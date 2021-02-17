@@ -1,0 +1,55 @@
+## Some Settings Are Case Sensitive so ensure That All True & False Calls Are Capatilized and File/folder locations are correctly specified.
+## DO NOT Change The Name Of The Setting and Keeps its Exact Format [Setting_Name]:[Call]
+
+----- Acqusisition Settings -----
+
+--- General Settings ---
+#Default Tool To Use: [dc3dd][dcfldd]
+Default_Tool:dcfldd
+
+#A Default Name for the files (Will Count Up in nnn if file with same name exsists)[Name]
+Default_Image_Name:This_Is_My_Image
+
+#Acqurie Boot Drive Override: [False][True]
+Boot_Drive_Override:False
+
+#Default Output Location for Images:
+Default_Output_Location:Evidance/
+
+#Enable On The Fly Hashing: [True][False]
+Enable_OTF_Hashing:True
+
+#Enable Hashing Logs: [True][False]
+Enable_Logging:True
+
+#Default Logging Location for Hash Logs:
+Default_Logging_Location:Logs/
+
+
+--- DC3DD Specific Settings ---
+#Single Selected hashing Mode: [sha1][sha256][sha512][md5]
+Hashing_Mode:md5
+
+
+--- DCFLDD Specific Settings ---
+#Enable Multiple Hash algorithms (If False then 1 will be selected): [True][False]
+Multiple_Hashing:True
+
+#Select Hashing Algorithms (If Logging is True then different log files will be created): [sha1][sha256][sha512][md5]
+Hashing_Mode_1:md5
+Hashing_Mode_2:sha256
+
+#The Number of bytes DCFLDD will read and write at a time:
+Byte_Split:512
+
+#Split image into multiple files: [True][False]
+File_Splitting:True
+
+#Split image size (if hashing is True then the hash window will be the same size):
+Split_Size:10G
+
+#Split image Formating (any combo of 'n' [number] and 'a' [alphabetical]): [aaa][nnn][annanana]
+Split_Format:nnn
+
+#perfom Hashes before or after converstion: [before][after]
+Hashing_Conversion:after
