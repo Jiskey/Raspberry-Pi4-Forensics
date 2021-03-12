@@ -758,6 +758,8 @@ uses the settings check function to gather configs
 def load_default_ACQ_conf():
 	click.secho('\nDefault Configuration:', bold = True)	
 	
+	tool = settings_check('Default_Tool')
+
 	tool = 'dc3dd'
 	output_location = settings_check('Default_Output_Location')
 	hashing = settings_check('Enable_OTF_Hashing')
