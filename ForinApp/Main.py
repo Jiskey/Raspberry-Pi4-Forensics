@@ -7,12 +7,19 @@
 
 import sys
 import click
+from simple_term_menu import TerminalMenu
 
 from Controllers import GUI_Controller
 from Controllers import ACQ_Controller
 
+def main():
+	terminal_menu = TerminalMenu(['Entry1','Entry2','Entry3', 'bg_blue'])
+	menu_entry_index = terminal_menu.show()
+
 if __name__ == '__main__':
+	main()	
 	selection = GUI_Controller.main_menu(0)
+	
 
 #Acquisition
 	if selection == 'ACQ':
