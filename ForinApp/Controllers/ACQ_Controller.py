@@ -9,6 +9,8 @@ import numpy as np
 #Import Drive Class
 from Classes.Drive import Drive
 
+from Controllers import MainMenu_Controller
+
 from Scripts import ErrorScript as es
 from Scripts import SettingsCheckScript as scs 
 from Scripts import TerminalMenuScript as tms
@@ -63,8 +65,7 @@ def ACQ_selection():
 			except:
 				continue
 		if index_selection == (len(choices) - 1):
-			#main_header()
-			click.echo('Go Back To main Menu')
+			MainMenu_Controller.main_menu()
 		elif drive_selected == False:
 			es.error(1001, 0)
 
@@ -87,7 +88,7 @@ def ACQ_selection():
 			ACQ_config()
 			break
 		elif index_selection == (len(choices) - 1):
-			click.echo('menu')
+			MainMenu_Controller.main_menu()
 		else:
 			try:
 				for count, partition in enumerate(ACQ_drive.get_partitions()):
@@ -259,6 +260,8 @@ def ACQ_conform(config):
 		os.system(command)
 	else:
 		ACQ_config()
+
+	MainMenu_Controller.main_menu()
 		
 """
 Wizard page

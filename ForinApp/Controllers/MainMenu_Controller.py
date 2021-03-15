@@ -5,10 +5,12 @@ import click
 import sys
 import os
 
+from Controllers import ACQ_Controller
+
 from Scripts import TerminalMenuScript as tms
 
 #Generate Application Header
-def main_menu(count):
+def main_menu():
 	os.system('clear')
 
 	click.echo('\n######################################################################################################')
@@ -36,7 +38,7 @@ def main_menu(count):
 	while x == False:
 		selection_index = tms.generate_menu(title, choices)
 		if selection_index == 0:
-			code = 'ACQ'
+			ACQ_Controller.ACQ_selection()
 			x = True
 			break
 		elif selection_index == 1:
