@@ -5,6 +5,8 @@ import click
 import sys
 import os
 
+from Scripts import TerminalMenuScript as tms
+
 #Generate Application Header
 def main_menu(count):
 	os.system('clear')
@@ -17,7 +19,7 @@ def main_menu(count):
 	click.secho('                                                             |___/                  ', bold=True) 
 	click.secho('\n-  FORIN - KALI LINUX DIGITAL FORENSIC INVESTIGATOR', bold=True, fg='blue')
 	click.echo('-  By: J. Male')
-	click.echo('-  Version 0.0.1: 15/12/2020')
+	click.echo('-  Version 0.0.3: 13/03/2021')
 	click.echo('-  Kali Version: 2020.4')
 	click.echo('-  Desc: "FORIN" is a simple CLI app that allows you to perform quick/easy digital anylsis and')
 	click.echo('         investigation using the tools included with Kali Linux')
@@ -25,45 +27,30 @@ def main_menu(count):
 	click.echo('\n######################################################################################################')
 	click.echo('\nIMPORTANT NOTE: BE SURE TO RUN AS SU!')
 
-#Generate Main Menu Options
-	click.echo('\nWelcome! What Would You Like To Do?')
-	click.echo('\n1 - Aquire A New Image')
-	click.echo('2 - Analyse Exsisting Image')
-	click.echo('3 - Settings')
-	click.echo('0 - Exit')
+	#Generate Main Menu Options
+	choices = ["[1] Aquire A New Image", "[2] Analyse Exsisting Image", "[3] Settings", "[0] Exit"]
+	title = '\nWelcome! What would You Like To Do?'
 
-#Detect User Selection with attmept counter (With 'easter-egg')
+	#Detect User Selection
 	x = False
 	while x == False:
-		selection = input('\n--- ')
-
-		if selection == '1':
+		selection_index = tms.generate_menu(title, choices)
+		if selection_index == 0:
 			code = 'ACQ'
+			x = True
 			break
-		elif selection == '2':
+		elif selection_index == 1:
 			sys.exit(0)
 			x = True
-		elif selection == '3':
+			break
+		elif selection_index == 2:
 			sys.exit(0)
 			x = True
-		elif selection == '0' :
+			break
+		elif selection_index == 3:
 			sys.exit(0)
 			x = True
-		else:
-			count = count + 1
-			if count < 5:
-				click.echo('Please select a valid option')
-			elif count < 10:
-				click.echo('Are you okay? Is there a problem?')
-			elif count < 15:
-				click.echo('Perhaps English is not your first language?')
-			elif count < 20:
-				click.echo('Okay, now your just messing with me!')
-			elif count < 25:
-				click.echo('Thats it! Ive had enough!')
-			elif count >= 26:
-				click.echo('...')
-
+			break
 	return code
 
 

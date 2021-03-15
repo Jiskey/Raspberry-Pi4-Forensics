@@ -5,7 +5,7 @@
 
 --- General Settings ---
 #Default Tool To Use: [dc3dd][dcfldd]
-Default_Tool:dcfldd
+Default_Tool:dc3dd
 
 #A Default Name for the files (Will Count Up in nnn if file with same name exsists)[Name]
 Default_Image_Name:This_Is_My_Image
@@ -14,7 +14,7 @@ Default_Image_Name:This_Is_My_Image
 Boot_Drive_Override:False
 
 #Default Output Location for Images:
-Default_Output_Location:Evidance/
+Default_Output_Location:/home/kali/Raspberry-Pi4-Forensics/ForinApp/Evidence/
 
 #Enable On The Fly Hashing: [True][False]
 Enable_OTF_Hashing:True
@@ -23,7 +23,7 @@ Enable_OTF_Hashing:True
 Enable_Logging:True
 
 #Default Logging Location for Hash Logs:
-Default_Logging_Location:Logs/
+Default_Logging_Location:/home/kali/Raspberry-Pi4-Forensics/ForinApp/Logs/
 
 
 --- DC3DD Specific Settings ---
