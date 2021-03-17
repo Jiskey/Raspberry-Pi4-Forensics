@@ -19,4 +19,5 @@ def generate_menu(title, items):
 	selection_index = menu.show()
 	#print(selection_index)
 	#print(menu.chosen_accept_key)
+	#print(menu.chosen_menu_entries)
 	return selection_index

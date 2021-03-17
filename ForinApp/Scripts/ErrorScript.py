@@ -25,5 +25,8 @@ def error(code, tag):
 	#1004: Unable To varify selected Directory
 	if code == 1004:
 		click.echo('Unable to verify directory. please select a valid Directory')
+	#3000: Settings Selection Error (No Child Selections)
+	if code == 3000:
+		click.echo('Unable to Collect Settings.')
 	
 

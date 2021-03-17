@@ -4,7 +4,6 @@
 import click
 import sys
 import os
-import numpy as np
 
 #Import Drive Class
 from Classes.Drive import Drive
@@ -49,7 +48,7 @@ def ACQ_selection():
 				if count == index_selection:
 					drive_selected = True
 					if index_selection == bootdrive_code:	#check if boot
-						check = scs.settings_check('Boot_Drive_Override')
+						check = scs.settings_check('$Boot_Drive_Override')
 						if check == 'False':
 							es.error(1002, 0)
 						elif check == 'True':
@@ -129,7 +128,7 @@ def ACQ_config():
 		index_selection = tms.generate_menu(title, choices)
 
 		if index_selection == 0:
-			check = scs.settings_check('Default_Tool')	#settings file check
+			check = scs.settings_check('$Default_Tool')	#settings file check
 			click.echo(check)
 			if check == 'dc3dd':
 				ACQ_conform(config1)
@@ -725,31 +724,31 @@ uses the settings check function to gather configs
 def load_default_ACQ_conf():
 	click.secho('\nDefault Configuration:', bold = True)	
 	
-	tool_check = scs.settings_check('Default_Tool')
+	tool_check = scs.settings_check('$Default_Tool')
 
 	tool = 'dc3dd'
-	output_location = scs.settings_check('Default_Output_Location')
-	hashing = scs.settings_check('Enable_OTF_Hashing')
-	hashing_mode = scs.settings_check('Hashing_Mode')
-	logging = scs.settings_check('Enable_Logging')
-	logging_location = scs.settings_check('Default_Logging_Location')
+	output_location = scs.settings_check('$Default_Output_Location')
+	hashing = scs.settings_check('$Enable_OTF_Hashing')
+	hashing_mode = scs.settings_check('$Hashing_Mode')
+	logging = scs.settings_check('$Enable_Logging')
+	logging_location = scs.settings_check('$Default_Logging_Location')
 	
 	config1 = [tool, output_location, hashing, hashing_mode, logging, logging_location]
 
 	tool = 'dcfldd'
-	output_location = scs.settings_check('Default_Output_Location')
-	hashing = scs.settings_check('Enable_OTF_Hashing')
-	logging = scs.settings_check('Enable_Logging')
-	logging_location = scs.settings_check('Default_Logging_Location')
-	multiple_hashing = scs.settings_check('Multiple_Hashing')
-	Hashing_mode_1 = scs.settings_check('Hashing_Mode_1')
-	hashing_mode_2 = scs.settings_check('Hashing_Mode_2')
-	byte_split = scs.settings_check('Byte_Split')
-	file_splitting = scs.settings_check('File_Splitting')
-	split_size = scs.settings_check('Split_Size')
-	split_format = scs.settings_check('Split_Format')
+	output_location = scs.settings_check('$Default_Output_Location')
+	hashing = scs.settings_check('$Enable_OTF_Hashing')
+	logging = scs.settings_check('$Enable_Logging')
+	logging_location = scs.settings_check('$Default_Logging_Location')
+	multiple_hashing = scs.settings_check('$Multiple_Hashing')
+	Hashing_mode_1 = scs.settings_check('$Hashing_Mode_1')
+	hashing_mode_2 = scs.settings_check('$Hashing_Mode_2')
+	byte_split = scs.settings_check('$Byte_Split')
+	file_splitting = scs.settings_check('$File_Splitting')
+	split_size = scs.settings_check('$Split_Size')
+	split_format = scs.settings_check('$Split_Format')
 	hash_window = split_size
-	hash_converstion = scs.settings_check('Hashing_Conversion')
+	hash_converstion = scs.settings_check('$Hashing_Conversion')
 
 	config2 = [tool, output_location, hashing, logging, logging_location, multiple_hashing, 
 		Hashing_mode_1, hashing_mode_2, byte_split, file_splitting, split_size, 

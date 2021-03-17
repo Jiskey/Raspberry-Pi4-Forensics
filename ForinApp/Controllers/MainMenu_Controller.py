@@ -6,6 +6,7 @@ import sys
 import os
 
 from Controllers import ACQ_Controller
+from Controllers import Settings_Controller
 
 from Scripts import TerminalMenuScript as tms
 
@@ -21,7 +22,7 @@ def main_menu():
 	click.secho('                                                             |___/                  ', bold=True) 
 	click.secho('\n-  FORIN - KALI LINUX DIGITAL FORENSIC INVESTIGATOR', bold=True, fg='blue')
 	click.echo('-  By: J. Male')
-	click.echo('-  Version 0.0.3: 13/03/2021')
+	click.echo('-  Version 0.3.1: 13/03/2021')
 	click.echo('-  Kali Version: 2020.4')
 	click.echo('-  Desc: "FORIN" is a simple CLI app that allows you to perform quick/easy digital anylsis and')
 	click.echo('         investigation using the tools included with Kali Linux')
@@ -46,15 +47,13 @@ def main_menu():
 			x = True
 			break
 		elif selection_index == 2:
-			sys.exit(0)
+			Settings_Controller.Settings_main()
 			x = True
 			break
 		elif selection_index == 3:
 			sys.exit(0)
 			x = True
 			break
-	return code
-
 
 
 
