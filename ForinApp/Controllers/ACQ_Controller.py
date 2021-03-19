@@ -474,7 +474,7 @@ def ACQ_wizard(config1, config2):
 				else:
 					es.error(1000, 0)
 
-		choices = ['[1] Default: {}'.format(config[5]), '[2] Internal: Logs/', '[3] None (Disable)', '[0] Back']
+		choices = ['[1] Default: {}'.format(config[4]), '[2] Internal: Logs/', '[3] None (Disable)', '[0] Back']
 		title = '\nPlease Specify A Output Path For The Log Files:'
 
 		#log file selection with '.isdir' check
@@ -741,7 +741,7 @@ def load_default_ACQ_conf():
 	logging = scs.settings_check('$Enable_Logging')
 	logging_location = scs.settings_check('$Default_Logging_Location')
 	multiple_hashing = scs.settings_check('$Multiple_Hashing')
-	Hashing_mode_1 = scs.settings_check('$Hashing_Mode_1')
+	Hashing_mode_1 = scs.settings_check('$Hashing_Mode')
 	hashing_mode_2 = scs.settings_check('$Hashing_Mode_2')
 	byte_split = scs.settings_check('$Byte_Split')
 	file_splitting = scs.settings_check('$File_Splitting')
