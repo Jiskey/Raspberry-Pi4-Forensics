@@ -16,7 +16,7 @@ $Default_Image_Name:This_Is_My_Image
 
 #Acqurie Boot Drive Override Safety
 [False][True]
-$Boot_Drive_Override:True
+$Boot_Drive_Override:False
 
 #Default Output Location for Images
 [--Directory]
@@ -24,7 +24,7 @@ $Default_Output_Location:/home/kali/Raspberry-Pi4-Forensics/ForinApp/Evidence/
 
 #Enable On The Fly Hashing During Acqusition 
 [True][False]
-$Enable_OTF_Hashing:False
+$Enable_OTF_Hashing:True
 
 #Enable Hashing Logs
 [True][False]
@@ -70,13 +70,17 @@ $Hashing_Conversion:after
 ----- Application Settings -----
 
 #Application Teminal Menu Cursor Style
-['-> ']['-- ']['-) ']
-$Cursor_Style:'-> '
+[-> ][-- ][-) ]
+$Cursor_Style:-> 
 
 #Terminal Menu Cursor Colour
-[blue][green][red][orange][cyan][purple][white][black]
-$Cursor_Colour:blue
+[black][blue][cyan][gray][green][purple][red][yellow]
+$Cursor_Colour:green
 
 #Terminal Menu Highlight Colour
-[blue][green][red][orange][cyan][purple][white][black]
+[black][blue][cyan][gray][green][purple][red][yellow]
 $Highlight_Colour:black
+
+#Terminal Menu Text Highlight Colour
+[black][blue][cyan][gray][green][purple][red][yellow]
+$Text_Highlight_Colour:green
