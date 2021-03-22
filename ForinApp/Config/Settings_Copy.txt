@@ -16,7 +16,7 @@ $Default_Image_Name:This_Is_My_Image
 
 #Acqurie Boot Drive Override Safety
 [False][True]
-$Boot_Drive_Override:True
+$Boot_Drive_Override:False
 
 #Default Output Location for Images
 [--Directory]
@@ -24,7 +24,7 @@ $Default_Output_Location:/home/kali/Raspberry-Pi4-Forensics/ForinApp/Evidence/
 
 #Enable On The Fly Hashing During Acqusition 
 [True][False]
-$Enable_OTF_Hashing:False
+$Enable_OTF_Hashing:True
 
 #Enable Hashing Logs
 [True][False]

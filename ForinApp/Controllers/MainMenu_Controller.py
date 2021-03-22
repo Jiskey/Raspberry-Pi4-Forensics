@@ -38,6 +38,7 @@ def main_menu():
 	x = False
 	while x == False:
 		selection_index = tms.generate_menu(title, choices)
+		print(selection_index)
 		if selection_index == 0:
 			ACQ_Controller.ACQ_selection()
 			x = True

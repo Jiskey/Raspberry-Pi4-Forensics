@@ -1,6 +1,7 @@
 import sys
 import os
 
+from Classes.Setting import Setting
 """
 Settings check function that reads the settings file under ForinApp/Config/
 returns the setting selected in the settings file by reading the file
@@ -35,35 +36,49 @@ def settings_index(setting):
 	return count
 
 """
-get_settings function that returns a list of file lines
+get_settings function that returns a list of txt file lines
 """
-def get_settings():
+def get_settings_txt():
 	txt = open('Config/Settings.txt','r')
 	txt_lines = txt.readlines()
 	txt.close()
 	return txt_lines
 
+def get_settings_list():
+	txt = open('Config/Settings.txt','r')
+	txt_lines = txt.readlines()
+	txt.close()
 
+	section = ''
+	description = ''
+	items = ''
+	code = ''
+	settings_list = []
 
+	check = 0
+	for count, line in enumerate(txt_lines):
+		if line.startswith('@@') == True:
+			continue
+		if line.find('-----') != -1:
+			section = line.strip()
+		elif line.find('#') != -1:
+			description = line.strip()
+			check = check + 1
+		elif line.find('[') != -1:
+			items = line.strip()
+			check = check + 1
+		elif line.find('$') != -1:
+			code = line.strip()
+			check = check + 1
+		if check == 3:
+			check = 0
+			settings_list.append(Setting(section, description, items, code))
 
+	return settings_list
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+def settings_update(setting_txt):
+	txt = open('Config/Settings.txt','w')
+	for line in setting_txt:
+		txt.write(line)
+	txt.close()
 	
