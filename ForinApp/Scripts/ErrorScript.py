@@ -28,5 +28,7 @@ def error(code, tag):
 	#3000: Settings Selection Error (No Child Selections)
 	if code == 3000:
 		click.echo('Unable to Collect Settings.')
+	if code == 4000:
+		click.echo('Sorry, That Path was Not Reconised. Please Specify A Valid Dir/Path')
 	
 

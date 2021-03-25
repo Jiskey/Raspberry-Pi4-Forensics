@@ -8,6 +8,7 @@ import os
 from Scripts import ErrorScript as es
 from Scripts import SettingsCheckScript as scs 
 from Scripts import TerminalMenuScript as tms
+from Scripts import UsageLoggingScript as uls
 
 from Controllers import MainMenu_Controller
 
@@ -97,10 +98,18 @@ def settings_edit_menu(setting):
 
 	index_selection = tms.generate_menu(title, choices)
 
+	new_code = call + ':' + choices[index_selection]		#create new code with selection
+
+	if choices[index_selection].find('--') != -1:				#if item is tagged with --
+		string_selection = tms.generate_string_menu('Image Name', 0)	#gen str input menu & return str
+		if string_selection == '0':
+			settings_main()
+		else:
+			new_code = call + ':' + string_selection.strip()
+
 	if index_selection == len(choices) - 1:
 		settings_main()
 	else:	
-		new_code = call + ':' + choices[index_selection]		#create new code with selection
 		try:
 			dupe_found = False
 			for count, change in enumerate(saved_changes):			#count current changes	
@@ -124,7 +133,7 @@ def settings_edit_menu(setting):
 settings save menu called on exit if there are changes made
 requires a setting_list which is a list of setting.classes
 """
-def settings_save_menu(settings_list, saved_changes):
+def settings_save_menu(settings_list, changes):
 	choices = ['[1] Save','[2] Discard', '[0] Back']
 	title = '\nChanges Have Been Made, Would You Like To Save The New Config?'
 
@@ -133,11 +142,15 @@ def settings_save_menu(settings_list, saved_changes):
 	if index_selection == 0:
 		settings_txt = scs.get_settings_txt()			#get settings (returns a list of file lines)
 
-		for count, change in enumerate(saved_changes):			#split the current change
+		for count, change in enumerate(changes):			#split the current change
 			change_code = change.get_code()
 			change_call, change_var = change_code.split(':')
 			setting_index = scs.settings_index(change_call)		#collect index of that setting
 			settings_txt[setting_index] = (change_code + '\n')	#replace old code with new code
+
+		logfile = scs.settings_check('$Default_Logging_Location')
+		logfile = logfile + 'Usage_Logs/Settings_Usage_Logs.txt'
+		uls.log_change(logfile, 'Settings_Change', changes)		#Log Changes Made
 
 		scs.settings_update(settings_txt)			#script call to write list of strings to file
 		saved_changes = []

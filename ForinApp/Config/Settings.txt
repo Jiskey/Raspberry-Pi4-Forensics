@@ -8,15 +8,15 @@
 --- General Settings ---
 #Default Tool To Use For Drive Acqusistion
 [dc3dd][dcfldd]
-$Default_Tool:dc3dd
+$Default_Tool:dcfldd
 
 #A Default Name for the files (Will Count Up in .000 (or specified) if file with same name exsists)
 [--File_Name]
-$Default_Image_Name:This_Is_My_Image
+$Default_Image_Name:hello
 
 #Acqurie Boot Drive Override Safety
 [False][True]
-$Boot_Drive_Override:False
+$Boot_Drive_Override:True
 
 #Default Output Location for Images
 [--Directory]
@@ -41,7 +41,7 @@ $Hashing_Mode:md5
 --- DCFLDD Specific Settings ---
 #Enable Multiple Hash algorithms (If False then 1 will be selected)
 [True][False]
-$Multiple_Hashing:True
+$Multiple_Hashing:False
 
 #Second Hash For dcfldd (First in General Settings) (If Logging is True then different log files will be created): [sha1][sha256][sha512][md5]
 [sha1][sha256][sha512][md5]
@@ -75,12 +75,12 @@ $Cursor_Style:->
 
 #Terminal Menu Cursor Colour
 [black][blue][cyan][gray][green][purple][red][yellow]
-$Cursor_Colour:green
+$Cursor_Colour:blue
 
 #Terminal Menu Highlight Colour
 [black][blue][cyan][gray][green][purple][red][yellow]
-$Highlight_Colour:black
+$Highlight_Colour:red
 
 #Terminal Menu Text Highlight Colour
 [black][blue][cyan][gray][green][purple][red][yellow]
-$Text_Highlight_Colour:green
+$Text_Highlight_Colour:blue

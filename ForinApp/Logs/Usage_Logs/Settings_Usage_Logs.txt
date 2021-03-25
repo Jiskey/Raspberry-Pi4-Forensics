@@ -1,0 +1,11 @@
+--- Action Taken: Settings_Change AT: Thu Mar 25 13:31:17 2021 BY: Guest
+Settings Changed: $Highlight_Colour   From: red   To: red
+Settings Changed: $Text_Highlight_Colour   From: blue   To: blue
+Settings Changed: $Default_Tool   From: dc3dd   To: dcfldd
+Settings Changed: $Boot_Drive_Override   From: False   To: True
+Settings Changed: $Multiple_Hashing   From: True   To: False
+
+--- Action Taken: Settings_Change AT: Thu Mar 25 13:30:45 2021 BY: Guest
+Settings Changed: $Highlight_Colour   From: black   To: red
+Settings Changed: $Text_Highlight_Colour   From: blue   To: blue
+

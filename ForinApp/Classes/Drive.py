@@ -1,7 +1,9 @@
+#Drive Class
+
 class Drive:
-	number = 0
-	path = ""
-	size_gb = 0
+	number = 0		#identifaction num
+	path = ""		#drive path
+	size_gb = 0		#size in bytes/GB
 	size_bytes = 0;
 
 	def __init__(self, drive_number, drive_path, drive_size_gb, drive_size_bytes):
