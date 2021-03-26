@@ -5,7 +5,7 @@ class Setting:
 	description = ''		#setting description
 	items = ''			#setting options
 	code = '';			#setting code ("$call:var")
-	
+
 	def __init__(self, setting_sect, setting_desc, setting_items, setting_code):
 		self.section = setting_sect
 		self.description = setting_desc
