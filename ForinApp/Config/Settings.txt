@@ -3,9 +3,14 @@
 @@ It is Recommended That You Edit This File From Within the Application However, a new 'Default' copy can be found on GitHub.
 @@ # = Desc, [] = Avalible Option, [--] = Custom option, $ = Option, @@ = txt comment
 
+----- General Settings -----
+
+#Enable SSH On Application StartUp (Not In Use)
+[True][False]
+$SSH_Startup:False
+
 ----- Acqusisition Settings -----
 
---- General Settings ---
 #Default Tool To Use For Drive Acqusistion
 [dc3dd][dcfldd]
 $Default_Tool:dcfldd
@@ -38,12 +43,11 @@ $Default_Logging_Location:/home/kali/Raspberry-Pi4-Forensics/ForinApp/Logs/
 [sha1][sha256][sha512][md5]
 $Hashing_Mode:md5
 
---- DCFLDD Specific Settings ---
 #Enable Multiple Hash algorithms (If False then 1 will be selected)
 [True][False]
 $Multiple_Hashing:False
 
-#Second Hash For dcfldd (First in General Settings) (If Logging is True then different log files will be created): [sha1][sha256][sha512][md5]
+#Second Hash For dcfldd (If Logging is True then different log files will be created): [sha1][sha256][sha512][md5]
 [sha1][sha256][sha512][md5]
 $Hashing_Mode_2:sha256
 
@@ -67,10 +71,16 @@ $Split_Format:nnn
 [before][after]
 $Hashing_Conversion:after
 
+----- Data Carving Settings -----
+
+#Default Data Carving Output Location
+[-- Specify New Output Directory]
+$DC_Output_Location:/home/kali/Raspberry-Pi4-Forensics/ForinApp/Evidence/DC_Evidance
+
 ----- Application Settings -----
 
 #Application Teminal Menu Cursor Style
-[-> ][-- ][-) ]
+[-> ][>> ][-) ][-O ][-* ]
 $Cursor_Style:-> 
 
 #Terminal Menu Cursor Colour
@@ -79,8 +89,8 @@ $Cursor_Colour:blue
 
 #Terminal Menu Highlight Colour
 [black][blue][cyan][gray][green][purple][red][yellow]
-$Highlight_Colour:red
+$Highlight_Colour:black
 
 #Terminal Menu Text Highlight Colour
 [black][blue][cyan][gray][green][purple][red][yellow]
-$Text_Highlight_Colour:blue
+$Text_Colour:blue

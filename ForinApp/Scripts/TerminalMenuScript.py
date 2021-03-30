@@ -18,7 +18,7 @@ def generate_menu(menu_title, menu_items):
 		title = menu_title,
 		menu_cursor = scs.settings_check('$Cursor_Style'),
 		menu_cursor_style = ('fg_' + scs.settings_check('$Cursor_Colour'), "bold"),
-		menu_highlight_style = ('bg_' + scs.settings_check('$Highlight_Colour'), 'fg_' + scs.settings_check('$Text_Highlight_Colour')),
+		menu_highlight_style = ('bg_' + scs.settings_check('$Highlight_Colour'), 'fg_' + scs.settings_check('$Text_Colour')),
 		cycle_cursor = True,
 		exit_on_shortcut = False,
 		#clear_screen =True,
@@ -40,7 +40,7 @@ def generate_file_preview_menu(menu_title, filepath):
 		title = menu_title,
 		menu_cursor = scs.settings_check('$Cursor_Style'),
 		menu_cursor_style = ('fg_' + scs.settings_check('$Cursor_Colour'), "bold"),
-		menu_highlight_style = ('bg_' + scs.settings_check('$Highlight_Colour'), 'fg_' + scs.settings_check('$Text_Highlight_Colour')),
+		menu_highlight_style = ('bg_' + scs.settings_check('$Highlight_Colour'), 'fg_' + scs.settings_check('$Text_Colour')),
 		cycle_cursor = True,
 		exit_on_shortcut = False,
 		#clear_screen = True,
@@ -59,20 +59,28 @@ Performs a check (num) if one is required
 def generate_string_menu(title, num):
 	print('\nPlease Specify A Custom {}:'.format(title))
 	print('Back/Cancel = "0", "exit", "quit", "cancel", "back"')
-
-	string_selection = input('\n--> ')
-
-	cancel_opts = ["0", "exit", "quit", "cancel", "back"]
 	
-	for count, opts in enumerate(cancel_opts):
-		if string_selection == opts:
-			string_selection = '0'
+	check = 0
+	x = True
+	while x == True:
+		string_selection = input('\n--> ')
+		cancel_opts = ["0", "exit", "quit", "cancel", "back"]
+	
+		for count, opts in enumerate(cancel_opts):
+			if string_selection == opts:
+				string_selection = '0'
+				return string_selection
+		
+		if num == 1:
+			if os.path.isdir(string_selection) == True:
+				return string_selection
+			elif os.path.isdir(string_selection) == False and check == 0:
+				check = check + 1
+				print('Invalid Selection, Please Specify A Valid Selection')
+			else:
+				pass
+		elif num == 0:
 			return string_selection
-
-	if num == 1:
-		print()
-	else:
-		return string_selection
 
 
 

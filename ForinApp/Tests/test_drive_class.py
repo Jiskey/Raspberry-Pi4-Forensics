@@ -3,46 +3,35 @@
 import pytest
 
 from Classes.Drive import *
+from Scripts import FdiskScript as fds 
 
-def test_drive_class_gets_sets():
-	num = 0
-	path = '/dev/sda'
-	size = 128
-	sizebytes = 134000000
-	drive = Drive(num, path, size, sizebytes)
+"""
+Class That tests the Drive Class
+WILL NOT WORK ON OTHER SYSTEMS... CURRENT ASSERSTIONS ARE BASED ON PC BOOT DRIVE
+"""
+def test_drive_class_gets():
 
-	assert drive.get_number() == num
-	assert drive.get_path() == path
-	assert drive.get_size_gb() == size
-	assert drive.get_size_bytes() == sizebytes
+	drives = fds.fdisk()
+	
+	assert len(drives) > 0
+	assert drives[0].get_path() == '/dev/sda'
+	assert drives[0].get_size() == 465.76
+	assert drives[0].get_size_bytes() == 500107862016
+	assert drives[0].get_sectors() == 976773168
+	assert drives[0].get_model() == ''
+	assert drives[0].get_sector_size() == '512:4096'
+	assert drives[0].get_disklabel() == 'dos'
+	assert drives[0].get_identifier().find('a8ce') != 1 
+	assert drives[0].get_boot() == True
+	assert drives[0].get_partition(0) == '/dev/sda1:2048:262143:W95 FAT32 (LBA)'
+	assert drives[0].get_sector_size_log() == 512
+	assert drives[0].get_sector_size_pyhs() == 4096
 
-	drive.set_number(num + 1)
-	drive.set_path(path + '1')
-	drive.set_size_gb(size + 1)
-	drive.set_size_bytes(sizebytes + 1)
-
-	assert drive.get_number() == num + 1
-	assert drive.get_path() == path + '1'
-	assert drive.get_size_gb() == size + 1
-	assert drive.get_size_bytes() == sizebytes + 1
-
-def test_drive_class_partitions():
-	num = 0
-	path = '/dev/sda'
-	size = 128
-	sizebytes = 134000000
-	drive = Drive(num, path, size, sizebytes)
-
-	partitions = ['/dev/sda1', '/dev/sda2', '/dev/sda3']
-	drive.add_drive_partition(partitions[0])
-	assert len(drive.get_partitions()) == 1
-	drive.add_drive_partition(partitions[1])
-	drive.add_drive_partition(partitions[2])
-	assert len(drive.get_partitions()) == 3
-
-	drive.set_partition_selection(partitions[1])
-	assert drive.get_partition_selection() == partitions[1]
-
-	drive.del_drive_partition(partitions[1])
-	assert len(drive.get_partitions()) == 2
-	assert drive.get_partitions()[1] == partitions[2]
+	assert len(drives[0].get_partitions()) > 0
+	assert drives[0].get_partition_path(0) == '/dev/sda1'
+	assert drives[0].get_partition_start(0) == 2048
+	assert drives[0].get_partition_end(0) == 262143
+	assert drives[0].get_partition_sectors(0) == 260096
+	assert drives[0].get_partition_size(0) == 0.1240234375
+	assert drives[0].get_partition_size_bytes(0) == 133169152
+	assert drives[0].get_partition_type(0) == 'W95 FAT32 (LBA)'

@@ -1,59 +1,106 @@
 #Drive Class
 
 class Drive:
-	number = 0		#identifaction num
-	path = ""		#drive path
-	size_gb = 0		#size in bytes/GB
-	size_bytes = 0;
+	path = ''						
+	size = 0
+	size_bytes = 0
+	sectors = 0
+	model = ''
+	sector_size = ''
+	disklabel = ''
+	identifier = ''
+	boot = False
+	partitions = [];
 
-	def __init__(self, drive_number, drive_path, drive_size_gb, drive_size_bytes):
-		self.number = drive_number
-		self.path = drive_path
-		self.size_gb = drive_size_gb
-		self.size_bytes = drive_size_bytes
-		
-		self.drive_partitions = []
-		self.partition_selection = ''
+	def __init__(self, path, size, size_bytes, sectors, model, sector_size, disklabel, identifier, boot, partitions):
+		self.path = path						
+		self.size = size
+		self.size_bytes = size_bytes
+		self.sectors = sectors
+		self.model = model
+		self.sector_size = sector_size
+		self.disklabel = disklabel 
+		self.identifier = identifier 
+		self.boot = boot
+		self.partitions = partitions
 
-	#Gets && Sets
-	def get_number(self):
-		return self.number
-
-	def set_number(self, drive_number):
-		self.number = drive_number
-
-	def get_path(self):
+#Gets (Will Never Set)
+	def get_path(self):				#path
 		return self.path
 
-	def set_path(self, path_name):
-		self.path = path_name
+	def get_size(self):				#size (GB)
+		return self.size
 
-	def get_size_gb(self):
-		return self.size_gb
-
-	def set_size_gb(self, drive_size_gb):
-		self.size_gb = drive_size_gb
-
-	def get_size_bytes(self):
+	def get_size_bytes(self):			#size (bytes)
 		return self.size_bytes
+	
+	def get_sectors(self):				#sectors
+		return self.sectors
 
-	def set_size_bytes(self, drive_size_bytes):
-		self.size_bytes = drive_size_bytes
+	def get_model(self):				#model
+		return self.model
 
-	def get_partition_selection(self):
-		return self.partition_selection
+	def get_sector_size(self):			#sector size (log/phys)
+		return self.sector_size
 
-	def set_partition_selection(self, partition_selection):
-		self.partition_selection = partition_selection
+	def get_disklabel(self):			#label	
+		return self.disklabel
 
-	def get_partitions(self):
-		return self.drive_partitions
+	def get_identifier(self):			#indetifaction code
+		return self.identifier
 
-	def get_drive_partition(self, section):
-		return self.drive_partitions[section]
+	def get_boot(self):				#boot	
+		return self.boot
 
-	def add_drive_partition(self, section):
-		self.drive_partitions.append(section)
+	def get_partitions(self):			#partitions
+		return self.partitions
 
-	def del_drive_partition(self, section):
-		self.drive_partitions.remove(section)
+	def get_partition(self, part):
+		return self.partitions[part]
+	
+#Data Format Functions
+	def get_partition_path(self, part):		#get partition path
+		part_path, part_start, part_end, part_type = self.partitions[part].split(':')
+		return part_path
+	
+	def get_partition_start(self, part):		#get partition sectors start
+		part_path, part_start, part_end, part_type = self.partitions[part].split(':')
+		return int(part_start)
+
+	def get_partition_end(self, part):		#get partition sectors end
+		part_path, part_start, part_end, part_type = self.partitions[part].split(':')
+		return int(part_end)
+
+	def get_partition_sectors(self, part):		#get partition sectors
+		part_path, part_start, part_end, part_type = self.partitions[part].split(':')
+		part_sectors = (int(part_end) - int(part_start)) + 1
+		return int(part_sectors)
+
+	def get_partition_size(self, part):		#get partition sectors size (GB)
+		part_path, part_start, part_end, part_type = self.partitions[part].split(':')
+		part_sectors = (int(part_end) - int(part_start)) + 1
+		part_sectors = part_sectors * 512
+		part_sectors = part_sectors / 1024
+		part_sectors = part_sectors / 1024
+		part_sectors = part_sectors / 1024
+		return float(part_sectors)
+
+	def get_partition_size_bytes(self, part):    	#get partition sectors size (bytes)
+		part_path, part_start, part_end, part_type = self.partitions[part].split(':')
+		part_sectors = (int(part_end) - int(part_start)) + 1
+		part_sectors = part_sectors * 512
+		return int(part_sectors)
+
+	def get_partition_type(self, part):		#get partition type
+		part_path, part_start, part_end, part_type = self.partitions[part].split(':')
+		return part_type
+
+	def get_sector_size_log(self):			#get logical sector size
+		log, pyhs = self.sector_size.split(':')
+		return int(log)
+
+	def get_sector_size_pyhs(self):			#get physical sector size
+		log, pyhs = self.sector_size.split(':')
+		return int(pyhs)
+
+

@@ -1,3 +1,6 @@
+--- Action Taken: Settings_Change AT: Sun Mar 28 19:59:36 2021 BY: Guest
+Settings Changed: $Highlight_Colour   From: red   To: black
+
 --- Action Taken: Settings_Change AT: Thu Mar 25 13:31:17 2021 BY: Guest
 Settings Changed: $Highlight_Colour   From: red   To: red
 Settings Changed: $Text_Highlight_Colour   From: blue   To: blue

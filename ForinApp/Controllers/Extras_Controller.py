@@ -10,15 +10,16 @@ from Controllers import MainMenu_Controller
 from Scripts import TerminalMenuScript as tms
 from Scripts import SettingsCheckScript as scs
 from Scripts import ErrorScript as es
+from Scripts import FdiskScript as fds
 
 """
 main function extras_main, displays selection of extra's
 """
 def extras_main():
 	os.system('clear')
-	click.secho('Program Extras\n', fg='blue', bold=True)
+	click.secho('2. Program Extras\n', fg='blue', bold=True)
 
-	choices = ['[1] View Img/Usability Logs', '[2] Enable/Disable SSH', '[0] Back']
+	choices = ['[1] View Img/Usability Logs', '[2] Enable/Disable SSH', '[3] Fdisk Drive Search', '[0] Back']
 	title = 'Please Select An Extra'
 	
 	index_selection = tms.generate_menu(title, choices)
@@ -29,6 +30,8 @@ def extras_main():
 		extras_logs(scs.settings_check('$Default_Logging_Location'))
 	elif index_selection == 1:
 		extras_ssh()
+	elif index_selection == 2:
+		extras_drives()
 
 """
 extras_logs, searches a directory for files and display its contents.
@@ -47,7 +50,7 @@ def extras_logs(log_path):
 
 	index_selection = tms.generate_menu(title, choices)
 	
-	title = title + '\nPress "Enter" To Return\n'
+	title = title + '\n--- Press "Enter" To Return\n'
 	check = 0
 	if index_selection == 0:
 		index_selection = tms.generate_file_preview_menu(title, scs.settings_check('$Default_Logging_Location'))
@@ -57,6 +60,15 @@ def extras_logs(log_path):
 		extras_main()
 
 	extras_logs(log_path)
+
+def extras_drives():
+	click.echo('Device Information Found Using Command: fdisk -l')
+	click.echo('Currently Display Full List Of Returns Given By Fdisk\n')
+
+	connected_drives = fds.fdisk_verbose()
+
+	x = input('--- Press "Enter" To Return')
+	extras_main()
 
 """
 extras_ssh, menu controller to allow the enabling/disabling of SHH
