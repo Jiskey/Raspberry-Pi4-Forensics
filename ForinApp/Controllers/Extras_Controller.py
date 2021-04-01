@@ -27,7 +27,7 @@ def extras_main():
 	if index_selection == len(choices) - 1:
 		MainMenu_Controller.main_menu()
 	elif index_selection == 0:
-		extras_logs(scs.settings_check('$Default_Logging_Location'))
+		extras_logs(scs.settings_check('$Default_Hash_Logging_Location'))
 	elif index_selection == 1:
 		extras_ssh()
 	elif index_selection == 2:
@@ -53,19 +53,22 @@ def extras_logs(log_path):
 	title = title + '\n--- Press "Enter" To Return\n'
 	check = 0
 	if index_selection == 0:
-		index_selection = tms.generate_file_preview_menu(title, scs.settings_check('$Default_Logging_Location'))
+		index_selection = tms.generate_file_preview_menu(title, scs.settings_check('$Default_Hash_Logging_Location'))
 	elif index_selection == 1:
-		index_selection = tms.generate_file_preview_menu(title, scs.settings_check('$Default_Logging_Location') + 'Usage_Logs/')
+		index_selection = tms.generate_file_preview_menu(title, scs.settings_check('$Default_Hash_Logging_Location') + 'Usage_Logs/')
 	elif index_selection == len(choices) -1:
 		extras_main()
 
 	extras_logs(log_path)
 
+"""
+performs the 'fdisk' command and displays its full output (verbose)
+"""
 def extras_drives():
 	click.echo('Device Information Found Using Command: fdisk -l')
 	click.echo('Currently Display Full List Of Returns Given By Fdisk\n')
 
-	connected_drives = fds.fdisk_verbose()
+	connected_drives = fds.fdisk(True)
 
 	x = input('--- Press "Enter" To Return')
 	extras_main()

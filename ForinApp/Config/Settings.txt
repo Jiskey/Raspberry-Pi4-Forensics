@@ -9,49 +9,49 @@
 [True][False]
 $SSH_Startup:False
 
+#Acqurie Boot Drive Override Safety
+[False][True]
+$Boot_Drive_Override:False
+
 ----- Acqusisition Settings -----
 
 #Default Tool To Use For Drive Acqusistion
 [dc3dd][dcfldd]
-$Default_Tool:dcfldd
+$Default_Tool:dc3dd
 
-#A Default Name for the files (Will Count Up in .000 (or specified) if file with same name exsists)
+#A Default Name for Acquired Images and Logs
 [--File_Name]
 $Default_Image_Name:hello
 
-#Acqurie Boot Drive Override Safety
-[False][True]
-$Boot_Drive_Override:True
-
 #Default Output Location for Images
-[--Directory]
+[--Output_Directory]
 $Default_Output_Location:/home/kali/Raspberry-Pi4-Forensics/ForinApp/Evidence/
 
 #Enable On The Fly Hashing During Acqusition 
 [True][False]
 $Enable_OTF_Hashing:True
 
-#Enable Hashing Logs
+#Hashing Mode 
+[sha1][sha256][sha512][md5]
+$Hashing_Mode:md5
+
+#Enable Hash Logs
 [True][False]
 $Enable_Logging:True
 
 #Default Logging Location for Hash Logs
-[--Directory]
-$Default_Logging_Location:/home/kali/Raspberry-Pi4-Forensics/ForinApp/Logs/
-
-#Hashing Mode 
-[sha1][sha256][sha512][md5]
-$Hashing_Mode:md5
+[--Hash_Directory]
+$Default_Hash_Logging_Location:/home/kali/Raspberry-Pi4-Forensics/ForinApp/Logs/
 
 #Enable Multiple Hash algorithms (If False then 1 will be selected)
 [True][False]
 $Multiple_Hashing:False
 
-#Second Hash For dcfldd (If Logging is True then different log files will be created): [sha1][sha256][sha512][md5]
+#Second Hash For dcfldd:
 [sha1][sha256][sha512][md5]
 $Hashing_Mode_2:sha256
 
-#The Number of bytes DCFLDD will read and write at a time
+#The Number of bytes (block size) DCFLDD will read and write at a time
 [256][512][1024][2048]
 $Byte_Split:512
 
@@ -67,9 +67,13 @@ $Split_Size:10G
 [aaa][nnn]
 $Split_Format:nnn
 
-#perfom Hashes before or after converstion
+#Perfom Hashes before or after converstion
 [before][after]
 $Hashing_Conversion:after
+
+#Perform Error Handling During dcfldd Op (Will Continue With Read Errors & NUll fill the rest of the block)
+[True][False]
+$Error_handling:True
 
 ----- Data Carving Settings -----
 

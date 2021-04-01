@@ -2,8 +2,8 @@
 
 class Setting:
 	section = ''			#what section it is under
-	description = ''		#setting description
-	items = ''			#setting options
+	description = ''		
+	items = ''			
 	code = '';			#setting code ("$call:var")
 
 	def __init__(self, setting_sect, setting_desc, setting_items, setting_code):
@@ -36,3 +36,17 @@ class Setting:
 
 	def set_code(self, setting_code):
 		self.code = setting_code
+
+	#Format Get Functions
+	def get_code_call(self):
+		call, var = self.code.split(':')	#returns the call of the code ($call:var)
+		return call
+
+	def get_code_var(self):				#returns the var of the code
+		call, var = self.code.split(':')
+		return var
+
+	def get_items_list(self):			#Returns a list of str(items)
+		list_items = self.items[1:-1]
+		list_items = list_items.split('][')	
+		return list_items

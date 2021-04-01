@@ -5,784 +5,283 @@ import click
 import sys
 import os
 
-#Import Drive Class
-from Classes.Drive import Drive
-
+from Classes.Drive import Drive	
 from Controllers import MainMenu_Controller
-
-from Scripts import ErrorScript as es
 from Scripts import SettingsCheckScript as scs 
 from Scripts import TerminalMenuScript as tms
-
+from Scripts import FdiskScript as fds
+from Scripts import CommandCreationScript as ccs
+from Scripts import UsageLoggingScript as uls
 """
-Drive Selection Page
-Calls Function To Read fidsk command output from file
-Stores selected Drive deatils and the partition selected
-Boot_override check to avoid imaging boot drive
+First Page
+Runs a script and uses tool 'fdisk' to display and create user options
+saves the selected drive and the partition code
 """
 def ACQ_selection():
 	os.system('clear')
 
-	click.secho('1.1: Device Selection', fg='blue', bold=True)
-	click.echo('\nWRITE BLOCKER:  Disabled')
-	click.echo('DEVICE SEARCH: "fdisk -l"')
-	click.echo('NOTE: 1 Is Usually Your Boot Drive. Please Double Check To Confirm Yourself')
+	click.secho('Acquisition: Drive Selection', fg='blue', bold=True)
+	click.echo('\nDEVICE SEARCH: "fdisk -l"')
+	click.echo('Note: If Boot Override is Set To: False. The Suspect Boot Drive Will Not Show (Can Be changed In Settings)')
+	click.echo('Boot Drive Override: {}\n'.format(scs.settings_check('$Boot_Drive_Override')))
 
-	read_storage_file()		#Function call to detect connected drives
-	
-	choices = []
-	for count, drive in enumerate(detected_drives):				#global var gen'd by func
-		choices.append('[{}] {}'.format(count + 1, drive.get_path()))
-	choices.append('[0] Back')
-	title = '\nPlease select the drive you would like to acquire.'
+	drives_list = fds.fdisk(False)				#script Runs 'sudo fdisk' + returns list of drives
 
-	drive_selected = False
-	global ACQ_drive
-
-	#drive selection
-	x = True
-	while x == True:
-		index_selection = tms.generate_menu(title, choices)
-		for count, drive in enumerate(detected_drives):
-			try:
-				if count == index_selection:
-					drive_selected = True
-					if index_selection == bootdrive_code:	#check if boot
-						check = scs.settings_check('$Boot_Drive_Override')
-						if check == 'False':
-							es.error(1002, 0)
-						elif check == 'True':
-							ACQ_drive = drive					
-							x = False
-							break
-						else:
-							es.error(1003, 1)
-					else:
-						ACQ_drive = drive
-						x = False
-						break
-			except:
-				continue
-		if index_selection == (len(choices) - 1):
-			MainMenu_Controller.main_menu()
-		elif drive_selected == False:
-			es.error(1001, 0)
+	acq_drive = Drive					
+	p_code = 255						#code 255 = full drive path (no partiton)
 
 	choices = []
-	choices.append('[1] Full Drive')
-	for count, section in enumerate(ACQ_drive.get_partitions()):
-		choices.append('[{}] {}'.format(count + 2, ACQ_drive.get_drive_partition(count)))
+	check = 1
+	for count, drive in enumerate(drives_list):
+		if drive.get_boot() == True and scs.settings_check('$Boot_Drive_Override') == 'True':
+			choices.append('[{}] {}'.format(check, drive.get_path()))
+			check = check + 1
+		elif drive.get_boot() == False:						#Hide boot if false
+			choices.append('[{}] {}'.format(check, drive.get_path()))
+			check = check + 1
 	choices.append('[0] Back')
-	title = '\nPlease select the drive you would like to acquire.'
+	title = ('Please Select The Drive You Would like To Acquire')
 
-	#partition Selection
-	partition_selected = False
+	index_selection = tms.generate_menu(title, choices)		#Display connected Drives
 
-	x = True
-	while x == True:
-		index_selection = tms.generate_menu(title, choices)
+	if index_selection == len(choices) - 1:
+		MainMenu_Controller.main_menu()
 
-		if index_selection == 0:
-			ACQ_drive.set_partition_selection(ACQ_drive.get_path())
-			ACQ_config()
-			break
-		elif index_selection == (len(choices) - 1):
-			MainMenu_Controller.main_menu()
-		else:
-			try:
-				for count, partition in enumerate(ACQ_drive.get_partitions()):
-					if count == index_selection:
-						ACQ_drive.set_partition_selection(ACQ_drive.get_drive_partition(count - 1))
-						partition_selected = True
-						x = False
-						break				
-				if partition_selected == True:
-					ACQ_config()
-					x = False
-					break
-				else:
-					es.error(1000, 0)
-					x = False
-					break
-			except:
-					es.error(1000, 0)
+	if scs.settings_check('$Boot_Drive_Override') == 'False':
+		acq_drive = drives_list[index_selection + 1]				#save selected Drive
+	else:
+		acq_drive = drives_list[index_selection]
 
+	choices = ['[1] Full Drive']
+	for count, parts in enumerate(acq_drive.get_partitions()):
+		choices.append('[{}] {}'.format(count + 2, parts.split(':')[0]))
+	choices.append('[0] Back')
+	title = 'Please Select The Partition You Would Like To Acquire'			
+
+	index_selection = tms.generate_menu(title, choices)		#display partitions of selected drive
+
+	if index_selection == len(choices) - 1:
+		ACQ_selection()
+	if index_selection == 0:
+		p_code = 255
+	else:
+		p_code = index_selection - 1
+
+	ACQ_config(acq_drive, p_code)
 """
-Configuration Selection Page
-2x config files are created based on which tool will be used (dc3dd/dcfldd)
+Configuration page, user can select different options to change settings
+contains a wizard, load default and custom config func
+requires the drive to acquire and the partition code
 """
-def ACQ_config():
+def ACQ_config(acq_drive, p_code):
 	os.system('clear')
+	click.secho('Acquisition: Configuration', fg='blue', bold=True)
 
-	click.secho('1.2: Acquisition Configuration', fg='blue', bold=True)
+	settings_list = scs.get_settings_list()		#get settings from settings txt
+	new_settings_list = []
+	new_settings_list.clear()
 
-	config1, config2 = load_default_ACQ_conf()			#returned configs
+	click.echo('\nCurrent Saved/Default Settings:\n')
+	check = 0
+	for setting in settings_list:
+		if setting.get_section() == '----- Acqusisition Settings -----':
+			new_settings_list.append(setting)			#append needed settings
+			call, var = setting.get_code().split(':')
+			if check < 7:						#ignore dfcldd tools if dc3dd
+				check = check + 1
+				click.echo('{} -- {}'.format(call[1:], var))
+			elif settings_list[0].get_code_var() == 'dcfldd':
+				click.echo('{} -- {}'.format(call[1:], var))
 
 	choices = ['[1] Use Default Configuration', '[2] Use Custom Configuration (Wizard)', 
 		'[3] Quick Acquire (No hashing or Logging)', '[0] Back']
-	title = '\nPlease select the drive you would like to acquire.'
+	title = '\nPlease Choose A Configuration'
 
-	#config selection
-	x = True
-	while x == True:
-		index_selection = tms.generate_menu(title, choices)
+	index_selection = tms.generate_menu(title, choices)
 
-		if index_selection == 0:
-			check = scs.settings_check('$Default_Tool')	#settings file check
-			click.echo(check)
-			if check == 'dc3dd':
-				ACQ_conform(config1)
-				break
-			elif check == 'dcfldd':
-				ACQ_conform(config2)
-				break
-		elif index_selection == 1:
-			ACQ_wizard(config1, config2)
-			break
-		elif index_selection == 2:
-			config1[0] = 'dc3dd' 
-			config1[2] = 'False' 
-			config1[4] = 'False'
-			ACQ_conform(config1)
-			break
-		elif index_selection == (len(choices) - 1):
-			ACQ_selection()
-			break
-		else:
-			es.error(1000, 0)
-
+	if index_selection == 0:						#Load New Settings via Default/Saved Config
+		ACQ_conform(new_settings_list, acq_drive, p_code)
+	elif index_selection == 1:						#Load New settings via wizard
+		new_settings_list = ACQ_wizard(new_settings_list, acq_drive, p_code)
+		ACQ_conform(new_settings_list, acq_drive, p_code)
+	elif index_selection == 2:						#Load New Settings via custom config
+		new_settings_list = ACQ_config_quick(new_settings_list)
+		ACQ_conform(new_settings_list, acq_drive, p_code)
+	elif index_selection == 3:
+		ACQ_selection()
 """
 Conformation page
-Loads and displays selected config based on previous slection or custom selections
-Creates and executes command based on tool (With Warning)
+Loads and displays selected config based on previous selection or custom selections
+Generates a command based on the required items
+Requires a settings list, a drive to acquire and the partition code (int(255) == Full Drive)
 """
-def ACQ_conform(config):
+def ACQ_conform(settings_list, acq_drive, p_code):
+	command = ccs.acq_command_gen(settings_list, acq_drive, p_code)
 	os.system('clear')
-	click.secho('1.3: Acqusition Conformation',bold=True, fg='blue')
+	click.secho('Acquisition: Execution\n', fg='blue', bold=True)
+	click.secho('Selected Device:', bold=True)
 
-	click.secho('\nDrive To Aquire Details:', bold=True)
-	click.echo('Drive Path: {}'.format(ACQ_drive.get_path()))
-	click.echo('Partition to Aquire: {}'.format(ACQ_drive.get_partition_selection()))
-	click.echo('Drive Size: GB: {} / Bytes: {}'.format(ACQ_drive.get_size_gb(), ACQ_drive.get_size_bytes()))
+	click.echo('Drive To Acquire -- {}'.format(acq_drive.get_path()))					#display Drive Details
+	click.echo('Drive ID -- {}'.format(acq_drive.get_identifier()))
+	click.echo('Drive Size -- {}\n'.format(acq_drive.get_size()))
 	
-	click.secho('\nSettings Specified:', bold=True)
-	
-	if config[0] == 'dc3dd':						#Load config for 'dc3dd'
-		click.echo('Acqusition Tool: {}'.format(config[0]))		#config1 = [0 - tool, 1 - output_location, 2 - hashing,
-		click.echo('\nOutput_Location: {}'.format(config[1]))			#3 - hashing_mode, 4 - logging, 5 - logging_location]
-		click.echo('Enable_OTF_Hashing: {}'.format(config[2]))
-		if config[2] == 'True':
-			click.echo('Hashing_Mode: {}'.format(config[3]))
-		click.echo('Enable_Logging: {}'.format(config[4]))
-		if config[4] == 'True':
-			click.echo('Logging_Location: {}'.format(config[5]))
-
-	elif config[0] == 'dcfldd':						#Load Config for 'dcfldd'
-		click.echo('Acqusition Tool: {}'.format(config[0]))		#config2 = [0 - tool, 1 - output_location, 2 - hashing, 3 - logging, 
-		click.echo('\nOutput_Location: {}'.format(config[1]))			#4 - logging_location, 5 - multiple_hashing, 6 - Hashing_mode_1, 
-		click.echo('Enable Logging: {}'.format(config[3]))			#7 - hashing_mode_2, 8 - byte_split, 9 - file_splitting, 
-		if config[3] == 'True':							#10 - split_size, 11 - split_format, 12 - hash_window, 13 - hash_converstion]
-			click.echo('Logging_Location: {}'.format(config[4]))
-		click.echo('Enable_OTF_Hashing: {}'.format(config[2]))
-		if config[2] == 'True':
-			click.echo('Hashing_Mode 1: {}'.format(config[6]))
-			click.echo('Enable Multiple Hashes: {}'.format(config[5]))
-		if config[5] == 'True':
-			click.echo('Hashing_Mode 2: {}'.format(config[7]))
-		click.echo('Byte Split: {}'.format(config[8]))
-		click.echo('Enable File Splitting: {}'.format(config[9]))
-		if config[9] == 'True':
-			click.echo('Split Size: {}'.format(config[10]))
-			click.echo('Split Format: {}'.format(config[11]))
-			click.echo('Hashing Window: {}'.format(config[12]))
-		click.echo('Hash Conversion: {}'.format(config[13]))
-
-	#File Ext. generator / file name generator
-	img = str(ACQ_drive.get_partition_selection())
-	a, b, name = img.split('/')
-
-	ext = '_00'
-
-	count = 1
-	while True:
-		filepath = '{}{}{}{}'.format(scs.settings_check('Default_Output_Location'), name, ext, str(count))
-		if (os.path.isfile(filepath + '.img') == True and config[0] == 'dc3dd'):
-			count = count + 1
-		elif (os.path.isfile(filepath + '.dd') == True and config[0] == 'dcfldd'):
-			count = count + 1
-		else:
-			name += (ext + str(count))
-			break
-
-	#Command Creation for 'dc3dd'
-	if config[0] == 'dc3dd':
-		line = ''
-		command = 'sudo dc3dd'
-		command += ' if={}'.format(str(ACQ_drive.get_partition_selection()))
-		command += ' of={}{}.img'.format(config[1], name)
-		if config[2] == 'True':
-			command += ' hash={}'.format(config[3])
-		if config[4] == 'True':
-			command += ' log={}{}.log'.format(config[5], name) 
-
-	#command creation for 'dcfldd'
-	elif config[0] == 'dcfldd':
-		a = ''
-		b = ''
-		command = 'sudo dcfldd'
-		command += ' if={}'.format(str(ACQ_drive.get_partition_selection()))
-		if config[2] == 'True':
-			command += ' hash={}'.format(config[6])
-			a = ' {}log={}{}_{}.txt'.format(config[6], config[4], name, config[6])
-			if config[5] == 'True':
-				command += ',{}'.format(config[7])
-				b = ' {}log={}{}_{}.txt'.format(config[7], config[4], name, config[7])
-		command += a
-		command += b
-		command += ' hashconv={}'.format(config[13])
-		command += ' bs={}'.format(config[8])
-		command += ' hashwindow={}'.format(config[12])
-		if config[9] == 'True':
-			command += ' split={}'.format(config[10])
-			command += ' splitformat={}'.format(config[11])
-		command += ' of={}{}.dd'.format(config[1], name)
-
-	click.secho('\n- --- - WARNING - --- -', bold=True, fg='red')
-	click.echo('\nCommand: {}'.format(command))
-	click.secho('\nYou Are About To Execute The Above Command! Do You Wish To Proceed? [Y/N]', bold=True)
-
-	#warning selection
-	choices = ['[1] TERMINATE!', '[2] EXECUTE!']
-	index_selection = tms.generate_menu('', choices)
-
-	if index_selection == 1:
-		os.system(command)
+	if p_code == 255:
+		click.echo('Partiton To Acquire -- {}'.format(acq_drive.get_path()))
+		click.echo('Partiton Size (GB) -- {}'.format(acq_drive.get_size()))
+		click.echo('Partiton Size Bytes -- {}'.format(acq_drive.get_size_bytes()))
+		click.echo('Partiton Sectors -- {}\n'.format(acq_drive.sectors()))
 	else:
-		ACQ_config()
+		click.echo('Partiton To Acquire -- {}'.format(acq_drive.get_partition_path(p_code)))
+		click.echo('Partiton Size (GB) -- {}'.format(acq_drive.get_partition_size(p_code)))
+		click.echo('Partiton Size Bytes -- {}'.format(acq_drive.get_partition_size_bytes(p_code)))
+		click.echo('Partiton Sectors -- {}\n'.format(acq_drive.get_partition_sectors(p_code)))
+
+	click.secho('Selected Settings:', bold=True)
+	skip_items = []
+	check = False
+	for count, setting in enumerate(settings_list):
+		if setting.get_code_call() == '$Enable_OTF_Hashing' and setting.get_code_var() == 'False':	#skip menus based on selection
+			skip_items.append('$Hashing_Mode')
+			skip_items.append('$Multiple_Hashing')
+			skip_items.append('$Hashing_Mode_2')
+		if setting.get_code_call() == '$Enable_Logging' and setting.get_code_var() == 'False':
+			skip_items.append('$Default_Hash_Logging_Location')
+		if setting.get_code_call() == '$Multiple_Hashing' and setting.get_code_var() == 'False':
+			skip_items.append('$Hashing_Mode_2')
+		if setting.get_code_call() == '$File_Splitting' and setting.get_code_var() == 'False':
+			skip_items.append('$Split_Size')
+			skip_items.append('$Split_Format')
+
+		if setting.get_code_call() == '$Multiple_Hashing':
+			check = True
+
+		skip_check = False
+		for skip in skip_items:
+			if skip == setting.get_code_call():		
+				skip_check = True
+
+		if skip_check == True:
+			continue
+				
+		call, var = setting.get_code().split(':')
+		if settings_list[0].get_code_var() == 'dc3dd' and check != True:				#display Settings Selected
+			click.echo('{} -- {}'.format(call[1:], var))
+		elif settings_list[0].get_code_var() == 'dcfldd':
+			click.echo('{} -- {}'.format(call[1:], var))
+
+	click.echo('\nNOTE: Please Check To Ensure That All Settings Are Correct And The Generated Command Is Correct')
+	click.echo('If You Are Unsure Of The Configuration Or Unsure What A Setting Does, Please Proceed With Caution')
+
+	click.secho('\n- --- - WARNING - --- - --- - WARNING - --- - --- - WARNING - --- -', fg='red', bold=True)
+	click.secho('\nCOMMAND:', bold=True)
+	click.echo(command)
+
+	title = '\nYou Are About To Execute The Above Command Do You With To Proceed?'
+	index_selection = tms.generate_promt_menu(title, 2)
+	
+	if index_selection == 0:
+		ACQ_config(acq_drive, p_code)
+	elif index_selection == 1:
+		logfile = scs.settings_check('$Default_Hash_Logging_Location')
+		logfile = logfile + 'Usage_Logs/Acq_Usage_Logs.txt'
+		uls.log_change(logfile, 'Acq_Attempt', command + '\n')			#update usage logs
+		os.system(command)							#execute command
 
 	MainMenu_Controller.main_menu()
-		
+	 
 """
-Wizard page
-2x Wizards based on the tool the user uses
+Wizard Config Page
+Cycles through the list of ACQ settings
+Requires a settings list, a drive to acquire and the partition code (int(255) == Full Drive)
+returns a new settings_list based on selections
 """
-def ACQ_wizard(config1, config2):
+def ACQ_wizard(settings_list, acq_drive, p_code):
+	choices = []
+	title = ''
+	skip_menus = []
+	list_dels = []
+	tool_code = ''
 
-	#Wizard For 'dc3dd'
-	def ACQ_wizard1(config1):
-		config = config1
+	for count, setting in enumerate(settings_list):			
+		os.system('clear')
+		click.secho('Acquisition: Automatic Wizard\n', fg='blue', bold=True)
+		choices = []
+		title = setting.get_description()
+		for choice in setting.get_items_list():
+			choices.append(choice)
+		choices.append('[1] Use Default: {}'.format(scs.settings_check(setting.get_code_call())))
+		choices.append('[0] Back')			
 
-		choices = ['[1] Default: {}'.format(config[1]), '[2] Internal: Evidence/', '[0] Back']
-		title = '\nPlease Select An Output Path'
-
-		#path selection with '.isdir' check.
-		x = True
-		while x == True:
-			index_selection = tms.generate_menu(title, choices)
-			check = os.path.isdir(config[1])
-			tmp = config[1]
-			if check == True and index_selection == 0:
-				if tmp[-1:] != '/':
-					tmp += str('/')
-				config[1] = tmp
-				click.echo('"{}" Selected'.format(config[1]))
-				break	
-			else:
-				if index_selection == 1:
-					config[1] = 'Evidence/'
-					click.echo('"{}" Selected'.format(config[1]))
-					break
-				elif selection == 2:
-					ACQ_config()
-					break
-				else:
-					es.error(1004, 0)
-		
-		choices = ['[1] Default: {}'.format(config[3]), '[2] md5', '[3] sha1', '[4] sha256',
-			 '[5] sha512', '[6] None (Disable)', '[0] Back']
-		title = '\nPlease Specify On-The-Fly Hashing Algorithm:'
-
-		#hash selection
-		x = True
-		while x == True:
-			index_selection = tms.generate_menu(title, choices)
-
-			if index_selection == 0:
-				click.echo('{} Selected'.format(config[3]))
-				break
-			elif index_selection == 1:
-				config[3]  = 'md5'
-				click.echo('{} Selected'.format(config[3]))
-				break
-			elif index_selection == 2:
-				config[3]  = 'sha1'
-				click.echo('{} Selected'.format(config[3]))
-				break
-			elif index_selection == 3:
-				config[3]  = 'sha256'
-				click.echo('{} Selected'.format(config[3]))
-				break
-			elif index_selection == 4:
-				config[3]  = 'sha512'
-				click.echo('{} Selected'.format(config[3]))
-				break
-			elif index_selection == 5:
-				config[2]  = 'False'
-				click.echo('On-The-Fly Hasing Disabled')
-				break
-			elif index_selection == 6:
-				ACQ_config()
-				break
-			else:
-				es.error(1000, 0)
-
-		choices = ['[1] Default: {}'.format(config[5]), '[2] Internal: Logs/', '[3] None (Disable)' '[0] Back']
-		title = '\nPlease Specify A Output Path For The Log Files:'
-
-		#log file selection with '.isdir' check
-		x = True
-		while x == True:
-			index_selection = tms.generate_menu(title, choices)
-			check = os.path.isdir(config[5])
-			tmp = config[5]
-			if check == True and index_selection == 0:
-				if tmp[-1:] != '/':
-					tmp += str('/')
-				config[5] = tmp
-				click.echo('"{}" Selected'.format(config[5]))
-				break		
-			else:
-				if index_selection == 1:
-					config[5] = 'Logs/'
-					click.echo('Logs/ Selected')
-					break
-				elif index_selection == 2:
-					click.echo('Logging Disabled')
-					config[4] = 'False'
-					break
-				elif index_selection == 3:
-					ACQ_config()
-					break
-				else:
-					es.error(1004, 0)
-
-		ACQ_conform(config)
-
-	#(Advanced) Wizard for 'dcfldd'
-	def ACQ_wizard2(config2):
-		config = config2
-
-		choices = ['[1] Default: {}'.format(config[1]), '[2] Internal: Evidence/', '[0] Back']
-		title = '\nPlease Select An Output Path'
-
-		#path selection with '.isdir' check.
-		x = True
-		while x == True:
-			index_selection = tms.generate_menu(title, choices)
-			check = os.path.isdir(config[1])
-			tmp = config[1]
-			if check == True and index_selection == 0:
-				if tmp[-1:] != '/':
-					tmp += str('/')
-				config[1] = tmp
-				click.echo('"{}" Selected'.format(config[1]))
-				break	
-			else:
-				if index_selection == 1:
-					config[1] = 'Evidence/'
-					click.echo('"{}" Selected'.format(config[1]))
-					break
-				elif selection == 2:
-					ACQ_config()
-					break
-				else:
-					es.error(1004, 0)
-
-		choices = ['[1] Default: {}'.format(config[6]), '[2] md5', '[3] sha1', '[4] sha256',
-			 '[5] sha512', '[6] None (Disable)', '[0] Back']
-		title = '\nPlease Specify On-The-Fly Hashing Algorithm:'
-
-		#hash selection
-		x = True
-		while x == True:
-			index_selection = tms.generate_menu(title, choices)
-
-			if index_selection == 0:
-				click.echo('{} Selected'.format(config[6]))
-				break
-			elif index_selection == 1:
-				config[6]  = 'md5'
-				click.echo('{} Selected'.format(config[6]))
-				break
-			elif index_selection == 2:
-				config[6]  = 'sha1'
-				click.echo('{} Selected'.format(config[6]))
-				break
-			elif index_selection == 3:
-				config[6]  = 'sha256'
-				click.echo('{} Selected'.format(config[6]))
-				break
-			elif index_selection == 4:
-				config[6]  = 'sha512'
-				click.echo('{} Selected'.format(config[6]))
-				break
-			elif index_selection == 5:
-				config[2]  = 'False'
-				click.echo('On-The-Fly Hasing Disabled')
-				break
-			elif index_selection == 6:
-				ACQ_config()
-				break
-			else:
-				es.error(1000, 0)
-		
-		if config[2] != 'False':	
-			choices = ['[1] Default: {}'.format(config[6]), '[2] md5', '[3] sha1', '[4] sha256',
-			 	'[5] sha512', '[6] None (Disable)', '[0] Back']
-			title = '\nPlease Specify 2nd On-The-Fly Hashing Algorithm:'
-
-			#2nd hash selection
-			x = True
-			while x == True:
-				index_selection = tms.generate_menu(title, choices)
-				if index_selection == 0:
-					click.echo('{} Selected'.format(config[7]))
-					break
-				elif index_selection == 1:
-					config[7]  = 'md5'
-					click.echo('{} Selected'.format(config[7]))
-					break
-				elif index_selection == 2:
-					config[7]  = 'sha1'
-					click.echo('{} Selected'.format(config[7]))
-					break
-				elif index_selection == 3:
-					config[7]  = 'sha256'
-					click.echo('{} Selected'.format(config[7]))
-					break
-				elif index_selection == 4:
-					config[7]  = 'sha512'
-					click.echo('{} Selected'.format(config[7]))
-					break
-				elif index_selection == 5:
-					config[5]  = 'False'
-					click.echo('On-The-Fly Hasing Disabled')
-					break
-				elif index_selection == 6:
-					ACQ_config()
-					break
-				else:
-					es.error(1000, 0)
-
-		choices = ['[1] Default: {}'.format(config[4]), '[2] Internal: Logs/', '[3] None (Disable)', '[0] Back']
-		title = '\nPlease Specify A Output Path For The Log Files:'
-
-		#log file selection with '.isdir' check
-		x = True
-		while x == True:
-			index_selection = tms.generate_menu(title, choices)
-			check = os.path.isdir(config[4])
-			tmp = config[4]
-			if check == True and index_selection == 0:
-				if tmp[-1:] != '/':
-					tmp += str('/')
-				config[4] = tmp
-				click.echo('"{}" Selected'.format(config[4]))
-				break		
-			else:
-				if index_selection == 1:
-					config[4] = 'Logs/'
-					click.echo('Logs/ Selected')
-					break
-				elif index_selection == 2:
-					click.echo('Logging Disabled')
-					config[3] = 'False'
-					break
-				elif index_selection == 3:
-					ACQ_config()
-					break
-				else:
-					es.error(1004, 0)
-
-		choices = ['[1] Default: {}'.format(config[8]), '[2] 256', '[3] 512', '[4] 1024', '[5] 2048', '[0] Back']
-		title = '\nPlease Sepcify A Byte Split (Read x Sectors Then Write)'
-
-		#byte split selection
-		x = True
-		while x == True:
-			index_selection = tms.generate_menu(title, choices)
-			if index_selection == 0:
-				click.echo('{} Selected'.format(config[8]))
-				break
-			elif index_selection == 1:
-				config[8]  = '256'
-				click.echo('{} Selected'.format(config[8]))
-				break
-			elif index_selection == 2:
-				config[7]  = '512'
-				click.echo('{} Selected'.format(config[7]))
-				break
-			elif index_selection == 3:
-				config[7]  = '1024'
-				click.echo('{} Selected'.format(config[7]))
-				break
-			elif index_selection == 4:
-				config[7]  = '2048'
-				click.echo('{} Selected'.format(config[7]))
-				break
-			elif index_selection == 5:
-				ACQ_config()
-				break
-			else:
-				es.error(1000, 0)
-
-		choices = ['[1] Default: {}'.format(config[10]), '[2] 1G', '[3] 2G', '[4] 5G', 
-			'[5] 10G', '[6] 20G', '[7] None (Disable)', '[0] Back']
-		title = '\nSplit Image File? (Gb) (Hash Window Will Copy This Selection)'
-
-		#img splitting selection
-		x = True
-		while x == True:
-			index_selection = tms.generate_menu(title, choices)
-			if index_selection == 0:
-				click.echo('{} Selected'.format(config[10]))
-				config[12] = config[10]
-				break
-			elif index_selection == 1:
-				config[10]  = '1G'
-				click.echo('{} Selected'.format(config[10]))
-				config[12] = config[10]
-				break
-			elif index_selection == 2:
-				config[10]  = '2G'
-				click.echo('{} Selected'.format(config[10]))
-				config[12] = config[10]
-				break
-			elif index_selection == 3:
-				config[10]  = '5G'
-				click.echo('{} Selected'.format(config[10]))
-				config[12] = config[10]
-				break
-			elif index_selection == 4:
-				config[10]  = '10G'
-				click.echo('{} Selected'.format(config[10]))
-				config[12] = config[10]
-				break
-			elif index_selection == 5:
-				config[10]  = '20G'
-				click.echo('{} Selected'.format(config[10]))
-				config[12] = config[10]
-				break
-			elif index_selection == 6:
-				config[9]  = 'False'
-				click.echo('File Splitting Disabled')
-				break
-			elif index_selection == 7:
-				ACQ_config()
-				break
-			else:
-				es.error(1000, 0)
-
-		if config[9] != 'False':
-			choices = ['[1] Default: {}'.format(config[11]), '[2] nnn (img.012)', '[3] aaa (img.abc)', 
-					'[4] ann (img.a01)', '[0] Back']
-			title = '\nPlease Specify A Split File Format:'
-
-			#split format selection
-			x = True
-			while x == True:
-				index_selection = tms.generate_menu(title, choices)
-				if index_selection == 0:
-					click.echo('{} Selected'.format(config[11]))
-					break
-				elif index_selection == 1:
-					config[11] = 'nnn'
-					click.echo('{} Selected'.format(config[11]))
-					break
-				elif index_selection == 2:
-					config[11] = 'aaa'
-					click.echo('{} Selected'.format(config[11]))
-					break
-				elif index_selection == 3:
-					config[11] = 'ann'
-					click.echo('{} Selected'.format(config[11]))
-					break
-				elif index_selection == 4:
-					ACQ_config()
-					break
-				else:
-					es.error(1000, 0)
-
-		choices = ['[1] After', '[2] Before', '[0] Back']
-		title = '\nPeform Hash Befor Or After Converstion:'
-		#hashconv selection
-		x = True
-		while x == True:
-			index_selection = tms.generate_menu(title, choices)
-			if index_selection == 0:
-				config[13] = 'after'
-				click.echo('{} Selected'.format(config[13]))
-				break
-			elif index_selection == 1:
-				config[13] = 'before'
-				click.echo('{} Selected'.format(config[13]))
-				break
-			elif index_selection == 2:
-				ACQ_config()
-				break
-			else:
-				es.error(1000, 0)
-
-		ACQ_conform(config)
-
-	os.system('clear')
-	click.secho('1.2.1: Acqusition Configuration Wiazrd', fg='blue', bold=True)
-	
-	choices = ['[1] dc3dd (.img Files)', '[2] dcfldd (.dd Files) (Advanced)', '[0] Back']
-	title = '\nPWhat Tool Would You Like To Use?'
-
-	#wizard selection
-	x = True
-	while x == True:
-		index_selection = tms.generate_menu(title, choices)
-		if index_selection == 0:
-			ACQ_wizard1(config1)
+		if setting.get_code_call() == '$Multiple_Hashing' and tool_code == 'dc3dd':	#ignore dfcldd tools if dc3dd
+			settings_list = settings_list[:count]
 			break
-		elif index_selection == 1:
-			ACQ_wizard2(config2)
+
+		skip = False						#skip menu based on skip_menus
+		for skip_code in skip_menus:
+			if skip_code == setting.get_code_call():
+				skip = True
+		if skip == True:
+			list_dels.append(count)				#store list[count] code for removal
+			continue
+		elif skip == False:
+			index_selection = tms.generate_menu(title, choices)		#user input
+
+		if index_selection == len(choices) - 1 or index_selection == '0':	#return to config page
+			ACQ_config(acq_drive, p_code)
 			break
-		elif index_selection == 2:
-			ACQ_config()
-			break
+
+		if index_selection == len(choices) - 2:
+			continue
+
+		if choices[index_selection].startswith('--') == True:			#detect custom string menu
+			title = choices[index_selection]
+			if choices[index_selection] == '--File_Name':
+				code = 0
+			else:
+				code = 1
+			var = tms.generate_string_menu(title, code)
+
+			if var == '0':
+				var = setting.get_code_call()
+
+			setting.set_code(setting.get_code_call() + ':' + var)
 		else:
-			es.error(1000, 0)
+			setting.set_code(setting.get_code_call() + ':' + choices[index_selection])
 
+		if setting.get_code_call() == '$Enable_OTF_Hashing' and setting.get_code_var() == 'False':	#skip menus based on selection
+			skip_menus.append('$Hashing_Mode')
+			skip_menus.append('$Multiple_Hashing')
+			skip_menus.append('$Hashing_Mode_2')
+		if setting.get_code_call() == '$Enable_Logging' and setting.get_code_var() == 'False':
+			skip_menus.append('$Default_Hash_Logging_Location')
+		if setting.get_code_call() == '$Multiple_Hashing' and setting.get_code_var() == 'False':
+			skip_menus.append('$Hashing_Mode_2')
+		if setting.get_code_call() == '$File_Splitting' and setting.get_code_var() == 'False':
+			skip_menus.append('$Split_Size')
+			skip_menus.append('$Split_Format')
+
+		if count == 0:
+			tool_code = setting.get_code_var()	#save tool on first cycle (dependancy)
+
+	check = 0					#del marked items
+	for del_ in list_dels:
+		settings_list.pop(del_ - check)
+		check = check + 1
+
+	return settings_list				#retun new list
 """
-Read storage file command
-reads a storage file name Storage.txt under /config
-String handling to store the only needed infomation based on patterns in the Storage.txt file.
+custom config 'quick'
+sets custom settings based on selections below
+Requires a settings list
+returns a new settings_list
 """
-def read_storage_file():
-	drive_found = False		
-	details = ''
-	found_drives = []				
-	drive_count = 0
-	found_sections = [] 
-	global detected_drives
-	global bootdrive_code
-	
-	detected_drives = []
-	os.system('sudo fdisk -l > Config/Storage.txt')
+def ACQ_config_quick(settings_list):
+	for setting in settings_list:
+		if setting.get_code_call() == '$Default_Tool':
+			setting.set_code(setting.get_code_call() + ':' + setting.get_items_list()[0])
+		if setting.get_code_call() == '$Enable_OTF_Hashing':
+			setting.set_code(setting.get_code_call() + ':' + setting.get_items_list()[1])
+		if setting.get_code_call() == '$Enable_Logging':
+			setting.set_code(setting.get_code_call() + ':' + setting.get_items_list()[1])	
 
-	txt = open('Config/Storage.txt','r')
-	txt_lines = txt.readlines()
-
-	for line in txt_lines:
-		if line[0:6] == 'Disk /':		#check for disk line
-			if line.find('ram') != -1:	#Ignore Ram
-				pass
-			else:
-				drive_found = True					
-				line_count = 0
-				drive_count = drive_count + 1
-				details += '\nDrive {} Details:\n'.format(str(drive_count))
-				details += str(line)
-				found_drives.append(line)
-
-		elif drive_found == True:
-			if line == '\n':
-				line_count = line_count + 1
-				details += '\n'
-				if line_count >= 2:
-					drive_found = False			#end of drive info
-					click.echo('')
-			else:
-				details += str(line)
-				if line.find('Boot') != -1:			#Check for boot
-					bootdrive_code = drive_count - 1
-				if line.find('/') != -1 and line_count == 1:
-					found_sections.append(line)	
-	txt.close()
-	click.echo(details)
-	
-	for count, drive in enumerate(found_drives):			#retrive stored drive String info (single 'Disk/' file line and format)
-		a, path, sizeGB, b, sizeBytes, c, d, e  = drive.split(' ')
-		path, a = path.split(':')
-		detected_drives.append(Drive(count + 1, path, float(sizeGB), float(sizeBytes)))
-
-	for section in found_sections:					#retrive and format String partitions
-		section_path = section[:11]
-		section_path = section_path.rstrip()
-		for count, drive in enumerate(detected_drives):
-			if section.find('{}'.format(str(drive.get_path()))) !=  -1:
-				drive.add_drive_partition(section_path)
-
-"""
-function that reads the config file and returns 2 configs
-uses the settings check function to gather configs
-"""
-def load_default_ACQ_conf():
-	click.secho('\nDefault Configuration:', bold = True)	
-	
-	tool_check = scs.settings_check('$Default_Tool')
-
-	tool = 'dc3dd'
-	output_location = scs.settings_check('$Default_Output_Location')
-	hashing = scs.settings_check('$Enable_OTF_Hashing')
-	hashing_mode = scs.settings_check('$Hashing_Mode')
-	logging = scs.settings_check('$Enable_Logging')
-	logging_location = scs.settings_check('$Default_Logging_Location')
-	
-	config1 = [tool, output_location, hashing, hashing_mode, logging, logging_location]
-
-	tool = 'dcfldd'
-	output_location = scs.settings_check('$Default_Output_Location')
-	hashing = scs.settings_check('$Enable_OTF_Hashing')
-	logging = scs.settings_check('$Enable_Logging')
-	logging_location = scs.settings_check('$Default_Logging_Location')
-	multiple_hashing = scs.settings_check('$Multiple_Hashing')
-	Hashing_mode_1 = scs.settings_check('$Hashing_Mode')
-	hashing_mode_2 = scs.settings_check('$Hashing_Mode_2')
-	byte_split = scs.settings_check('$Byte_Split')
-	file_splitting = scs.settings_check('$File_Splitting')
-	split_size = scs.settings_check('$Split_Size')
-	split_format = scs.settings_check('$Split_Format')
-	hash_window = split_size
-	hash_converstion = scs.settings_check('$Hashing_Conversion')
-
-	config2 = [tool, output_location, hashing, logging, logging_location, multiple_hashing, 
-		Hashing_mode_1, hashing_mode_2, byte_split, file_splitting, split_size, 
-		split_format, hash_window, hash_converstion]
-
-	if tool_check == 'dc3dd':	
-		click.echo('\nDefault Tool: {}'.format(config1[0]))
-		click.echo('Default Output Location: {}'.format(config1[1]))
-		click.echo('Enable On-The-Fly Hashing: {}'.format(config1[2]))
-		click.echo('Hashing Mode: {}'.format(config1[3]))
-		click.echo('Enable Logging: {}'.format(config1[4]))
-		click.echo('Default Logging_Location: {}\n'.format(config1[5]))
-	elif tool_check == 'dcfldd':
-		click.echo('Default Tool: {}'.format(config2[0]))
-		click.echo('Default Output Location: {}'.format(config2[1]))
-		click.echo('Enable On-The-Fly Hashing: {}'.format(config2[2]))
-		click.echo('Enable Logging: {}'.format(config2[3]))
-		click.echo('Default Logging Location: {}'.format(config2[4]))
-		if config2[2] == 'True':
-			click.echo('Enable Multple Hashing: {}'.format(config2[5]))
-			if config2[5] == 'True':
-				click.echo('Hashing Mode 1: {}'.format(config2[6]))
-				click.echo('Hashing Mode 2: {}'.format(config2[7]))
-			else:
-				click.echo('Hashing Mode: {}'.format(config2[6]))
-		click.echo('Byte Split: {}'.format(config2[8]))
-		click.echo('Enable File Splitting: {}'.format(config2[9]))
-		if config2[9] ==  'True':
-			click.echo('Split Size (G): {}'.format(config2[10]))
-			click.echo('Split Format (aaa, nnn): {}'.format(config2[11]))
-			click.echo('Hashing Window: {}'.format(config2[12]))
-		click.echo('Hash Converstion: {}'.format(config2[13]))
-	else:
-		ErrorScript.error(1003, 2)
-
-	return config1, config2
-
+	return settings_list

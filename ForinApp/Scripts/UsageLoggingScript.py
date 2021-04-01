@@ -26,15 +26,28 @@ def log_change(filepath, action, contents):
 		pass
 
 	if action == 'Settings_Change':
-		txt = open(filepath, 'w')		#write new log
-		txt.write(output)
-		for item in contents:
-			item = item.get_code()
-			code, var = item.split(':')
-			oldvar = scs.settings_check(code)
-			txt.write('Settings Changed: {}   From: {}   To: {}\n'.format(code, oldvar, var))
-		txt.write('\n')
+		txt = open(filepath, 'w')		#write setting new log
+		if contents != '':		
+			txt.write(output)
+			for item in contents:
+				item = item.get_code()
+				code, var = item.split(':')
+				oldvar = scs.settings_check(code)
+				txt.write('Settings Changed: {}   From: {}   To: {}\n'.format(code, oldvar, var))
+			txt.write('\n')
 		txt == open(filepath, 'a')
 		for item in exsisting_logs:		#append old logs
 			txt.write(item)
 		txt.close()
+
+	if action == 'Acq_Attempt' and contents != '':
+		txt = open(filepath, 'w')		#write Acq new log
+		if contents != '':
+			txt.write(output)
+			txt.write('Command Used: {}'.format(contents))
+			txt.write('\n')
+		txt == open(filepath, 'a')
+		for item in exsisting_logs:		
+			txt.write(item)
+		txt.close()
+			

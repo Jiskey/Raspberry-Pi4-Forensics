@@ -4,6 +4,7 @@
 import click
 import sys
 import os
+import time
 
 from simple_term_menu import TerminalMenu
 
@@ -21,7 +22,7 @@ def generate_menu(menu_title, menu_items):
 		menu_highlight_style = ('bg_' + scs.settings_check('$Highlight_Colour'), 'fg_' + scs.settings_check('$Text_Colour')),
 		cycle_cursor = True,
 		exit_on_shortcut = False,
-		#clear_screen =True,
+		#clear_screen = True,
 	)
 
 	selection_index = menu.show()
@@ -57,8 +58,8 @@ takes in a title and returns a string
 Performs a check (num) if one is required
 """
 def generate_string_menu(title, num):
-	print('\nPlease Specify A Custom {}:'.format(title))
-	print('Back/Cancel = "0", "exit", "quit", "cancel", "back"')
+	click.echo('\nPlease Specify A Custom {}:'.format(title))
+	click.echo('Back/Cancel = "0", "exit", "quit", "cancel", "back"')
 	
 	check = 0
 	x = True
@@ -82,9 +83,28 @@ def generate_string_menu(title, num):
 		elif num == 0:
 			return string_selection
 
+"""
+Gererates a Menu with 2 selections
+takes in a title and a sleep time
+uses time module to specify sleep time to prevent 'Enter Spam'
+"""
+def generate_promt_menu(title, freeze):
+	menu_items = ['CANCEL', 'EXECUTE']
 
+	menu = TerminalMenu(
+		menu_entries = menu_items,
+		title = title,
+		menu_cursor = scs.settings_check('$Cursor_Style'),
+		menu_cursor_style = ('fg_' + scs.settings_check('$Cursor_Colour'), "bold"),
+		menu_highlight_style = ('bg_' + scs.settings_check('$Highlight_Colour'), 'fg_' + scs.settings_check('$Text_Colour')),
+		cycle_cursor = True,
+		exit_on_shortcut = False,
+		#clear_screen = True,
+	)
 
-
+	time.sleep(freeze)
+	selection_index = menu.show()
+	return selection_index
 
 
 

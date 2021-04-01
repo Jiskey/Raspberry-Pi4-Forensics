@@ -1,3 +1,20 @@
+--- Action Taken: Settings_Change AT: Thu Apr  1 13:13:11 2021 BY: Guest
+Settings Changed: $Default_Output_Location   From: /home/kali/Raspberry-Pi4-Forensics/ForinApp/Evidence/   To: /home/kali/Test_Evi
+Settings Changed: $Default_Hash_Logging_Location   From: /home/kali/Raspberry-Pi4-Forensics/ForinApp/Logs/   To: /home/kali/Test_Evi
+
+--- Action Taken: Settings_Change AT: Wed Mar 31 04:33:51 2021 BY: Guest
+Settings Changed: $Default_Tool   From: dcfldd   To: dc3dd
+
+--- Action Taken: Settings_Change AT: Wed Mar 31 04:30:38 2021 BY: Guest
+Settings Changed: $Boot_Drive_Override   From: True   To: False
+Settings Changed: $Default_Tool   From: dc3dd   To: dcfldd
+
+--- Action Taken: Settings_Change AT: Wed Mar 31 04:27:54 2021 BY: Guest
+Settings Changed: $Default_Tool   From: dcfldd   To: dc3dd
+
+--- Action Taken: Settings_Change AT: Wed Mar 31 04:20:02 2021 BY: Guest
+Settings Changed: $Boot_Drive_Override   From: False   To: True
+
 --- Action Taken: Settings_Change AT: Sun Mar 28 19:59:36 2021 BY: Guest
 Settings Changed: $Highlight_Colour   From: red   To: black
 

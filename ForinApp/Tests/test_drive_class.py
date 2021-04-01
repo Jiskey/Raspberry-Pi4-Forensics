@@ -13,7 +13,8 @@ def test_drive_class_gets():
 
 	drives = fds.fdisk()
 	
-	assert len(drives) > 0
+	assert len(drives) >= 1
+	assert len(drives) > 1
 	assert drives[0].get_path() == '/dev/sda'
 	assert drives[0].get_size() == 465.76
 	assert drives[0].get_size_bytes() == 500107862016
