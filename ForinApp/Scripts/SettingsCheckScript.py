@@ -8,7 +8,8 @@ returns the setting selected in the settings file by reading the file
 """
 def settings_check(setting):
 	txt = open('Config/Settings.txt', 'r')
-	txt_lines = txt.readlines()	
+	txt_lines = txt.readlines()
+	txt.close()	
 
 	for line in txt_lines:
 		if line.find(setting) != -1:			#if setting found
@@ -18,7 +19,6 @@ def settings_check(setting):
 		else:
 			pass
 
-	txt.close()
 	return statement
 
 """

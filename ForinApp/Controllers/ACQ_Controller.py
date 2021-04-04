@@ -129,7 +129,7 @@ def ACQ_conform(settings_list, acq_drive, p_code):
 		click.echo('Partiton To Acquire -- {}'.format(acq_drive.get_path()))
 		click.echo('Partiton Size (GB) -- {}'.format(acq_drive.get_size()))
 		click.echo('Partiton Size Bytes -- {}'.format(acq_drive.get_size_bytes()))
-		click.echo('Partiton Sectors -- {}\n'.format(acq_drive.sectors()))
+		click.echo('Partiton Sectors -- {}\n'.format(acq_drive.get_sectors()))
 	else:
 		click.echo('Partiton To Acquire -- {}'.format(acq_drive.get_partition_path(p_code)))
 		click.echo('Partiton Size (GB) -- {}'.format(acq_drive.get_partition_size(p_code)))

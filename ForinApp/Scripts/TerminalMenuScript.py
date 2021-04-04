@@ -72,7 +72,7 @@ def generate_string_menu(title, num):
 				string_selection = '0'
 				return string_selection
 		
-		if num == 1:
+		if num == 1 and string_selection != '':
 			if os.path.isdir(string_selection) == True:
 				return string_selection
 			elif os.path.isdir(string_selection) == False and check == 0:
@@ -80,7 +80,7 @@ def generate_string_menu(title, num):
 				print('Invalid Selection, Please Specify A Valid Selection')
 			else:
 				pass
-		elif num == 0:
+		elif num == 0 and string_selection != '':
 			return string_selection
 
 """
@@ -95,7 +95,7 @@ def generate_promt_menu(title, freeze):
 		menu_entries = menu_items,
 		title = title,
 		menu_cursor = scs.settings_check('$Cursor_Style'),
-		menu_cursor_style = ('fg_' + scs.settings_check('$Cursor_Colour'), "bold"),
+		#menu_cursor_style = ('fg_' + scs.settings_check('$Cursor_Colour'), "bold"),
 		menu_highlight_style = ('bg_' + scs.settings_check('$Highlight_Colour'), 'fg_' + scs.settings_check('$Text_Colour')),
 		cycle_cursor = True,
 		exit_on_shortcut = False,
@@ -105,6 +105,31 @@ def generate_promt_menu(title, freeze):
 	time.sleep(freeze)
 	selection_index = menu.show()
 	return selection_index
+"""
+Gererates a Menu with Multiple selection func
+takes in a title, a list of choices and a type check
+uses type_check to return either a tuple(indices(0, 1, 4. etc) or tuple(str, str, str, etc...))
+"""
+def gernerate_multi_select_menu(title, choices, type_check):
+	menu_items = choices
 
+	menu = TerminalMenu(
+		menu_entries = menu_items,
+		title = title,
+		menu_cursor = scs.settings_check('$Cursor_Style'),
+		menu_cursor_style = ('fg_' + scs.settings_check('$Cursor_Colour'), "bold"),
+		menu_highlight_style = ('bg_' + scs.settings_check('$Highlight_Colour'), 'fg_' + scs.settings_check('$Text_Colour')),
+		cycle_cursor = True,
+		exit_on_shortcut = False,
+		multi_select = True,
+		show_multi_select_hint=True 
+		#clear_screen = True,
+	)
+
+	index_selection_indices = menu.show()
+	if type_check == False:
+		return index_selection_indices
+	elif type_check == True:
+		return menu.chosen_menu_entries
 
 

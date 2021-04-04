@@ -134,3 +134,13 @@ def acq_command_gen(settings_list, acq_drive, p_code):		#p_code of 255 == full d
 		command = start + drive + hashing + log + hash_window + converstion + block_size + error_handling + splitting + splitting_format + output
 	
 	return command
+
+"""
+Scalpel command generation.
+requires a path to carve, output path and the name of the Dir
+"""
+def scalpel_commmand_gen(path, output, dir_name):
+	if output.endswith('/') == False:
+		output += '/' 
+	command = 'sudo scalpel {} -o {}{}'.format(path, output, dir_name)
+	return command

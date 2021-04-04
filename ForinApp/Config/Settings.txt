@@ -20,11 +20,11 @@ $Boot_Drive_Override:False
 $Default_Tool:dc3dd
 
 #A Default Name for Acquired Images and Logs
-[--File_Name]
+[-- Specify New Acq File_Name]
 $Default_Image_Name:hello
 
 #Default Output Location for Images
-[--Output_Directory]
+[-- Specify New Acq Output_Directory]
 $Default_Output_Location:/home/kali/Raspberry-Pi4-Forensics/ForinApp/Evidence/
 
 #Enable On The Fly Hashing During Acqusition 
@@ -40,7 +40,7 @@ $Hashing_Mode:md5
 $Enable_Logging:True
 
 #Default Logging Location for Hash Logs
-[--Hash_Directory]
+[-- Specify New Hash_Directory]
 $Default_Hash_Logging_Location:/home/kali/Raspberry-Pi4-Forensics/ForinApp/Logs/
 
 #Enable Multiple Hash algorithms (If False then 1 will be selected)
@@ -80,6 +80,10 @@ $Error_handling:True
 #Default Data Carving Output Location
 [-- Specify New Output Directory]
 $DC_Output_Location:/home/kali/Raspberry-Pi4-Forensics/ForinApp/Evidence/DC_Evidance
+
+#Default Data Carving Output Dir/Folder Name(Scalpel will create dir if it does not exist)
+[-- Specify New Carving Output Dir/Folder Name]
+$DC_Output_Location_Name:DC_Evidence_Folder
 
 ----- Application Settings -----
 
