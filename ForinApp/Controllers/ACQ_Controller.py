@@ -182,8 +182,10 @@ def ACQ_conform(settings_list, acq_drive, p_code):
 	if index_selection == 0:
 		ACQ_config(acq_drive, p_code)
 	elif index_selection == 1:
-		logfile = scs.settings_check('$Default_Hash_Logging_Location')
-		logfile = logfile + 'Usage_Logs/Acq_Usage_Logs.txt'
+		logfile = scs.settings_check('$Default_UsageLog_Location')
+		if logfile.endswith('/') == False:
+			logfile += '/'
+		logfile += 'Acq_Usage_Logs.txt'
 		uls.log_change(logfile, 'Acq_Attempt', command + '\n')			#update usage logs
 		os.system(command)							#execute command
 

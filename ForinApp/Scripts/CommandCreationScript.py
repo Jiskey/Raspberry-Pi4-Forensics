@@ -139,8 +139,10 @@ def acq_command_gen(settings_list, acq_drive, p_code):		#p_code of 255 == full d
 Scalpel command generation.
 requires a path to carve, output path and the name of the Dir
 """
-def scalpel_commmand_gen(path, output, dir_name):
-	if output.endswith('/') == False:
-		output += '/' 
-	command = 'sudo scalpel {} -o {}{}'.format(path, output, dir_name)
+def DC_commmand_gen(conf_path, tool, dir_name, carve_path):
+	command = 'sudo {} '.format(tool)
+	if tool == 'foremost':
+		command += '-T -v -c {} {} -o {}'.format(conf_path, carve_path, dir_name)
+	if tool == 'scalpel':
+		command += '-v -c {} {} -o {}/'.format(conf_path, carve_path, dir_name)
 	return command

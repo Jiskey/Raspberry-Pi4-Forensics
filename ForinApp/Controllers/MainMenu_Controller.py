@@ -27,7 +27,7 @@ def main_menu():
 	click.secho('                                                             |___/                  ', bold=True) 
 	click.secho('\n-  FORIN - KALI LINUX DIGITAL FORENSIC INVESTIGATOR', bold=True, fg='blue')
 	click.echo('-  By: J. Male')
-	click.echo('-  Version 0.5.0: 4/04/2021')
+	click.echo('-  Version 0.5.1: 5/04/2021')
 	click.echo('-  Kali Version: 2020.4')
 	click.echo('-  Desc: "FORIN" is a simple CLI app that allows you to perform quick/easy digital anylsis and')
 	click.echo('         investigation using the tools included with Kali Linux')
@@ -57,8 +57,8 @@ def sub_menu_1():
 
 
 def sub_menu_2():
-	choices = ["[1] Acquire Img (Dc3dd / Dcfldd)", 
-			"[2] Data Carving (Scalpel)", 
+	choices = ['[1] Acquire Img (Dc3dd / Dcfldd / PhotoRec)', 
+			'[2] Data Carving (Foremost / Scalpel / PhotoRec)', 
 			'[0] Back']
 	title = '\nPlease Select A Tool You Would Like To You!'
 	selection_index = tms.generate_menu(title, choices)
@@ -66,7 +66,7 @@ def sub_menu_2():
 	if selection_index == 0:
 		ACQ_Controller.ACQ_selection()
 	elif selection_index == 1:
-		DC_Controller.DC_selection()
+		DC_Controller.DC_main_menu()
 	elif selection_index == 2:
 		sub_menu_1()
 	else:

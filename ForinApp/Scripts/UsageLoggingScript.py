@@ -7,6 +7,7 @@ import os
 import time
 
 from Scripts import SettingsCheckScript as scs
+
 """
 simple logging function.
 requires the filepath, the name of the change (action), list of lines to write to file
@@ -42,12 +43,21 @@ def log_change(filepath, action, contents):
 
 	if action == 'Acq_Attempt' and contents != '':
 		txt = open(filepath, 'w')		#write Acq new log
-		if contents != '':
-			txt.write(output)
-			txt.write('Command Used: {}'.format(contents))
-			txt.write('\n')
+		txt.write(output)
+		txt.write('Command Used: {}'.format(contents))
+		txt.write('\n')
 		txt == open(filepath, 'a')
 		for item in exsisting_logs:		
 			txt.write(item)
 		txt.close()
-			
+
+	if action == 'Data_Carve_Attempt' and contents != '':
+		txt = open(filepath, 'w')		#write new data carve log
+		txt.write(output)
+		txt.write('Command Used: {}'.format(contents[0]))
+		txt.write(contents[1])
+		txt.write('\n')
+		txt == open(filepath, 'a')
+		for item in exsisting_logs:		
+			txt.write(item)
+		txt.close()

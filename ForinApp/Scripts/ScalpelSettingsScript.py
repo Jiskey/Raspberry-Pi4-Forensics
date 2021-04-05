@@ -11,9 +11,9 @@ from Classes.ScalpelSetting import ScalpelSetting
 get_scalpel_settings_txt gets the scalple config file text.
 returns a list of txt_lines.
 """
-def get_scalpel_settings_txt():
+def get_DC_settings_txt(path):
 	check = False
-	txt = open('/etc/scalpel/scalpel.conf')
+	txt = open(path)
 	txt_lines = txt.readlines()
 	txt.close()
 
@@ -23,8 +23,8 @@ def get_scalpel_settings_txt():
 Writes to the scalpel config file.
 requires a list(lines).
 """
-def set_scalpel_settings_txt(new_txt):
-	txt = open('/etc/scalpel/scalpel.conf','w')			#write to file
+def set_DC_settings_txt(new_txt, path):
+	txt = open(path,'w')			#write to file
 	for txt_line in new_txt:	
 		txt.write(txt_line)
 	txt.close()
@@ -35,9 +35,9 @@ into a list of class(ScalpleSetting) based on the layout of the scalpel.conf fil
 setting.get_options(list(option[0 = tag][1 = ext][2 = case_sens][3 = size][4 = extra1]...)).
 returns a list with class(ScalpelSetting(cat, options())).
 """
-def get_scalpel_settings_list():
+def get_DC_settings_list(path):
 	check = False
-	txt = open('/etc/scalpel/scalpel.conf')
+	txt = open(path)
 	txt_lines = txt.readlines()
 	txt.close()
 	
@@ -48,11 +48,11 @@ def get_scalpel_settings_list():
 
 	cat_check = False
 	for count, line in enumerate(txt_lines):
-		if line.startswith('#-----') and cat_check == False:		#check for main category
+		if line.startswith('#-----') and cat_check == False and count > 3:		#check for main category
 			settings_list.append(ScalpelSetting(cat, options))
 			cat = ''
 			options = []
-			cat = txt_lines[count + 1]
+			cat = txt_lines[count + 1].strip()
 			cat_check = True
 		elif cat_check != False:
 			if line.startswith('#-----'):
@@ -91,7 +91,7 @@ the options within based on a list of user selections from the multi_select term
 requires a settings_list, index_selection = list(strings of user selections), wizard_check code
 returns an altered settings_list
 """
-def set_scalpel_settings_list(settings_list, index_selection, check):
+def set_DC_settings_list(settings_list, index_selection, check):
 
 	select_all = False					#check for select all
 	for index in index_selection:				
@@ -124,7 +124,7 @@ the selected_settings_list and matches the scalpel setting.conf format...
 requries a list(file lines) and a list(altered: class(ScalpelSetting))
 returns a updated list(new_txt)
 """
-def create_scalpel_settings_txt(new_txt, selected_settings_list):
+def create_DC_settings_txt(new_txt, selected_settings_list):
 	enable_codes = []						#what files to enable / disable
 	disable_codes = []
 

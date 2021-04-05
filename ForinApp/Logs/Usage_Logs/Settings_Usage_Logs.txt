@@ -1,3 +1,9 @@
+--- Action Taken: Settings_Change AT: Mon Apr  5 21:02:32 2021 BY: Guest
+Settings Changed: $Cursor_Style   From: ->    To: >> 
+Settings Changed: $Cursor_Colour   From: blue   To: green
+Settings Changed: $Highlight_Colour   From: black   To: black
+Settings Changed: $Text_Colour   From: blue   To: green
+
 --- Action Taken: Settings_Change AT: Thu Apr  1 13:13:11 2021 BY: Guest
 Settings Changed: $Default_Output_Location   From: /home/kali/Raspberry-Pi4-Forensics/ForinApp/Evidence/   To: /home/kali/Test_Evi
 Settings Changed: $Default_Hash_Logging_Location   From: /home/kali/Raspberry-Pi4-Forensics/ForinApp/Logs/   To: /home/kali/Test_Evi

@@ -1,0 +1,10 @@
+--- Action Taken: Data_Carve_Attempt AT: Mon Apr  5 20:56:56 2021 BY: Guest
+Command Used: sudo foremost -T -v -c /etc/foremost.conf /home/kali/Raspberry-Pi4-Forensics/ForinApp/Evidence/hello.img -o Carved_Evidence
+art, art, gif, gif, jpg, jpg, jpg, bmp, mov, mov, mpg, fws, doc, pst, ost, dbx, idx, mbx, htm, 
+
+
+--- Action Taken: Data_Carve_Attempt AT: Mon Apr  5 20:49:46 2021 BY: Guest
+Command Used: sudo foremost -T -v -c /etc/foremost.conf /etc/foremost.conf -o Carved_Evidence
+art, art, gif, gif, jpg, jpg, jpg, bmp, mov, mov, mpg, mpg, mpg, fws, doc, pst, ost, dbx, idx, mbx, htm, 
+
+

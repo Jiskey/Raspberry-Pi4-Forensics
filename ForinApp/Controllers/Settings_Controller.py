@@ -148,8 +148,10 @@ def settings_save_menu(settings_list, changes):
 			setting_index = scs.settings_index(change_call)		#collect index of that setting
 			settings_txt[setting_index] = (change_code + '\n')	#replace old code with new code
 
-		logfile = scs.settings_check('$Default_Hash_Logging_Location')
-		logfile = logfile + 'Usage_Logs/Settings_Usage_Logs.txt'
+		logfile = scs.settings_check('$Default_UsageLog_Location')
+		if logfile.endswith('/') == False:
+			logfile += '/'
+		logfile += 'Settings_Usage_Logs.txt'
 		uls.log_change(logfile, 'Settings_Change', changes)		#Log Changes Made
 
 		scs.settings_update(settings_txt)			#script call to write list of strings to file
