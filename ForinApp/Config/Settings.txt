@@ -93,6 +93,24 @@ $Foremost_ConfFile_Location:/etc/foremost.conf
 [-- Specify New Carving Output Dir/Folder Name]
 $DC_Output_Location_Name:Carved_Evidence
 
+----- PDF Analysis Settings -----
+
+#Location of PDF Evidance Files (pdfid & pdf-parser output)
+[-- Specify .PDF Evidance Directory]
+$PDF_Evidance_Location:/home/kali/Raspberry-Pi4-Forensics/ForinApp/Evidence/PDF_Evidance/
+
+#Enable pdfid Disarm (-d) To Create a Safe pdf Copy
+[True][False]
+$PDF_Disarm:False
+
+#Enable MD5 Hashes For .pdf Objects When Parsed With pdf-parser
+[True][False]
+$PDF_Hashes:False
+
+#Enable Verbose Obj Location Output After PDF Processing
+[True][False]
+$PDF_Verbose_Output:True
+
 ----- Application Settings -----
 
 #Application Teminal Menu Cursor Style

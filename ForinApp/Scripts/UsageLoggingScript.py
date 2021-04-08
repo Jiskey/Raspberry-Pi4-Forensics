@@ -61,3 +61,14 @@ def log_change(filepath, action, contents):
 		for item in exsisting_logs:		
 			txt.write(item)
 		txt.close()
+
+	if action == 'PDF_Parse_Attmept' and contents != '':
+		txt = open(filepath, 'w')		#write new dpf parsing log
+		txt.write(output)
+		for x in contents:
+			txt.write('Command: ' + x)
+		txt.write('\n\n')
+		txt == open(filepath, 'a')
+		for item in exsisting_logs:		
+			txt.write(item)
+		txt.close()

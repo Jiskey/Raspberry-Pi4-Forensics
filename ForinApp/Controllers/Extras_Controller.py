@@ -50,12 +50,15 @@ def extras_logs(log_path):
 
 	index_selection = tms.generate_menu(title, choices)
 	
+	if log_path.endswith('/') == False:
+		log_path+= '/'
+
 	title = title + '\n--- Press "Enter" To Return\n'
 	check = 0
 	if index_selection == 0:
-		index_selection = tms.generate_file_preview_menu(title, scs.settings_check('$Default_Hash_Logging_Location'))
+		index_selection = tms.generate_file_preview_menu(title, log_path, 'all')
 	elif index_selection == 1:
-		index_selection = tms.generate_file_preview_menu(title, scs.settings_check('$Default_Hash_Logging_Location') + 'Usage_Logs/')
+		index_selection = tms.generate_file_preview_menu(title, log_path + 'Usage_Logs/', 'all')
 	elif index_selection == len(choices) -1:
 		extras_main()
 

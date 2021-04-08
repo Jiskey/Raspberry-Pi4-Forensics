@@ -9,6 +9,7 @@ import time
 from simple_term_menu import TerminalMenu
 
 from Scripts import SettingsCheckScript as scs
+
 """
 genernate_menu creates a selection menu
 takes (string, list of items)
@@ -29,11 +30,32 @@ def generate_menu(menu_title, menu_items):
 	return selection_index
 
 """
+generate_obj_preview_menu generates a file preview menu based on the name of the current select obj.
+uses 'cat' command to generate small preview window
+"""
+def generate_obj_preview_menu(menu_title, menu_items, objs_list, dir_path):
+	menu = TerminalMenu(
+		menu_entries = menu_items,
+		title = menu_title,
+		menu_cursor = scs.settings_check('$Cursor_Style'),
+		menu_cursor_style = ('fg_' + scs.settings_check('$Cursor_Colour'), "bold"),
+		menu_highlight_style = ('bg_' + scs.settings_check('$Highlight_Colour'), 'fg_' + scs.settings_check('$Text_Colour')),
+		cycle_cursor = True,
+		exit_on_shortcut = False,
+		#clear_screen = True,
+		preview_command = 'cat ' + dir_path + '{}.txt,
+		preview_size = 0.8,
+	)
+
+	selection_index = menu.show()
+	return selection_index
+
+"""
 generate_file_preview_menu creats a menu to display files within a given directory
 takes in a title and a filepath
 """
-def generate_file_preview_menu(menu_title, filepath):
-	def files(path = filepath):
+def generate_file_preview_menu(menu_title, dir_path, check):
+	def files(path = dir_path):
 		return (file for file in os.listdir(path) if os.path.isfile(os.path.join(path, file)))
 
 	menu = TerminalMenu(
@@ -45,8 +67,8 @@ def generate_file_preview_menu(menu_title, filepath):
 		cycle_cursor = True,
 		exit_on_shortcut = False,
 		#clear_screen = True,
-		preview_command = 'cat ' + filepath + '{}',
-		preview_size = 0.7,
+		preview_command = 'sudo cat ' + dir_path + '{} | more',
+		preview_size = 0.6,
 	)
 
 	selection_index = menu.show()
@@ -105,6 +127,7 @@ def generate_promt_menu(title, freeze):
 	time.sleep(freeze)
 	selection_index = menu.show()
 	return selection_index
+
 """
 Gererates a Menu with Multiple selection func
 takes in a title, a list of choices and a type check
