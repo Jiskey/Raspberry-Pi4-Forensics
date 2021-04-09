@@ -1,11 +1,11 @@
 #Python Command Creation Script
-#Used whenever the app requries a specific and complex teminal window user command needs to bre created
+#Used whenever the app requries a specific and complex teminal window user command needs to be created
 
 import sys
 import os
 
 from Scripts import SettingsCheckScript as scs
-from Classes.Drive import Drive
+from Model.Drive import Drive
 
 """
 acq_command_gen generates a command string to execute in the console
@@ -142,7 +142,7 @@ requires a path to carve, output path and the name of the Dir
 def DC_commmand_gen(conf_path, tool, dir_name, carve_path):
 	command = 'sudo {} '.format(tool)
 	if tool == 'foremost':
-		command += '-T -v -c {} {} -o {}'.format(conf_path, carve_path, dir_name)
+		command += '-T -v -c {} {} -o {}/'.format(conf_path, carve_path, dir_name)
 	if tool == 'scalpel':
 		command += '-v -c {} {} -o {}/'.format(conf_path, carve_path, dir_name)
 	return command
@@ -156,7 +156,7 @@ def PDF_pdfid_command_gen(path, d_check, filename):
 	command = 'sudo pdfid '
 	if d_check == 'True':
 		command += '-d '
-	new_filename = filename.split('.')
+	new_filename = filename.split('.')				#discard contents of file
 	txt = open(path + new_filename[0] + '_pdfid.txt', 'w')
 	txt.write('')
 	txt.close()

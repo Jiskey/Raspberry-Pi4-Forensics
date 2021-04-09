@@ -1,5 +1,5 @@
-#Python Terminal_Menu Script
-#using simple_term_menu 
+#Python simple_term_menu Script
+#using simple_term_menu to generate multiple differing types of input menus.
 
 import click
 import sys
@@ -7,7 +7,6 @@ import os
 import time
 
 from simple_term_menu import TerminalMenu
-
 from Scripts import SettingsCheckScript as scs
 
 """
@@ -43,7 +42,7 @@ def generate_obj_preview_menu(menu_title, menu_items, objs_list, dir_path):
 		cycle_cursor = True,
 		exit_on_shortcut = False,
 		#clear_screen = True,
-		preview_command = 'cat ' + dir_path + '{}.txt,
+		preview_command = 'cat ' + dir_path + '{}.txt',
 		preview_size = 0.8,
 	)
 

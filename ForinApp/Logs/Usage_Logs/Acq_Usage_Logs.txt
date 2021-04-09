@@ -1,0 +1,3 @@
+--- Action Taken: Acq_Attempt AT: Thu Apr  8 18:40:39 2021 BY: Guest
+Command Used: sudo dc3dd if=/dev/sdb2 of=/home/kali/Raspberry-Pi4-Forensics/ForinApp/Evidence/hello.img 
+

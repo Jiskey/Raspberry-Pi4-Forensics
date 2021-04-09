@@ -1,7 +1,11 @@
+#python settings check script
+#used whenever the app requires data about the application settings
+
 import sys
 import os
 
-from Classes.Setting import Setting
+from Model.Setting import Setting
+
 """
 Settings check function that reads the settings file under ForinApp/Config/
 returns the setting selected in the settings file by reading the file

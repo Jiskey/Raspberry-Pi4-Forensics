@@ -5,8 +5,8 @@ import click
 import sys
 import os
 
-from Controllers import MainMenu_Controller
-from Classes.ScalpelSetting import ScalpelSetting
+from View import MainMenu_Controller
+from Model.ScalpelSetting import ScalpelSetting
 from Scripts import SettingsCheckScript as scs 
 from Scripts import TerminalMenuScript as tms
 from Scripts import ScalpelSettingsScript as sss
@@ -290,7 +290,7 @@ def DC_selection_drive(drive_path, tool):
 	index_selection = tms.generate_menu(title, choices)		#select drive
 
 	if index_selection == len(choices) - 1:
-		DC_selection(tool)
+		DC_main_menu()
 
 	if scs.settings_check('$Boot_Drive_Override') == 'False':
 		dc_drive = drives[index_selection + 1]
@@ -340,11 +340,11 @@ def DC_selection_image(img_path, tool):
 	index_selection = tms.generate_menu(title, choices)
 	
 	if index_selection == len(choices) - 1:
-		DC_selection(tool)
+		DC_main_menu()
 	elif index_selection == len(choices) - 2:
 		index_selection = tms.generate_string_menu('Data Carving File Path', 1)
 		if index_selection == '0':
-			DC_selection_image(img_path)
+			DC_selection_image(img_path, tool)
 		elif index_selection.endswith('/') == False:					#append if needed
 			index_selection += '/'
 			DC_selection_image(index_selection)

@@ -5,14 +5,11 @@ import click
 import sys
 import os
 
-from Scripts import ErrorScript as es
+from View import MainMenu_Controller
+from Model.Setting import Setting
 from Scripts import SettingsCheckScript as scs 
 from Scripts import TerminalMenuScript as tms
 from Scripts import UsageLoggingScript as uls
-
-from Controllers import MainMenu_Controller
-
-from Classes.Setting import Setting
 
 """
 main settings call. acts as the first page in the settings menu.

@@ -5,8 +5,8 @@ import click
 import sys
 import os
 
-from Controllers import MainMenu_Controller
-from Classes.PdfObject import PdfObject
+from View import MainMenu_Controller
+from Model.PdfObject import PdfObject
 from Scripts import SettingsCheckScript as scs 
 from Scripts import TerminalMenuScript as tms
 from Scripts import CommandCreationScript as ccs

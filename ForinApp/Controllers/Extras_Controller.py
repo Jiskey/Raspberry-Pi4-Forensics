@@ -5,11 +5,9 @@ import click
 import sys
 import os
 
-from Controllers import MainMenu_Controller
-
+from View import MainMenu_Controller
 from Scripts import TerminalMenuScript as tms
 from Scripts import SettingsCheckScript as scs
-from Scripts import ErrorScript as es
 from Scripts import FdiskScript as fds
 
 """
@@ -58,7 +56,7 @@ def extras_logs(log_path):
 	if index_selection == 0:
 		index_selection = tms.generate_file_preview_menu(title, log_path, 'all')
 	elif index_selection == 1:
-		index_selection = tms.generate_file_preview_menu(title, log_path + 'Usage_Logs/', 'all')
+		index_selection = tms.generate_file_preview_menu(title, scs.settings_check('$Default_UsageLog_Location'), 'all')
 	elif index_selection == len(choices) -1:
 		extras_main()
 

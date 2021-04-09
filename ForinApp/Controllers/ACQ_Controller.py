@@ -5,8 +5,8 @@ import click
 import sys
 import os
 
-from Classes.Drive import Drive	
-from Controllers import MainMenu_Controller
+from Model.Drive import Drive	
+from View import MainMenu_Controller
 from Scripts import SettingsCheckScript as scs 
 from Scripts import TerminalMenuScript as tms
 from Scripts import FdiskScript as fds

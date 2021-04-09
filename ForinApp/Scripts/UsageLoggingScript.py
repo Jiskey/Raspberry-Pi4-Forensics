@@ -36,39 +36,50 @@ def log_change(filepath, action, contents):
 				oldvar = scs.settings_check(code)
 				txt.write('Settings Changed: {}   From: {}   To: {}\n'.format(code, oldvar, var))
 			txt.write('\n')
-		txt == open(filepath, 'a')
+		else:
+			txt.write(output)
+		txt = open(filepath, 'a')
 		for item in exsisting_logs:		#append old logs
 			txt.write(item)
 		txt.close()
 
-	if action == 'Acq_Attempt' and contents != '':
-		txt = open(filepath, 'w')		#write Acq new log
-		txt.write(output)
-		txt.write('Command Used: {}'.format(contents))
-		txt.write('\n')
-		txt == open(filepath, 'a')
+	if action == 'Acq_Attempt':
+		txt = open(filepath, 'w')
+		if contents != '':		#write Acq new log
+			txt.write(output)
+			txt.write('Command Used: {}'.format(contents))
+			txt.write('\n')
+		else:
+			txt.write(output)
+		txt = open(filepath, 'a')
 		for item in exsisting_logs:		
 			txt.write(item)
 		txt.close()
 
-	if action == 'Data_Carve_Attempt' and contents != '':
-		txt = open(filepath, 'w')		#write new data carve log
-		txt.write(output)
-		txt.write('Command Used: {}'.format(contents[0]))
-		txt.write(contents[1])
-		txt.write('\n')
-		txt == open(filepath, 'a')
+	if action == 'Data_Carve_Attempt':
+		txt = open(filepath, 'w')
+		if contents != '':		#write new data carve log
+			txt.write(output)
+			txt.write('Command Used: {}'.format(contents[0]))
+			txt.write(contents[1])
+			txt.write('\n')
+		else:
+			txt.write(output)
+		txt = open(filepath, 'a')
 		for item in exsisting_logs:		
 			txt.write(item)
 		txt.close()
 
-	if action == 'PDF_Parse_Attmept' and contents != '':
-		txt = open(filepath, 'w')		#write new dpf parsing log
-		txt.write(output)
-		for x in contents:
-			txt.write('Command: ' + x)
-		txt.write('\n\n')
-		txt == open(filepath, 'a')
+	if action == 'PDF_Parse_Attmept':
+		txt = open(filepath, 'w')
+		if contents != '':		#write new dpf parsing log
+			txt.write(output)
+			for x in contents:
+				txt.write('Command: ' + x)
+			txt.write('\n\n')
+		else:
+			txt.write(output)
+		txt = open(filepath, 'a')
 		for item in exsisting_logs:		
 			txt.write(item)
 		txt.close()

@@ -5,7 +5,7 @@ import click
 import sys
 import os
 
-from Classes.ScalpelSetting import ScalpelSetting
+from Model.ScalpelSetting import ScalpelSetting
 
 """
 get_scalpel_settings_txt gets the scalple config file text.
@@ -32,7 +32,7 @@ def set_DC_settings_txt(new_txt, path):
 """
 get_scalpel_settings_list gets the scalpel config file text and converts them... 
 into a list of class(ScalpleSetting) based on the layout of the scalpel.conf file.
-setting.get_options(list(option[0 = tag][1 = ext][2 = case_sens][3 = size][4 = extra1]...)).
+setting.get_options(list(option([0 = tag][1 = ext][2 = case_sens][3 = size][4 = extra1]...)).
 returns a list with class(ScalpelSetting(cat, options())).
 """
 def get_DC_settings_list(path):
@@ -135,13 +135,9 @@ def create_DC_settings_txt(new_txt, selected_settings_list):
 					if option[0] == '#':
 						if line.startswith('#') == False:		#if set to disabled by selection but enabled in config
 							disable_codes.append(count)
-						#else:
-							#pass
 					elif option[0] == '@':
 						if line.startswith('#') == True:		#if set to enabled by selection but disabled in config
 							enable_codes.append(count)
-						#else:
-							#pass
 
 	for code in disable_codes:		#update txt lines to disable
 		tmp_txt = ''			#following scalpel.conf format

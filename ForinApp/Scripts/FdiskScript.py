@@ -1,13 +1,12 @@
 #Python Fdisk Script
-#Used whenever the app requries data about drives connected to the device
+#Used whenever the app reqiures data about drives connected to the device
 
 import click
 import sys
 import os
 
 from Scripts import SettingsCheckScript as scs
-
-from Classes.Drive import Drive
+from Model.Drive import Drive
 
 """
 Returns a list of drives connected to the device

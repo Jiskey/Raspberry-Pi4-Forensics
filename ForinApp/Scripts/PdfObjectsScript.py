@@ -6,7 +6,7 @@ import sys
 import os
 import time
 
-from Classes.PdfObject import PdfObject
+from Model.PdfObject import PdfObject
 from Scripts import SettingsCheckScript as scs
 
 """
@@ -94,8 +94,11 @@ def get_pdf_objects_list(evi_path, sel_file, hash_check):
 		if line.startswith('trailer'):			#break at trailer (end) obj's
 			break
 
-	pdf_objects_list.pop(0)
-	pdf_objects_list.append(PdfObject(obj_id, header_lines, data_lines, content_lines))
+	try:
+		pdf_objects_list.pop(0)
+		pdf_objects_list.append(PdfObject(obj_id, header_lines, data_lines, content_lines))
+	except:
+		pass
 
 	stream = ''
 	for line in txt_loc_lines:	#append objs_tags with streams from stream locs file
@@ -137,7 +140,7 @@ def get_pdf_objects_list(evi_path, sel_file, hash_check):
 				if obj.get_id() == int(saved_hash[0]):
 					obj.set_md5(saved_hash[1])
 
-	for obj in pdf_objects_list:						#create file from pdf object for previewing
+	for obj in pdf_objects_list:						#create files from pdf object for previewing
 		txt = open(dir_path + '/obj_{}.txt'.format(obj.get_id()), 'w')
 		for line in obj.get_head():
 			txt.write(line)
