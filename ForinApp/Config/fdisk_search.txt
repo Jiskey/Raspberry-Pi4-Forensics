@@ -115,7 +115,7 @@ I/O size (minimum/optimal): 512 bytes / 33553920 bytes
 Disklabel type: gpt
 Disk identifier: 2E5411A8-FDAA-4683-AE4B-8A465AD4C857
 
-Device      Start       End   Sectors   Size Type
-/dev/sdb1    2048    534527    532480   260M EFI System
-/dev/sdb2  534528    796671    262144   128M Microsoft reserved
-/dev/sdb3  796672 234441614 233644943 111.4G Microsoft basic data
+Device      Start      End  Sectors  Size Type
+/dev/sdb1    2048   534527   532480  260M EFI System
+/dev/sdb2  534528   796671   262144  128M Microsoft reserved
+/dev/sdb3  796672 17573887 16777216    8G Microsoft basic data

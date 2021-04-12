@@ -79,6 +79,12 @@ $Hashing_Conversion:after
 [True][False]
 $Error_handling:True
 
+----- File System Inspection Settings (TSK) -----
+
+#Default Output Location for programs that perform FSI
+[-- Specify_New_FSI_Directory]
+$Default_FSI_Output:/home/kali/Raspberry-Pi4-Forensics/ForinApp/Evidence/FSI_Evidance/
+
 ----- Data Carving Settings -----
 
 #Default Scalpel .Conf File Location

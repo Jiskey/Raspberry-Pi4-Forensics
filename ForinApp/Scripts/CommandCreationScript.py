@@ -63,7 +63,7 @@ def acq_command_gen(settings_list, acq_drive, p_code):		#p_code of 255 == full d
 
 	check = 0
 	for count, file in enumerate(os.listdir(output_loc)):			#if file with same name
-		if file == name + '.img':
+		if file == name + '.dd':
 			check = check + 1
 			name = name + '_' + str(check)
 	
@@ -80,9 +80,9 @@ def acq_command_gen(settings_list, acq_drive, p_code):		#p_code of 255 == full d
 	drive = 'if={} '.format(part)
 	output = 'of={}'.format(output_loc)
 	if output.endswith('/'):
-		output += name + '.img '
+		output += name + '.dd '
 	else: 
-		output += '/' + name + '.img '
+		output += '/' + name + '.dd '
 	if otf_hashing == 'True':
 		hashing = 'hash={} '.format(hash_mode)
 	else:

@@ -1,3 +1,15 @@
+--- Action Taken: Acq_Attempt AT: Mon Apr 12 03:31:10 2021 BY: Guest
+Command Used: sudo dc3dd if=/dev/sdb3 of=/home/kali/Raspberry-Pi4-Forensics/ForinApp/Evidence/hello.dd hash=md5 log=/home/kali/Raspberry-Pi4-Forensics/ForinApp/Logs/hello.log 
+
+--- Action Taken: Acq_Attempt AT: Sun Apr 11 18:55:52 2021 BY: Guest
+Command Used: sudo dcfldd if=/dev/sdb1 hash=md5 md5log=$Default_Image_Name_md5.txt hashconv=after bs=512 conv=noerror,sync of=/home/kali/Raspberry-Pi4-Forensics/ForinApp/Evidence/$Default_Image_Name.dd 
+
+--- Action Taken: Acq_Attempt AT: Sun Apr 11 17:51:29 2021 BY: Guest
+Command Used: sudo dc3dd if=/dev/sdb3 of=/home/kali/Raspberry-Pi4-Forensics/ForinApp/Evidence/hello.dd hash=md5 log=/home/kali/Raspberry-Pi4-Forensics/ForinApp/Logs/hello.log 
+
+--- Action Taken: Acq_Attempt AT: Sun Apr 11 13:55:44 2021 BY: Guest
+Command Used: sudo dc3dd if=/dev/sdb1 of=/home/kali/Raspberry-Pi4-Forensics/ForinApp/Evidence/hello.dd 
+
 --- Action Taken: Acq_Attempt AT: Thu Apr  8 18:40:39 2021 BY: Guest
 Command Used: sudo dc3dd if=/dev/sdb2 of=/home/kali/Raspberry-Pi4-Forensics/ForinApp/Evidence/hello.img 
 

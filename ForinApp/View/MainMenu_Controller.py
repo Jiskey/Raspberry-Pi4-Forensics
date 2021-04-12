@@ -8,6 +8,7 @@ import os
 from Controllers import ACQ_Controller
 from Controllers import DC_Controller
 from Controllers import PDF_Controller
+from Controllers import FSI_Controller
 from Controllers import Settings_Controller
 from Controllers import Extras_Controller
 from Scripts import TerminalMenuScript as tms
@@ -27,7 +28,7 @@ def main_menu():
 	click.secho('                                                             |___/                  ', bold=True) 
 	click.secho('\n-  FORIN - KALI LINUX DIGITAL FORENSIC INVESTIGATOR', bold=True, fg='blue')
 	click.echo('-  By: J. Male')
-	click.echo('-  Version 0.6.1: 09/04/2021')
+	click.echo('-  Version: 0.7.0 12/04/2021')
 	click.echo('-  Kali Version: 2020.4')
 	click.echo('-  Desc: "FORIN" is a simple CLI app that allows you to perform quick/easy digital anylsis and')
 	click.echo('         investigation using the tools included with Kali Linux')
@@ -57,20 +58,23 @@ def sub_menu_1():
 
 
 def sub_menu_2():
-	choices = ['[1] Acquire Img (Dc3dd / Dcfldd / PhotoRec)', 
-			'[2] Data Carving (Foremost / Scalpel / PhotoRec)',
-			'[3] PDF File Analysis (Pdfid / Pdf-Parser)', 
+	choices = ['[1] Acquire Img (Dc3dd / Dcfldd)', 
+			'[2] File System Inspection (Sleuth Kit)',
+			'[3] Data Carving (Foremost / Scalpel / PhotoRec)',
+			'[4] PDF File Analysis (Pdfid / Pdf-Parser)', 
 			'[0] Back']
 	title = '\nPlease Select A Tool You Would Like To You!'
 	selection_index = tms.generate_menu(title, choices)
 
 	if selection_index == 0:
 		ACQ_Controller.ACQ_selection()
-	elif selection_index == 1:
-		DC_Controller.DC_main_menu()
+	if selection_index == 1:
+		FSI_Controller.FSI_main_menu()
 	elif selection_index == 2:
-		PDF_Controller.PDF_main_menu()
+		DC_Controller.DC_main_menu()
 	elif selection_index == 3:
+		PDF_Controller.PDF_main_menu()
+	elif selection_index == 4:
 		sub_menu_1()
 	else:
 		sys.exit(0)
