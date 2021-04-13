@@ -7,7 +7,7 @@
 
 #Default Usage Log File Location
 [-- Please Specify New Usage Log Location]
-$Default_UsageLog_Location:/home/kali/Raspberry-Pi4-Forensics/ForinApp/Logs/Usage_Logs
+$Default_UsageLog_Location:/home/kali/Raspberry-Pi4-Forensics/ForinApp/Logs/Usage_Logs/
 
 #Enable SSH On Application StartUp (Not In Use)
 [True][False]
@@ -107,11 +107,11 @@ $PDF_Evidance_Location:/home/kali/Raspberry-Pi4-Forensics/ForinApp/Evidence/PDF_
 
 #Enable pdfid Disarm (-d) To Create a Safe pdf Copy
 [True][False]
-$PDF_Disarm:False
+$PDF_Disarm:True
 
 #Enable MD5 Hashes For .pdf Objects When Parsed With pdf-parser
 [True][False]
-$PDF_Hashes:False
+$PDF_Hashes:True
 
 #Enable Verbose Obj Location Output After PDF Processing
 [True][False]

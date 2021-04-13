@@ -62,10 +62,11 @@ def acq_command_gen(settings_list, acq_drive, p_code):		#p_code of 255 == full d
 			error = setting.get_code_var()
 
 	check = 0
-	for count, file in enumerate(os.listdir(output_loc)):			#if file with same name
-		if file == name + '.dd':
+	tmp = name
+	for count, file in enumerate(os.listdir(output_loc)):			#if file with same name	
+		if file == name + '.dd' or file == name + str(check) +'.dd':
 			check = check + 1
-			name = name + '_' + str(check)
+			name = tmp + str(check)
 	
 	if hash_log_loc.endswith('/') == False:					#append loc str with /
 		hash_log_loc += '/'

@@ -22,7 +22,6 @@ def generate_menu(menu_title, menu_items):
 		menu_highlight_style = ('bg_' + scs.settings_check('$Highlight_Colour'), 'fg_' + scs.settings_check('$Text_Colour')),
 		cycle_cursor = True,
 		exit_on_shortcut = False,
-		#clear_screen = True,
 	)
 
 	selection_index = menu.show()
@@ -41,7 +40,6 @@ def generate_obj_preview_menu(menu_title, menu_items, objs_list, dir_path):
 		menu_highlight_style = ('bg_' + scs.settings_check('$Highlight_Colour'), 'fg_' + scs.settings_check('$Text_Colour')),
 		cycle_cursor = True,
 		exit_on_shortcut = False,
-		#clear_screen = True,
 		preview_command = 'cat ' + dir_path + '{}.txt',
 		preview_size = 0.8,
 	)
@@ -53,7 +51,7 @@ def generate_obj_preview_menu(menu_title, menu_items, objs_list, dir_path):
 generate_file_preview_menu creats a menu to display files within a given directory
 takes in a title and a filepath
 """
-def generate_file_preview_menu(menu_title, dir_path, check):
+def generate_file_preview_menu(menu_title, dir_path):
 	def files(path = dir_path):
 		return (file for file in os.listdir(path) if os.path.isfile(os.path.join(path, file)))
 
@@ -65,8 +63,7 @@ def generate_file_preview_menu(menu_title, dir_path, check):
 		menu_highlight_style = ('bg_' + scs.settings_check('$Highlight_Colour'), 'fg_' + scs.settings_check('$Text_Colour')),
 		cycle_cursor = True,
 		exit_on_shortcut = False,
-		#clear_screen = True,
-		preview_command = 'sudo cat ' + dir_path + '{} | more',
+		preview_command = 'cat ' + dir_path + '{}',
 		preview_size = 0.6,
 	)
 
@@ -116,11 +113,9 @@ def generate_promt_menu(title, freeze):
 		menu_entries = menu_items,
 		title = title,
 		menu_cursor = scs.settings_check('$Cursor_Style'),
-		#menu_cursor_style = ('fg_' + scs.settings_check('$Cursor_Colour'), "bold"),
 		menu_highlight_style = ('bg_' + scs.settings_check('$Highlight_Colour'), 'fg_' + scs.settings_check('$Text_Colour')),
 		cycle_cursor = True,
 		exit_on_shortcut = False,
-		#clear_screen = True,
 	)
 
 	time.sleep(freeze)
@@ -144,8 +139,7 @@ def gernerate_multi_select_menu(title, choices, type_check):
 		cycle_cursor = True,
 		exit_on_shortcut = False,
 		multi_select = True,
-		show_multi_select_hint=True 
-		#clear_screen = True,
+		show_multi_select_hint=True
 	)
 
 	index_selection_indices = menu.show()

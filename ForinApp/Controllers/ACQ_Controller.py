@@ -39,7 +39,7 @@ def ACQ_selection():
 		elif drive.get_boot() == False:						#Hide boot if false
 			choices.append('[{}] {}'.format(check, drive.get_path()))
 			check = check + 1
-	choices.append('[0] Back')
+	choices.append('[0] Main Menu')
 	title = ('Please Select The Drive You Would like To Acquire')
 
 	index_selection = tms.generate_menu(title, choices)		#Display connected Drives
@@ -237,7 +237,7 @@ def ACQ_wizard(settings_list, acq_drive, p_code):
 
 		if choices[index_selection].startswith('--') == True:			#detect custom string menu
 			title = choices[index_selection]
-			if choices[index_selection] == '--File_Name':
+			if choices[index_selection] == '-- Specify New Acq File_Name':
 				code = 0
 			else:
 				code = 1

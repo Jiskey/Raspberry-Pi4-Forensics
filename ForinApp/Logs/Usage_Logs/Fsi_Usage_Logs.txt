@@ -1,0 +1,2 @@
+--- Action Taken: File_System_Inspection AT: Tue Apr 13 00:22:12 2021 BY: Guest
+File Inspected: /home/kali/hello.dd

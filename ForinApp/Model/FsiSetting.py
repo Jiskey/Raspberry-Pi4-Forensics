@@ -22,7 +22,6 @@ class FsiSetting:
 	byte_offset = 0
 	fsstat_txt = []
 	fls_txt = []
-	mmls_txt = []
 	fls_list = []
 	inode_nav_list = []
 	sel_inode = 0;
@@ -60,9 +59,6 @@ class FsiSetting:
 
 	def get_fsstat_txt(self):				# Str Lines From fsstat Command
 		return self.fsstat_txt
-
-	def get_mmls_txt(self):					# Str Lines From mmls Command
-		return self.mmls_txt
 
 	def get_fls_txt(self):					# Str Lines From fls Command
 		return self.fls_txt
@@ -129,7 +125,7 @@ class FsiSetting:
 			self.fls_list.append(tmp)
 
 	### Generates The ffstat information To Append
-	def gen_ffstat(self, path):
+	def gen_fsstat(self, path):
 		os.system('fsstat -i ' + self.img_format + ' -f ' + self.img_FS_format + ' ' + self.file_path + ' > ' + self.output_path + self.img_name + '_details.txt')
 		for line in open(self.output_path + self.img_name + '_details.txt'):
 			if line.startswith('FAT CONTENTS'):
@@ -137,16 +133,6 @@ class FsiSetting:
 			self.fsstat_txt.append(line.strip())
 		else:
 			self.fls_txt.append('\n')
-	
-	### Generates The mmls information To Append
-	def gen_mmls(self, path):
-		os.system('mmls -i ' + self.img_format + ' ' + self.file_path + ' >> ' + self.output_path + self.img_name + '_details.txt')
-		os.system('mmls -i ' + self.img_format + ' ' + self.file_path + ' > Config/tmp.txt' )
-		for line in open('Config/tmp.txt'):
-			self.mmls_txt.append(line)
-		else:
-			self.fls_txt.append('\n')
-		os.system('rm Config/tmp.txt')
 
 	### Generates The fls information To Append
 	def gen_fls(self, path):

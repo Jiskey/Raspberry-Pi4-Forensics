@@ -70,7 +70,7 @@ def DC_selection(tool):
 		dir_name = DC_selection_dir()					#generate a list of scalpelsetting classes
 		DC_conform(selected_settings_list, conf_path, dir_name, tool, drive_path)
 	elif index_selection == 1:
-		img_path = DC_selection_image(path, tool)				#get file
+		img_path = DC_selection_image(tool)				#get file
 		selected_settings_list = DC_config(conf_path)				
 		dir_name = DC_selection_dir()
 		DC_conform(selected_settings_list, conf_path, dir_name, tool, img_path)
@@ -125,14 +125,14 @@ DC conformation page.
 displays all settings and actions to the user aswell as the command.
 warning with 2 second prompt window
 """
-def DC_conform(selected_settings_list, conf_path, dir_name, tool, carve_path):
+def DC_conform(selected_settings_list, conf_path, dir_name, tool, img_path):
 	os.system('clear')
 	click.secho('Data Carving: Conform\n', fg='blue', bold=True)
 
 	click.secho('Selected Data Carving Tool: ', bold=True)
 	click.echo(tool)
 	click.secho('Selected Drive/File To Carve: ', bold=True)
-	click.echo(carve_path)
+	click.echo(img_path)
 	click.secho('Selected Output Location:', bold=True)
 	click.echo('ForinApp/')
 	click.secho('Selected Output Dir Name:\n', bold=True)
@@ -160,7 +160,7 @@ def DC_conform(selected_settings_list, conf_path, dir_name, tool, carve_path):
 	click.secho('Changes will be made to the scalpel.conf file', bold = True)
 
 	click.secho('\nCOMMAND:', bold=True)
-	command = ccs.DC_commmand_gen(conf_path, tool, dir_name, carve_path)			#generate scalple command
+	command = ccs.DC_commmand_gen(conf_path, tool, dir_name, img_path)			#generate scalple command
 	click.echo(command)
 	title = '\nYou Are About To Execute The Above Command Do You With To Proceed?'
 	index_selection = tms.generate_promt_menu(title, 2)				#prompt
@@ -319,44 +319,26 @@ DC image selection page, requires the user the select a img file to carve.
 requires a file path to where the files are located
 returns a full path with file_path + name
 """
-def DC_selection_image(img_path, tool):
+def DC_selection_image(tool, path=scs.settings_check('$Default_Output_Location')):
 	os.system('clear')
 	click.secho('Data Carving: Image Selection', fg='blue', bold=True)
 
-	if img_path == '':
-		path = scs.settings_check('$Default_Output_Location')		#get output loc
-	else:
-		path = img_path
 	click.echo('Currently Selected Evidance Path: {}'.format(path))
 
 	choices = []
-	title = '\nWhat Would You Like To Carve?\nIf You Dont See Any Files Try Specifying a Custom Path'	#get files at output loc
+	title = '\nWhat Would You Like To Carve?\nIf You Dont See Any Files Try Specifying a Custom Path In The Settings'	#get files at output loc
 	for file in os.listdir(path):
 		if file.lower().endswith('.dd') or file.lower().endswith('.img') or file.lower().endswith('.raw') or file.lower().endswith('.aff'):
 			choices.append(file)
-	choices.append('-- Specify Other Output Location')
 	choices.append('[0] Back')
 
 	index_selection = tms.generate_menu(title, choices)
 	
 	if index_selection == len(choices) - 1:
 		DC_main_menu()
-	elif index_selection == len(choices) - 2:
-		index_selection = tms.generate_string_menu('Data Carving File Path', 1)
-		if index_selection == '0':
-			DC_selection_image(img_path, tool)
-		elif index_selection.endswith('/') == False:					#append if needed
-			index_selection += '/'
-			DC_selection_image(index_selection)
-		else:
-			DC_selection_image(index_selection)
-	
-	img_file_name = ''
-	for count, file in enumerate(os.listdir(path)):
-		if count == index_selection:
-			img_file_name = file
-		
-	return (path + img_file_name)
+	else:
+		img_file_name = choices[index_selection]
+		return path + str(img_file_name)
 
 """
 photorec selection page, is a prompt page asking the user if the wish to procced

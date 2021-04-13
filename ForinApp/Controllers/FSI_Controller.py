@@ -4,7 +4,6 @@
 #Desc: 
 #	Handles all of the operations within the application realting to File System Inspection And The Sleuth Kit.
 
-
 import click
 import sys
 import os
@@ -14,8 +13,7 @@ from View import MainMenu_Controller
 from Model.FsiSetting import FsiSetting
 from Scripts import SettingsCheckScript as scs 
 from Scripts import TerminalMenuScript as tms
-from Scripts import CommandCreationScript as ccs
-#from Scripts import UsageLoggingScript as uls
+from Scripts import UsageLoggingScript as uls
 
 """
 FSI Controller Main Menu
@@ -59,7 +57,7 @@ def FSI_main_menu(*path):
 				choices.append(file)
 				continue
 	choices.append('[1] -- Select New Evidance Location')
-	choices.append('[0] Back')
+	choices.append('[0] Main Menu')
 	title = '\nPlease Select A File To Insepct'
 
 	index_selection = tms.generate_menu(title, choices)		### Selection
@@ -70,7 +68,12 @@ def FSI_main_menu(*path):
 		new_path = tms.generate_string_menu('Evidance File Path', 1)
 		FSI_main_menu(new_path)
 	else:
+		uls_filepath = scs.settings_check('$Default_UsageLog_Location')
+		if uls_filepath.endswith('/') == False:
+			uls_filepath += '/'
+		uls_filepath += 'Fsi_Usage_Logs.txt'
 		sel_file = path + choices[index_selection]
+		uls.log_change(uls_filepath, 'File_System_Inspection', sel_file)
 		FSI_selection(sel_file)
 
 	MainMenu_Controller.main_menu()
@@ -82,7 +85,7 @@ Executes TSK Tool Commands To Gather Information And Display It To The User
 Uses 'img_conf' Of Class.Type(FsiSetting) To Store Needed Information For Extraction & Navigation
 Requires a File Path For The Img File To Inspect From 'FSI_main_menu'
 """
-#Move Commands To Model
+
 def FSI_selection(file_path):
 	img_format = ''
 	img_FS_format = ''
@@ -107,27 +110,32 @@ def FSI_selection(file_path):
 	os.system('img_stat -t ' + file_path + ' > Config/tmp.txt')
 	for line in open('Config/tmp.txt'):
 		img_format = line.strip()
-	os.system('fsstat -i ' + img_format + ' -t ' + file_path + ' > Config/tmp.txt')
+	os.system('fsstat -t -i ' + img_format + ' ' + file_path + ' > Config/tmp.txt')
 	for line in open('Config/tmp.txt'):
 		img_FS_format = line.strip()
 
 	img_conf = FsiSetting(name, ext, file_path, img_format, img_FS_format, output_path)
 
+	if img_FS_format == '':
+		click.echo('\nSorry Somthing Went Wrong When Processing Your image File')
+		click.echo('Please Choose A different File')
+		x = input('Press [Enter To Return]')
+		FSI_main_menu()
+
 	### Generate Info For Class (Tool Output Information) & Display
-	img_conf.gen_ffstat(fsi_path)
-	img_conf.gen_mmls(fsi_path)
+	img_conf.gen_fsstat(fsi_path)
 	img_conf.gen_fls(fsi_path)
 	img_conf.update_fls(0)
+
+	for line in img_conf.get_fsstat_txt():
+		click.echo(line)
 		
-	choices = ['[1] Select Byte Offset', '[2] View Files', '[0] Back']
-	title = '\nWhat Would You Like To do?'
+	choices = ['[1] View Files', '[0] Back']
+	title = 'What Would You Like To do?'
 	
 	index_selection = tms.generate_menu(title, choices)		### Selection
 
 	if index_selection == 0:
-		FSI_selection(sel_file)
-		#FSI_offset_selection()
-	elif index_selection == 1:
 		FSI_display(img_conf)
 	else:
 		FSI_main_menu()
@@ -218,7 +226,7 @@ def FSI_export(img_conf, index_selection):
 	sel_fls = img_conf.get_fls(index_selection - 2)
 	file_name = ''
 	title = '\nWhat Would You Like To Export'
-	choices = ['[1] Export Details (istat)', '[2] Export icat Hexdump (icat)', '[3] Export Image Copy (icat *Image Files Only)', '[0] back']
+	choices = ['[1] Export Details (istat)', '[2] Export icat Hexdump (icat)', '[3] Export Copy (icat *Mainly jpg/png files)', '[0] back']
 
 	### Check File Selected
 	try:
@@ -253,7 +261,7 @@ def FSI_export(img_conf, index_selection):
 			img_conf.export_icat_img(file_ext)
 			click.echo('\nExporting...')
 		else:
-			click.echo('Error: File Type Not An Image')
+			click.echo('Error: File Not Accepted')
 	elif index_selection == 3:
 		FSI_display(img_conf)
 
