@@ -29,7 +29,7 @@ $Default_Image_Name:hello
 
 #Default Output Location for Images
 [-- Specify New Acq Output_Directory]
-$Default_Output_Location:/home/kali/Raspberry-Pi4-Forensics/ForinApp/Evidence/
+$Default_Output_Location:/home/kali/
 
 #Enable On The Fly Hashing During Acqusition 
 [True][False]
@@ -89,11 +89,11 @@ $Default_FSI_Output:/home/kali/Raspberry-Pi4-Forensics/ForinApp/Evidence/FSI_Evi
 
 #Default Scalpel .Conf File Location
 [-- Specify New .Conf File Directory]
-$Scalpel_ConfFile_Location:/etc/scalpel/scalpel.conf
+$Scalpel_ConfFile_Location:/home/kali/Raspberry-Pi4-Forensics/ForinApp/Config/scalpel.conf
 
 #Default Foremost .Conf File Location
 [-- Specify New .Conf File Directory]
-$Foremost_ConfFile_Location:/etc/foremost.conf
+$Foremost_ConfFile_Location:/home/kali/Raspberry-Pi4-Forensics/ForinApp/Config/foremost.conf
 
 #Default Data Carving Output Dir/Folder Name
 [-- Specify New Carving Output Dir/Folder Name]

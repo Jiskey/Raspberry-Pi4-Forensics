@@ -1,7 +1,18 @@
---- Action Taken: Data_Carve_Attempt AT: Thu Apr 15 01:53:39 2021 BY: Guest
-Command Used: sudo scalpel -v -c /etc/foremost.conf /home/kali/Raspberry-Pi4-Forensics/ForinApp/Evidence/dfrws-2007-challenge.img -o Demo/
-gif, gif, jpg, jpg, png, bmp, tif, avi, mov, mpg, mpg, mpg, fws, doc, 
+--- Action Taken: Data_Carve_Attempt AT: Thu Apr 15 17:55:22 2021 BY: Guest
+Command Used: sudo foremost -T -v -c /home/kali/Raspberry-Pi4-Forensics/ForinApp/Config/foremost.conf /home/kali/dfrws-2006-challenge.raw -o Carved_Evidence/
+wpc, htm, mail, pgd, pgp, pgp, pgp, pgp, txt, rpm, wav, ra, ra, asf, wmv, wma, wma, mp3, mp3, mp3, mp3, mp3, dat, dat, lnk, chm, cookie, rdp, zip, rar, java, cpp, max, 
 
 
---- Action Taken: Data_Carve_Attempt AT: Thu Apr 15 01:34:13 2021 BY: Guest
-Command Used: sudo foremost -T -v -c /etc/foremost.conf /home/kali/Raspberry-Pi4-Forensics/ForinApp/Evidence/dfrws-2007-challenge.img -o qweqwe/
+--- Action Taken: Data_Carve_Attempt AT: Thu Apr 15 17:55:04 2021 BY: Guest
+Command Used: sudo foremost -T -v -c /home/kali/Raspberry-Pi4-Forensics/ForinApp/Config/foremost.conf /home/kali/dfrws-2006-challenge.raw -o Carved_Evidence/
+art, gif, gif, jpg, jpg, jpg, png, bmp, tif, avi, 
+
+
+--- Action Taken: Data_Carve_Attempt AT: Thu Apr 15 17:53:53 2021 BY: Guest
+Command Used: sudo scalpel -v -c /home/kali/Raspberry-Pi4-Forensics/ForinApp/Config/scalpel.conf /home/kali/dfrws-2006-challenge.raw -o Carved_Evidence/
+htm, pdf, pdf, mail, rpm, wav, ra, ra, dat, dat, 
+
+
+--- Action Taken: Data_Carve_Attempt AT: Thu Apr 15 17:53:28 2021 BY: Guest
+Command Used: sudo scalpel -v -c /home/kali/Raspberry-Pi4-Forensics/ForinApp/Config/scalpel.conf /home/kali/dfrws-2006-challenge.raw -o Carved_Evidence/
+art, gif, gif, jpg, jpg, png, bmp, 

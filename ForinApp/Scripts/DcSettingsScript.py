@@ -111,7 +111,7 @@ def set_DC_settings_list(objs_list, index_selection, check):
 	for index in index_selection:				
 		if index == 0 or index ==  'Select All':
 			select_all = True
-		if len(index_selection) == 0 or index == 'Back':
+		if index == 'Back':
 			return 0
 
 	### Read Selections A Set Tag To: @ == Enable / adv = enable by cat
@@ -126,12 +126,12 @@ def set_DC_settings_list(objs_list, index_selection, check):
 						if ext[4].strip() == header[2].strip():
 							ext[0] ='@'
 		else:
-			for ext in obj.exts():
+			for ext in obj.get_exts():
 				if select_all == True:
 					ext[0] = '@'	
 				else:
 					for index in index_selection:
-						if index.strip() == ext.get_cat().strip():
+						if index.strip() == obj.get_cat().strip():
 							ext[0] = '@'
 
 	return objs_list
@@ -145,39 +145,18 @@ Returns A Updated List(new_txt)
 def create_DC_settings_txt(new_txt, selected_objs_list):
 	enable_codes = []						
 	disable_codes = []
+	check = 0
 
 	### Read Currently Saved .Conf File Options
-	for count, line in enumerate(new_txt):
-		for obj in selected_objs_list:
-			for ext in obj.get_exts():
+	for obj in selected_objs_list:
+		for ext in obj.get_exts():
+			for count, line in enumerate(new_txt):
+				check = 0
 				if line.find(str(ext[4])) != -1:
-					if ext[0] == '#':
-						if line.startswith('#') == False:		
-							disable_codes.append(count)
-					elif ext[0] == '@':
-						if line.startswith('#') == True:		
-							enable_codes.append(count)
-
-	### Set File Lines to Enable/Disable Following Tool .conf Format
-	for code in disable_codes:		
-		tmp_txt = ''			
-		exts_line = new_txt[code].split()
-		if exts_line[0].strip() != '#':
-			temp.insert(0, '#')
-		for ext in exts_line:
-			tmp_txt += ext + '\t'
-		tmp_txt = tmp_txt.strip()
-		new_txt[code] = tmp_txt + '\n'
-
-
-	for code in enable_codes:		
-		tmp_txt = ''
-		exts_line = new_txt[code].split()
-		for count, ext in enumerate(exts_line):
-			if count >= 0:
-				tmp_txt += ext + '\t'
-		tmp_txt = tmp_txt.strip()
-		new_txt[code] = '\t' + tmp_txt + '\n'
-
-	return new_txt				
-
+					if ext[0] == '#' and line.startswith('#') == False:		
+						new_txt[count + check] = '#\t' + new_txt[count + check].strip() + '\n'
+						check = check + 1
+					elif ext[0] == '@' and line.startswith('#') == True:		
+						new_txt[count + check] = new_txt[count + check][1:]
+						check = check + 1
+	return new_txt

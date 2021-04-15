@@ -63,7 +63,8 @@ def DC_selection(tool):
 	click.secho('Data Carving: Scalpel Type', fg='blue', bold=True)
 
 	### Select What To Carve
-	if tool == 'scalpel':					
+	if tool == 'scalpel':
+		conf_path = scs.settings_check('$Scalpel_ConfFile_Location')		
 		title = '\nWhat Would You Like To Carve?'
 		choices = ['[1] Connected Drive','[2] Acquired Img File','[0] Back']
 		index_selection = tms.generate_menu(title, choices)
@@ -156,6 +157,10 @@ def DC_conform(selected_objs_list, conf_path, dir_name, tool, img_path):
 	click.secho('Selected Output Dir Name:\n', bold=True)
 	click.echo(scs.settings_check('$DC_Output_Location_Name'))
 
+	if len(selected_objs_list) <= 1:
+		obj = selected_objs_list
+		print(obj)
+
 	for count, obj in enumerate(selected_objs_list):
 		if files != '':
 			click.echo(files.strip())
@@ -191,7 +196,7 @@ def DC_conform(selected_objs_list, conf_path, dir_name, tool, img_path):
 		dcss.set_DC_settings_txt(new_txt, conf_path)
 		os.system('clear')
 		os.system(command)
-		dcss.set_DC_settings_txt(old_txt, conf_path)
+		#dcss.set_DC_settings_txt(old_txt, conf_path)
 		wait_selection = tms.generate_menu('\nOperation Complete. Please Press Enter To Continue: ENTER', [' '])
 
 	MainMenu_Controller.main_menu()
