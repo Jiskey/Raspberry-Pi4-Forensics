@@ -1,30 +1,7 @@
---- Action Taken: Data_Carve_Attempt AT: Mon Apr 12 22:28:01 2021 BY: Guest
-Command Used: sudo foremost -T -v -c /etc/foremost.conf /home/kali/Raspberry-Pi4-Forensics/ForinApp/Evidence/hello.dd -o Carved_Evidence/
-jpg, jpg, jpg, 
+--- Action Taken: Data_Carve_Attempt AT: Thu Apr 15 01:53:39 2021 BY: Guest
+Command Used: sudo scalpel -v -c /etc/foremost.conf /home/kali/Raspberry-Pi4-Forensics/ForinApp/Evidence/dfrws-2007-challenge.img -o Demo/
+gif, gif, jpg, jpg, png, bmp, tif, avi, mov, mpg, mpg, mpg, fws, doc, 
 
 
---- Action Taken: Data_Carve_Attempt AT: Mon Apr 12 22:26:05 2021 BY: Guest
-Command Used: sudo foremost -T -v -c /etc/foremost.conf /home/kali/Raspberry-Pi4-Forensics/ForinApp/Evidence/FSI_Evidance -o Carved_Evidence/
-jpg, jpg, jpg, 
-
-
---- Action Taken: Data_Carve_Attempt AT: Mon Apr 12 21:48:48 2021 BY: Guest
-Command Used: sudo foremost -T -v -c /etc/foremost.conf /home/kali/ -o Carved_Evidence/
-jpg, jpg, jpg, 
-
-
---- Action Taken: Data_Carve_Attempt AT: Mon Apr 12 19:19:50 2021 BY: Guest
-Command Used: sudo foremost -T -v -c /etc/foremost.conf /home/kali/Raspberry-Pi4-Forensics/ForinApp/Evidence/hello.dd -o Carved_Evidence/
-jpg, jpg, jpg, 
-
-
---- Action Taken: Data_Carve_Attempt AT: Mon Apr 12 19:05:21 2021 BY: Guest
-Command Used: sudo foremost -T -v -c /etc/foremost.conf /home/kali/Raspberry-Pi4-Forensics/ForinApp/Evidence/ -o Carved_Evidence/
-jpg, jpg, jpg, 
-
-
---- Action Taken: Data_Carve_Attempt AT: Thu Apr  8 21:04:14 2021 BY: Guest
-Command Used: sudo foremost -T -v -c /etc/foremost.conf /home/kali/Raspberry-Pi4-Forensics/ForinApp/Evidence/hello.img -o Carved_Evidence/
-art, art, gif, gif, jpg, jpg, jpg, bmp, mov, mov, mpg, fws, doc, pst, ost, dbx, idx, mbx, htm, 
-
-
+--- Action Taken: Data_Carve_Attempt AT: Thu Apr 15 01:34:13 2021 BY: Guest
+Command Used: sudo foremost -T -v -c /etc/foremost.conf /home/kali/Raspberry-Pi4-Forensics/ForinApp/Evidence/dfrws-2007-challenge.img -o qweqwe/

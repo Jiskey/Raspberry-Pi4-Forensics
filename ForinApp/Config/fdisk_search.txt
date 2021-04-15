@@ -94,28 +94,40 @@ Sector size (logical/physical): 512 bytes / 4096 bytes
 I/O size (minimum/optimal): 4096 bytes / 4096 bytes
 
 
+Disk /dev/mmcblk0: 59.48 GiB, 63864569856 bytes, 124735488 sectors
+Units: sectors of 1 * 512 = 512 bytes
+Sector size (logical/physical): 512 bytes / 512 bytes
+I/O size (minimum/optimal): 512 bytes / 512 bytes
+Disklabel type: dos
+Disk identifier: 0x29e51e91
+
+Device         Boot  Start       End   Sectors  Size Id Type
+/dev/mmcblk0p1        2048    262143    260096  127M  c W95 FAT32 (LBA)
+/dev/mmcblk0p2      262144 124735487 124473344 59.4G 83 Linux
+
+
 Disk /dev/sda: 465.76 GiB, 500107862016 bytes, 976773168 sectors
 Disk model:                 
 Units: sectors of 1 * 512 = 512 bytes
 Sector size (logical/physical): 512 bytes / 4096 bytes
 I/O size (minimum/optimal): 4096 bytes / 4096 bytes
 Disklabel type: dos
-Disk identifier: 0xdfa8ce7d
+Disk identifier: 0xd34db33f
 
 Device     Boot  Start       End   Sectors   Size Id Type
 /dev/sda1         2048    262143    260096   127M  c W95 FAT32 (LBA)
 /dev/sda2       262144 976773167 976511024 465.6G 83 Linux
 
 
-Disk /dev/sdb: 111.79 GiB, 120034123776 bytes, 234441648 sectors
-Disk model: Portable SSD 3.0
+Disk /dev/sdb: 114.61 GiB, 123060879360 bytes, 240353280 sectors
+Disk model:  SanDisk 3.2Gen1
 Units: sectors of 1 * 512 = 512 bytes
 Sector size (logical/physical): 512 bytes / 512 bytes
-I/O size (minimum/optimal): 512 bytes / 33553920 bytes
+I/O size (minimum/optimal): 512 bytes / 512 bytes
 Disklabel type: gpt
-Disk identifier: 2E5411A8-FDAA-4683-AE4B-8A465AD4C857
+Disk identifier: 4AE89675-E578-421B-BED6-9A680C04F3CC
 
-Device      Start      End  Sectors  Size Type
-/dev/sdb1    2048   534527   532480  260M EFI System
-/dev/sdb2  534528   796671   262144  128M Microsoft reserved
-/dev/sdb3  796672 17573887 16777216    8G Microsoft basic data
+Device      Start       End   Sectors   Size Type
+/dev/sdb1    2048    534527    532480   260M EFI System
+/dev/sdb2  534528    796671    262144   128M Microsoft reserved
+/dev/sdb3  796672 240353246 239556575 114.2G Microsoft basic data

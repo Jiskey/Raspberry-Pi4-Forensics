@@ -48,6 +48,7 @@ def FSI_main_menu(*path):
 			ext_list.add('.' + ext)
 	os.system('rm Config/tmp.txt')
 	ext_list.add('.dd')
+	ext_list.add('.img')
 
 	if path.endswith('/') != True:
 		path += '/'
