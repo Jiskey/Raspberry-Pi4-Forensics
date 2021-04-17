@@ -20,24 +20,22 @@ FSI Controller Main Menu
 Requests The User To Select A IMG File For Inspection
 Can Take A Path Specified When Being Called To Save New Chosen Dir
 """
-def FSI_main_menu(*path):
+def FSI_main_menu(path = '0'):
 	ext_list = set({})
 	choices = []
 	title = ''	
 
-	if path:
-		path = str(path[0])
-		if path == '0':
-			path = scs.settings_check('$Default_Output_Location')
+	if path and path != '0':
+		evi_path = ''
 	else:
-		path = scs.settings_check('$Default_Output_Location')
+		evi_path = scs.settings_check('$Default_Output_Location')
 
 	os.system('clear')
 	click.secho('File System Inspection (Sleuth Kit)\n', bold=True, fg='blue')
 	click.echo('File System Inspection Of A Forensic Img File Using TSK [MMLS, FLS, IMG_STAT, ICAT, ISTAT, FSSTAT]\n')
 	click.echo('Image File Can Be Of The Following Formats:')
 	os.system('mmls -i list')
-	click.echo('\nCurrent Image Evidance Location: {}'.format(path))
+	click.echo('\nCurrent Image Evidance Location: {}'.format(evi_path))
 	
 	### Get Combatible Img File Formats
 	os.system('mmls -i list 2> Config/tmp.txt')
@@ -50,9 +48,9 @@ def FSI_main_menu(*path):
 	ext_list.add('.dd')
 	ext_list.add('.img')
 
-	if path.endswith('/') != True:
-		path += '/'
-	for file in os.listdir(path):
+	if evi_path.endswith('/') != True:
+		evi_path += '/'
+	for file in os.listdir(evi_path):
 		for ext in ext_list:
 			if file.endswith(ext) == True:
 				choices.append(file)
@@ -73,7 +71,7 @@ def FSI_main_menu(*path):
 		if uls_filepath.endswith('/') == False:
 			uls_filepath += '/'
 		uls_filepath += 'Fsi_Usage_Logs.txt'
-		sel_file = path + choices[index_selection]
+		sel_file = evi_path + choices[index_selection]
 		uls.log_change(uls_filepath, 'File_System_Inspection', sel_file)
 		FSI_selection(sel_file)
 

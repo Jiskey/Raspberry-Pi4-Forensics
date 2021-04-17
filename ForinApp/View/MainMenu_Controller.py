@@ -13,6 +13,7 @@ from Controllers import ACQ_Controller
 from Controllers import DC_Controller
 from Controllers import PDF_Controller
 from Controllers import FSI_Controller
+from Controllers import PWD_Controller
 from Controllers import Settings_Controller
 from Controllers import Extras_Controller
 from Scripts import TerminalMenuScript as tms
@@ -68,7 +69,8 @@ def sub_menu_2():
 	choices = ['[1] Acquire Img (Dc3dd / Dcfldd)', 
 			'[2] File System Inspection (Sleuth Kit)',
 			'[3] Data Carving (Foremost / Scalpel / PhotoRec)',
-			'[4] PDF File Analysis (Pdfid / Pdf-Parser)', 
+			'[4] PDF File Analysis (Pdfid / Pdf-Parser)',
+			'[5] Password Cracking (Hashcat)', 
 			'[0] Back']
 	title = '\nPlease Select A Tool You Would Like To You!'
 	selection_index = tms.generate_menu(title, choices)
@@ -82,6 +84,8 @@ def sub_menu_2():
 	elif selection_index == 3:
 		PDF_Controller.PDF_main_menu()
 	elif selection_index == 4:
+		PWD_Controller.PWD_main_menu()
+	elif selection_index == 5:
 		sub_menu_1()
 	else:
 		sys.exit(0)

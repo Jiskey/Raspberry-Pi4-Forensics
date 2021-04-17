@@ -24,12 +24,12 @@ requires a path that can be empty.
 def PDF_main_menu(path = '0'):
 	if path and path != '0':
 		evi_path = path
+		if evi_path.endswith('/') == False:
+			evi_path = evi_path + '/'
 	else:
-		evi_path = scs.settings_check('$PDF_Evidance_Location')
-
-	print(evi_path)
-	if evi_path.endswith('/') == False:
-		evi_path = evi_path + '/'
+		evi_path = scs.settings_check('$Default_Output_Location')
+		if evi_path.endswith('/') == False:
+			evi_path = evi_path + '/'
 
 	hashes = scs.settings_check('$PDF_Hashes')
 	disarm = scs.settings_check('$PDF_Disarm')

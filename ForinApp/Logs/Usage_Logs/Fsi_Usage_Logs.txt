@@ -1,3 +1,29 @@
+--- Action Taken: File_System_Inspection AT: Sat Apr 17 03:15:39 2021 BY: Guest
+File Inspected: /home/kali/11-carve-fat.dd
+--- Action Taken: File_System_Inspection AT: Sat Apr 17 03:15:37 2021 BY: Guest
+File Inspected: /home/kali/dfrws-2006-challenge.raw
+--- Action Taken: File_System_Inspection AT: Sat Apr 17 03:15:36 2021 BY: Guest
+File Inspected: /home/kali/L2_Graphic.dd
+--- Action Taken: File_System_Inspection AT: Sat Apr 17 03:15:34 2021 BY: Guest
+File Inspected: /home/kali/L0_Graphic.dd
+--- Action Taken: File_System_Inspection AT: Sat Apr 17 03:15:10 2021 BY: Guest
+File Inspected: 0L0_Graphic.dd
+--- Action Taken: File_System_Inspection AT: Sat Apr 17 03:13:52 2021 BY: Guest
+File Inspected: 0L0_Graphic.dd
+--- Action Taken: File_System_Inspection AT: Sat Apr 17 03:13:22 2021 BY: Guest
+File Inspected: 0dfrws-2006-challenge.raw
+--- Action Taken: File_System_Inspection AT: Sat Apr 17 03:13:19 2021 BY: Guest
+File Inspected: 0L2_Graphic.dd
+--- Action Taken: File_System_Inspection AT: Sat Apr 17 03:12:58 2021 BY: Guest
+File Inspected: 0L0_Graphic.dd
+--- Action Taken: File_System_Inspection AT: Fri Apr 16 22:03:11 2021 BY: Guest
+File Inspected: /home/kali/dfrws-2006-challenge.raw
+--- Action Taken: File_System_Inspection AT: Fri Apr 16 22:03:10 2021 BY: Guest
+File Inspected: /home/kali/11-carve-fat.dd
+--- Action Taken: File_System_Inspection AT: Fri Apr 16 22:03:08 2021 BY: Guest
+File Inspected: /home/kali/L2_Graphic.dd
+--- Action Taken: File_System_Inspection AT: Fri Apr 16 22:03:02 2021 BY: Guest
+File Inspected: /home/kali/L0_Graphic.dd
 --- Action Taken: File_System_Inspection AT: Fri Apr 23 18:11:02 2021 BY: Guest
 File Inspected: /home/kali/hello.dd
 --- Action Taken: File_System_Inspection AT: Fri Apr 23 18:10:55 2021 BY: Guest
