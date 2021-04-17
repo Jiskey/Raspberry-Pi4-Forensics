@@ -84,7 +84,6 @@ Executes TSK Tool Commands To Gather Information And Display It To The User
 Uses 'img_conf' Of Class.Type(FsiSetting) To Store Needed Information For Extraction & Navigation
 Requires a File Path For The Img File To Inspect From 'FSI_main_menu'
 """
-
 def FSI_selection(file_path):
 	img_format = ''
 	img_FS_format = ''
