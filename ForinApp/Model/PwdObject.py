@@ -17,7 +17,6 @@ class PwdObject:
 	filepath = ''
 	filename = ''
 	output_path = ''
-	pass_charset = ''
 	pass_hash = 0
 	pass_mask = ''
 	dict_list = []
@@ -25,9 +24,9 @@ class PwdObject:
 	custom_charset_list = []
 	attack = 0
 	workload = 1
-	opencl_type = 1
-	optimised_kernal = False;
+	optimised_kernal = 'False';
 	hash_list = []
+	max_runtime = 0
 
 	def __init__(self, filepath, filename):
 		self.filepath = filepath
@@ -42,8 +41,9 @@ class PwdObject:
 	def get_output_path(self):				
 		return self.output_path
 
-	def get_pass_charset(self):
-		return self.pass_charset
+	def set_output_path(self, output_path):				
+		self.output_path = output_path
+
 
 	def get_pass_hash(self):
 		return self.pass_hash
@@ -65,6 +65,9 @@ class PwdObject:
 
 	def add_dict_file(self, dict_file):
 		self.dict_list.append(dict_file)
+
+	def get_dict_file(self, dict_file):
+		return self.dict_list[dict_file]
 
 	def get_sel_rule(self):				
 		return self.sel_rule
@@ -90,17 +93,35 @@ class PwdObject:
 	def get_workload(self):				
 		return self.workload
 
-	def get_opencl_type(self):				
-		return self.opencl_type
+	def set_workload(self, workload):
+		if type(workload) == int:				
+			self.workload = workload
+		elif workload == 'Low':
+			self.workload = 1
+		elif workload == 'Default':
+			self.workload = 2
+		elif workload == 'High':
+			self.workload = 3
+		elif workload == 'Nightmare':
+			self.workload = 4
 
 	def get_optimised_kernal(self):				
 		return self.optimised_kernal
+
+	def set_optimised_kernal(self, optimised_kernal):				
+		self.optimised_kernal = optimised_kernal
 
 	def get_hash_list(self):				
 		return self.hash_list
 
 	def set_hash_list(self, hash_list):				
 		self.hash_list = hash_list
+
+	def get_max_runtime(self):
+		return self.max_runtime
+
+	def set_max_runtime(self, max_runtime):
+		self.max_runtime = max_runtime
 
 	def gen_hash_list(self):
 		check = False
@@ -122,3 +143,39 @@ class PwdObject:
 					self.hash_list.append(line.strip())
 			except:
 				continue
+
+	def gen_command(self):
+		command = 'sudo hashcat '
+		if self.max_runtime != 0:
+			command = command + '--runtime={} '.format(self.max_runtime)
+		if self.optimised_kernal == 'True':
+			command = command + '-O '
+		command = command + '-w {} '.format(self.workload)
+		command = command + '-m {} '.format(self.pass_hash)
+		command = command + '-a {} '.format(self.attack)
+		if self.sel_rule != '':
+			command = command + '-r {} '.format(self.sel_rule)
+		command = command + '-o {}{}'.format(self.output_path, self.filename.split('.')[0] + '_evidance.txt')
+		command = command + ' {} '.format(self.filepath + self.filename)
+
+		if self.attack == 0 or self.attack == 1:
+			for wordlist in self.dict_list:
+				command = command + wordlist + ' '
+		elif self.attack == 3 or self.attack == 6 or self.attack == 7:
+			if self.attack == 6:
+				for wordlist in self.dict_list:
+					command = command + wordlist + ' '
+
+			for count, charset in enumerate(self.custom_charset_list):
+				command = command + '-' + str(count + 1) + ' ' + charset + ' '
+			command = command + self.pass_mask + ' '
+
+			if self.attack == 7:
+				for wordlist in self.dict_list:
+					command = command + wordlist + ' '
+
+		return command
+
+
+
+

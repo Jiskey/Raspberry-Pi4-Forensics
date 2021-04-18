@@ -57,6 +57,7 @@ def PWD_main_menu(path = '0'):
 	PWD_hash_type(pwd_object)
 	PWD_attack_type(pwd_object)
 	PWD_config(pwd_object)
+	PWD_conform(pwd_object)
 
 """
 
@@ -99,7 +100,7 @@ def PWD_attack_type(pwd_object):
 
 	if index_selection == 5:
 		PWD_main_menu(pwd_object.get_filepath())
-	if index_selection == 4:
+	elif index_selection == 4:
 		choices = ['[1] Mask:Dict','[2] Dict:Mask']
 		title = '\nPlease Select A Format'
 		index_selection = tms.generate_menu(title, choices)
@@ -109,23 +110,103 @@ def PWD_attack_type(pwd_object):
 			pwd_object.set_attack(6)
 		PWD_sel_dict(pwd_object)
 		PWD_gen_mask(pwd_object)
-	if index_selection == 3:
+	elif index_selection == 3:
 		pwd_object.set_attack(3)
 		PWD_gen_mask(pwd_object)
-	if index_selection == 2:
+	elif index_selection == 2:
 		pwd_object.set_attack(1)
 		PWD_sel_dict(pwd_object)
-	if index_selection == 1:
+	elif index_selection == 1:
 		pwd_object.set_attack(2)
 		PWD_sel_dict(pwd_object)
-	if index_selection == 0:
+	elif index_selection == 0:
+		pwd_object.set_sel_rule('')
 		pwd_object.set_attack(0)
 		PWD_sel_dict(pwd_object)
+
 """
 
 """
-def PWD_config():
-	pass
+def PWD_config(pwd_object):
+	pwd_object.set_workload(scs.settings_check('$Default_Workload_Profile'))
+	pwd_object.set_optimised_kernal(scs.settings_check('$Optimised_Kernal'))
+	pwd_object.set_output_path(scs.settings_check('$Default_PWD_Output'))
+	pwd_object.set_max_runtime(int(scs.settings_check('$Max_Runtime')))
+	title = '\nPlease Select An Option:'
+	choices = ['[2] Specify New Options', '[1] Use Default', '[0] Back']
+
+	os.system('clear')
+	click.secho('Password/Hash Cracking (Hashcat)\n', bold=True, fg='blue')
+	click.echo('Currently Selected Configuration Options:\n')
+	click.echo('WorkLoad Performace: {}'.format(str(pwd_object.get_workload())))
+	click.echo('Hashcat Optimised kernal: {}'.format(str(pwd_object.get_optimised_kernal())))
+	click.echo('Max Operation Runtime: {}'.format(str(pwd_object.get_max_runtime())))
+	click.echo('Default Output Location: {}'.format(str(pwd_object.get_output_path())))
+
+	if pwd_object.get_workload() == 4:
+		click.secho('WARNING: Workload Performance Set To Nightmare! (4). Expect Huge Perfomance Imapce!', fg='red')
+
+	index_selection = tms.generate_menu(title, choices)
+
+	if index_selection == 2:
+		PWD_attack_type(pwd_object)
+	elif index_selection == 0:
+		PWD_config_wizard(pwd_object)
+
+"""
+
+"""
+def PWD_conform(pwd_object):
+	title = '\n'
+	if pwd_object.get_workload() == 4:
+		title = title + '\nWARNING! HEADLESS WORKLOAD DETECTED. EXPECT HUGE PERFORMANCE HIT!\n'
+	title = title + 'You Are About To Execute The Following Command!'
+
+	os.system('clear')
+	click.secho('Password/Hash Cracking (Hashcat)\n', bold=True, fg='blue')
+	
+	click.echo('To Crack: {}'.format(pwd_object.get_filepath() + pwd_object.get_filename()))
+	click.echo('Output Path: {}'.format(pwd_object.get_output_path()))
+
+	if pwd_object.get_attack() == 0:
+		click.secho('\nAttack Type: Strait', bold=True)
+		click.echo('Dictonary File: {}'.format(pwd_object.get_dict_file(0)))
+		click.echo('Rule File: {}'.format(pwd_object.get_sel_rule()))
+	elif pwd_object.get_attack() == 1:
+		click.secho('\nAttack Type: Combinator', bold=True)
+		click.echo('Dictonary File: {}'.format(pwd_object.get_dict_file(0)))
+		click.echo('Secondary Dictonary File: {}'.format(pwd_object.get_dict_file(1)))
+	elif pwd_object.get_attack() == 3:
+		click.secho('\nAttack Type: Brute-Force (Mask) Attack', bold=True)
+		for charset in pwd_object.get_custom_charset_list():
+			click.echo('Custom Charset 1: ' + charset)
+		click.echo('Cracking Mask: {}'.format(pwd_object.get_pass_mask()))
+	elif pwd_object.get_attack() == 6 or pwd_object.get_attack() == 7:
+		if pwd_object.get_attack() == 6:
+			hybrid_format = 'Dictonary + Mask'
+		else:
+			hybrid_format = 'Mask + Dictonary'
+		click.secho('\nAttack Type: Hybrid Attack', bold=True)
+		click.echo('Hybrid Format: ' + hybrid_format)
+		click.echo('Cracking Mask: {}'.format(pwd_object.get_pass_mask()))
+
+	click.secho('\nConfiguration Options', bold = True)
+	click.echo('Workload: {}'.format(pwd_object.get_workload()))
+	click.echo('Optimised Kernal: {}'.format(pwd_object.get_optimised_kernal()))
+	click.echo('Max Program Runtime: {}'.format(pwd_object.get_max_runtime()))
+
+	command = pwd_object.gen_command()
+	click.secho('\n- --- - WARNING - --- - --- - WARNING - --- - --- - WARNING - --- -', fg='red', bold=True)
+	click.secho('\nCOMMAND:', bold=True)
+	click.echo(command)
+
+	index_selection = tms.generate_promt_menu(title, 2)
+
+	if index_selection == 0:
+		PWD_config(pwd_object)
+		PWD_conform(pwd_object)
+	else:
+		os.system(command)
 
 """
 
@@ -242,10 +323,74 @@ def PWD_sel_dict(pwd_object, path = '0'):
 			else:
 				pwd_object.set_attack(222)
 				PWD_sel_dict(pwd_object, index_selection)
+		elif index_selection == len(choices) - 3:
+			pwd_object.set_sel_rule('')
 		else:
 			pwd_object.set_attack(0)
 			pwd_object.set_sel_rule(path + choices[index_selection])
 
+"""
+
+"""
+def PWD_config_wizard(pwd_object):
+	settings_list = scs.get_settings_list()
+	new_settings_list = []
+
+	for setting in settings_list:
+		if setting.get_section() == '----- Password Cracking Settings Settings -----':
+			new_settings_list.append(setting)
+
+	for setting in new_settings_list:
+		title = '\n' + setting.get_description() + '\n'
+		choices = []
+
+		os.system('clear')
+		click.secho('Password/Hash Cracking (Hashcat)\n', bold=True, fg='blue')
+
+		if setting.get_code_call() == '$Default_Workload_Profile':
+			click.echo(' * | Performance | Runtime | Power Consumption | Desktop Impact  ')	
+			click.echo('===|=============|=========|===================|=================')	
+			click.echo(' 1 | Low         |    2 ms | Low               | Minimal  ')	
+			click.echo(' 2 | Default     |   12 ms | Econmice          | Noticeable  ')	
+			click.echo(' 3 | High        |   96 ms | High              | Unresponsive  ')	
+			click.echo(' 4 | Nightmare   |  480 ms | Insane            | Headless  ')
+
+		if setting.get_code_call() == '$Max_Runtime':
+			click.echo('0 = No Max Runtime')	
+			click.echo('600 = 10 Minutes')	
+			click.echo('3600 = 1 Hour')	
+			click.echo('...')	
+			click.echo('604800 = 1 Week')		
+	
+		for option in setting.get_items_list():
+			choices.append(option)
+		choices.append('[1] Use Default: {}'.format(str(setting.get_code().split(':')[1])))
+		choices.append('[0] Back')
+
+		index_selection = tms.generate_menu(title, choices)
+
+		if index_selection == len(choices) - 1:
+			PWD_config(pwd_object)
+			break
+		elif index_selection == len(choices) - 2:
+			continue
+		elif choices[index_selection].startswith('-- ') == True:
+			index_selection = tms.generate_string_menu('Hashcat Output Filepath', 1)
+			if index_selection == '0':
+				PWD_config_wizard(pwd_object)
+				break
+			else:
+				if index_selection.endswith('/') == False:
+					index_selection = index_selection + '/'
+				pwd_object.set_output_path(index_selection)
+		else:
+			if setting.get_code_call() == '$Default_Workload_Profile':
+				pwd_object.set_workload(choices[index_selection])
+			if setting.get_code_call() == '$Optimised_Kernal':
+				pwd_object.set_optimised_kernal(choices[index_selection])
+			if setting.get_code_call() == '$Max_Runtime':
+				pwd_object.set_max_runtime(int(choices[index_selection]))
+		
 """
 
 """

@@ -117,6 +117,24 @@ $PDF_Hashes:True
 [True][False]
 $PDF_Verbose_Output:False
 
+----- Password Cracking Settings Settings -----
+
+#Location of Password Evidance Files (Hashcat Output)
+[-- Specify New Password Output]
+$Default_PWD_Output:/home/kali/Raspberry-Pi4-Forensics/ForinApp/Evidence/PWD_Evidance/
+
+#Workload Profile For Hashcat Operation
+[Low][Default][High][Nightmare]
+$Default_Workload_Profile:Default
+
+#Enable Hashcat Optimised Performace Option
+[True][False]
+$Optimised_Kernal:True
+
+#Max Runtime For Hashcat Operation (Seconds) (0 = No Max Runtime)
+[0][600][3600][14400][43200][86400][172800][604800]
+$Max_Runtime:0
+
 ----- Application Settings -----
 
 #Application Teminal Menu Cursor Style
