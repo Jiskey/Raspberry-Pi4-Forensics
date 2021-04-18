@@ -86,6 +86,14 @@ def log_change(filepath, action, contents):
 			txt.write('File Inspected: ' + contents)
 			txt.write('\n')
 
+	### Log After Attempt At Password Cracking (PWD)
+	if action == 'Password_Crack_Attempt':	
+		txt = open(filepath, 'w')
+		if contents != '':
+			txt.write(output)
+			txt.write('Command Used: ' + contents)
+			txt.write('\n')
+
 	txt = open(filepath, 'a')
 	for item in exsisting_logs:		
 		txt.write(item)

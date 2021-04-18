@@ -2,8 +2,8 @@
 #Application Name: Forin
 #Author: J.Male
 #Desc: 
-#	
-#	
+#	PWD_Object Class Hold and handles operation involved wht password cracking (PWD)
+#	Contains information About Attack types and files to use.
 
 import sys
 import os
@@ -11,7 +11,9 @@ import os
 from Scripts import SettingsCheckScript as scs
 
 """
-
+pwd_object class handles and edits information needede to performa password cracking.
+contains hashes, files, attack codes, ...
+Includes hashcat command generation and has_list generation
 """
 class PwdObject:
 	filepath = ''
@@ -27,6 +29,7 @@ class PwdObject:
 	optimised_kernal = 'False';
 	hash_list = []
 	max_runtime = 0
+	potfile = 'True'
 
 	def __init__(self, filepath, filename):
 		self.filepath = filepath
@@ -123,6 +126,12 @@ class PwdObject:
 	def set_max_runtime(self, max_runtime):
 		self.max_runtime = max_runtime
 
+	def get_potfile(self):
+		return self.potfile
+
+	def set_potfile(self, potfile):
+		self.potfile = potfile
+
 	def gen_hash_list(self):
 		check = False
 		tmp_string = ''
@@ -146,6 +155,8 @@ class PwdObject:
 
 	def gen_command(self):
 		command = 'sudo hashcat '
+		if self.potfile == 'False':
+			command = command + '--potfile-disable '
 		if self.max_runtime != 0:
 			command = command + '--runtime={} '.format(self.max_runtime)
 		if self.optimised_kernal == 'True':

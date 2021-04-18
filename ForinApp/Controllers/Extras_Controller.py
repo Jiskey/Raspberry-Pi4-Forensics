@@ -21,7 +21,7 @@ def extras_main():
 	os.system('clear')
 	click.secho('2. Program Extras\n', fg='blue', bold=True)
 
-	choices = ['[1] View Img/Usability Logs', '[2] Fdisk Drive Search', '[0] Back']
+	choices = ['[1] View Img/Usability Logs', '[2] Fdisk Drive Search','[3] View Cracked Hashes (Hashcat)' , '[0] Back']
 	title = 'Please Select An Extra'
 	
 	index_selection = tms.generate_menu(title, choices)
@@ -32,6 +32,8 @@ def extras_main():
 		extras_logs(scs.settings_check('$Default_Hash_Logging_Location'))
 	elif index_selection == 1:
 		extras_drives()
+	elif index_selection == 2:
+		extras_cracked_hashes(scs.settings_check('$Default_PWD_Output'))
 
 """
 Extras_Logs, Searches a Directory For Files And Display Its Contents.
@@ -40,9 +42,7 @@ Preview Is a combination of simple_term_menu & cat
 """
 def extras_logs(log_path):
 	choices = []
-	if os.path.isdir(log_path) == False:
-		es.error(4000, 0)
-	elif os.path.isdir(log_path) == True:
+	if os.path.isdir(log_path) == True:
 		choices.append('[1] Acqusition Logs')
 		choices.append('[2] Usabiltiy Logs')
 	choices.append('[0] Back')
@@ -54,7 +54,6 @@ def extras_logs(log_path):
 		log_path+= '/'
 
 	title = title + '\n--- Press "Enter" To Return\n'
-	check = 0
 	if index_selection == 0:
 		index_selection = tms.generate_file_preview_menu(title, log_path)
 	elif index_selection == 1:
@@ -73,3 +72,22 @@ def extras_drives():
 	connected_drives = fds.fdisk(True)
 	wait_selection = tms.generate_menu('Please Press Any Button To Continue', [' '])
 	extras_main()
+
+"""
+Displays A List Of Cracked Password Found In the Hashcat potfile.
+Will Also Display FileFound in PWD Evidance Folder.
+"""
+def extras_cracked_hashes(log_path):
+	if log_path.endswith('/') == False:
+		log_path+= '/'
+
+	click.secho('Hashes Cracked From ~/root/Hashcat.potfile: ', bold=True)
+	click.echo('Checking File...\n')
+	os.system('sudo cat ~/.hashcat/hashcat.potfile')
+	click.echo('\nCurrently selected Craches Hashes Output File: {}\n'.format(log_path))
+
+	title ='\n--- Press "Enter" To Return\n'
+	index_selection = tms.generate_file_preview_menu(title, log_path)
+
+	extras_main()
+	

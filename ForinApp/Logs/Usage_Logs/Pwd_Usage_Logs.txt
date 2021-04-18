@@ -1,0 +1,18 @@
+--- Action Taken: Password_Crack_Attempt AT: Sun Apr 18 16:09:57 2021 BY: Guest
+Command Used: sudo hashcat -O -w 2 -m 0 -a 0 -o /home/kali/Raspberry-Pi4-Forensics/ForinApp/Evidence/PWD_Evidance/hashes_evidance.txt /home/kali/hashes.txt /home/kali/4.txt 
+
+--- Action Taken: Password_Crack_Attempt AT: Sun Apr 18 16:08:34 2021 BY: Guest
+Command Used: sudo hashcat -O -w 2 -m 0 -a 0 -o /home/kali/Raspberry-Pi4-Forensics/ForinApp/Evidence/PWD_Evidance/hashes_evidance.txt /home/kali/hashes.txt /home/kali/3.txt 
+
+--- Action Taken: Password_Crack_Attempt AT: Sun Apr 18 16:03:05 2021 BY: Guest
+Command Used: sudo hashcat --runtime=43200 -O -w 2 -m 0 -a 1 -o /home/kali/Raspberry-Pi4-Forensics/ForinApp/Evidence/PWD_Evidance/hashes_evidance.txt /home/kali/hashes.txt /home/kali/3.txt /home/kali/2.txt 
+
+--- Action Taken: Password_Crack_Attempt AT: Sun Apr 18 16:01:18 2021 BY: Guest
+Command Used: sudo hashcat -O -w 2 -m 0 -a 1 -o /home/kali/Raspberry-Pi4-Forensics/ForinApp/Evidence/PWD_Evidance/hashes_evidance.txt /home/kali/hashes.txt /home/kali/4.txt /home/kali/3.txt 
+
+--- Action Taken: Password_Crack_Attempt AT: Sun Apr 18 16:00:23 2021 BY: Guest
+Command Used: sudo hashcat --runtime=3600 -w 3 -m 0 -a 0 -o /home/kali/Raspberry-Pi4-Forensics/ForinApp/Evidence/PWD_Evidance/hashes_evidance.txt /home/kali/hashes.txt /home/kali/1.txt 
+
+--- Action Taken: Password_Crack_Attempt AT: Sun Apr 18 15:59:42 2021 BY: Guest
+Command Used: sudo hashcat --runtime=3600 -w 3 -m 0 -a 0 -o /home/kali/Raspberry-Pi4-Forensics/ForinApp/Evidence/PWD_Evidance/1_evidance.txt /home/kali/1.txt /home/kali/1.txt 
+

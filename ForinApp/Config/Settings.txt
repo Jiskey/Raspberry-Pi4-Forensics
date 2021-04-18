@@ -127,13 +127,17 @@ $Default_PWD_Output:/home/kali/Raspberry-Pi4-Forensics/ForinApp/Evidence/PWD_Evi
 [Low][Default][High][Nightmare]
 $Default_Workload_Profile:Default
 
-#Enable Hashcat Optimised Performace Option
+#Enable Hashcat Optimised Kernal Performace
 [True][False]
 $Optimised_Kernal:True
 
 #Max Runtime For Hashcat Operation (Seconds) (0 = No Max Runtime)
 [0][600][3600][14400][43200][86400][172800][604800]
 $Max_Runtime:0
+
+#Enable Hashcat Potfile (Potfile = Already Stored Cracked Hashes)
+[True][False]
+$Enable_Hashcat_Potfile:True
 
 ----- Application Settings -----
 
