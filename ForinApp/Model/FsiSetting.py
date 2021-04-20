@@ -36,40 +36,40 @@ class FsiSetting:
 		self.img_FS_format = img_FS_format
 		self.output_path = output_path
 
-	def get_img_name(self):					# Img.dd Name
+	def get_img_name(self):					
 		return self.img_name
 
-	def get_img_ext(self):					# Img.dd Ext.
+	def get_img_ext(self):					
 		return self.img_ext
 		
-	def get_file_path(self):				# Img.dd File Path
+	def get_file_path(self):				
 		return self.file_path
 
-	def get_img_format(self):				# Img.dd Format (exam: dos)
+	def get_img_format(self):				
 		return self.img_format
 
-	def get_img_FS_format(self):				# Img.dd File System Format
+	def get_img_FS_format(self):				
 		return self.img_FS_format
 
-	def get_output_path(self):				# Evidance Output Path
+	def get_output_path(self):				
 		return self.output_path
 
-	def get_byte_offset(self):				# Img.dd Byte Offset
+	def get_byte_offset(self):				
 		return self.byte_offset
 
-	def get_fsstat_txt(self):				# Str Lines From fsstat Command
+	def get_fsstat_txt(self):				
 		return self.fsstat_txt
 
-	def get_fls_txt(self):					# Str Lines From fls Command
+	def get_fls_txt(self):					
 		return self.fls_txt
 
-	def get_fls_list(self):					# List of fls items
+	def get_fls_list(self):					
 		return self.fls_list
 
-	def get_fls(self, fls_num):				# Single fls item ([*][inode][name]...)
+	def get_fls(self, fls_num):				
 		return self.fls_list[fls_num]
 
-	def get_inode_nav_list(self):				# List of previously selected inodes
+	def get_inode_nav_list(self):				
 		return self.inode_nav_list
 
 	def add_inode_nav(self, inode):	
@@ -78,7 +78,7 @@ class FsiSetting:
 	def del_inode_nav(self, inode):				
 		self.inode_nav_list.pop(inode)
 
-	def get_sel_inode(self):				# The Currently Selected inode
+	def get_sel_inode(self):			
 		return self.sel_inode
 
 	def set_sel_inode(self, sel_inode):			

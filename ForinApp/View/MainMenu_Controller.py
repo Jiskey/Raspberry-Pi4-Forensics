@@ -30,7 +30,7 @@ def main_menu():
 	click.secho('                                                             |___/                  ', bold=True) 
 	click.secho('\n-  FORIN - KALI LINUX DIGITAL FORENSIC INVESTIGATOR', bold=True, fg='blue')
 	click.echo('-  By: J. Male')
-	click.echo('-  Version: 0.7.2 15/04/2021')
+	click.echo('-  Version: 0.7.3 20/04/2021')
 	click.echo('-  Kali Version: 2021.1')
 	click.echo('-  Desc: "FORIN" is a simple CLI app that allows you to perform quick/easy digital anylsis and')
 	click.echo('         investigation using the tools included with Kali Linux')

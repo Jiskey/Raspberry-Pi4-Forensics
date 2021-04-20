@@ -1,10 +1,18 @@
-#Settings Class
+#Python Setting Class
+#Application Name: Forin
+#Author: J.Male
+#Desc: 
+#	Setting Class Is the Class That holds settings collect from thew Forin App Conf File.
 
+"""
+Class Setting Holds data that is collected from the settings.txt / Config File.
+Can Either Hold The Whole List Of Settings Or Just One Section Based On Settings.get_section()
+"""
 class Setting:
-	section = ''			#what section it is under
+	section = ''
 	description = ''		
 	items = ''			
-	code = '';			#setting code ("$call:var")
+	code = '';
 
 	def __init__(self, setting_sect, setting_desc, setting_items, setting_code):
 		self.section = setting_sect
@@ -12,7 +20,6 @@ class Setting:
 		self.items = setting_items
 		self.code = setting_code
 
-	#Gets && Sets
 	def get_section(self):
 		return self.section
 
@@ -31,22 +38,26 @@ class Setting:
 	def set_items(self, setting_items):
 		self.items = setting_items
 
+	### Setting Code str(Call:Var)
 	def get_code(self):
 		return self.code
 
+	### Setting Code str(Call:Var)
 	def set_code(self, setting_code):
 		self.code = setting_code
 
-	#Format Get Functions
+	### Get Setting Call [Call:Var]
 	def get_code_call(self):
-		call, var = self.code.split(':')	#returns the call of the code ($call:var)
+		call, var = self.code.split(':')	
 		return call
 
-	def get_code_var(self):				#returns the var of the code
+	### Get Setting Var [Call:Var]
+	def get_code_var(self):	
 		call, var = self.code.split(':')
 		return var
 
-	def get_items_list(self):			#Returns a list of str(items)
+	### Return a list of Options (list('opt1','opt2',...))
+	def get_items_list(self):
 		list_items = self.items[1:-1]
 		list_items = list_items.split('][')	
 		return list_items

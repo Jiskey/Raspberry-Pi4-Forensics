@@ -1,3 +1,9 @@
+--- Action Taken: File_System_Inspection AT: Tue Apr 20 20:50:04 2021 BY: Guest
+File Inspected: /home/kali/hello.dd
+--- Action Taken: File_System_Inspection AT: Tue Apr 20 20:45:30 2021 BY: Guest
+File Inspected: /home/kali/hello.dd
+--- Action Taken: File_System_Inspection AT: Tue Apr 20 18:58:29 2021 BY: Guest
+File Inspected: /home/kali/hello.dd
 --- Action Taken: File_System_Inspection AT: Thu Apr 15 16:48:25 2021 BY: Guest
 File Inspected: /home/kali/Raspberry-Pi4-Forensics/ForinApp/Evidence/dfrws-2006-challenge.raw
 --- Action Taken: File_System_Inspection AT: Thu Apr 15 16:48:17 2021 BY: Guest
