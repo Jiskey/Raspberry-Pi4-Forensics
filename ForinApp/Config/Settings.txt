@@ -15,7 +15,7 @@ $SSH_Startup:False
 
 #Boot Drive Override Safety (Include Boot Drive When Perfoming a drive search for connected drives)
 [False][True]
-$Boot_Drive_Override:False
+$Boot_Drive_Override:True
 
 ----- Acqusisition Settings -----
 

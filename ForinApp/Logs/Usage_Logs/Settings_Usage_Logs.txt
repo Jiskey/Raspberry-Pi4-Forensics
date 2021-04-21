@@ -1,3 +1,6 @@
+--- Action Taken: Settings_Change AT: Wed Apr 21 17:44:48 2021 BY: Guest
+Settings Changed: $Boot_Drive_Override   From: False   To: True
+
 --- Action Taken: Settings_Change AT: Thu Apr 15 17:00:45 2021 BY: Guest
 Settings Changed: $Default_Output_Location   From: /home/kali   To: /home/kali/
 

@@ -117,12 +117,31 @@ def FSI_selection(file_path):
 
 	img_conf = FsiSetting(name, ext, file_path, img_format, img_FS_format, output_path)
 
-	if img_FS_format == '':
-		click.echo('\nSorry Somthing Went Wrong When Processing Your image File')
-		click.echo('Please Choose A different File')
-		x = input('Press [Enter To Return]')
-		FSI_main_menu()
+	### Detect Physical Image / Ignore Logical
+	if img_conf.get_img_FS_format() == '':
+		click.echo('Checking Active Partitons...\n')
+		os.system('mmls -i ' + img_format + ' ' + file_path + ' > Config/tmp.txt')
+		for line in open('Config/tmp.txt'):
+			print(line.strip())
+			if line.startswith('\n') == False:
+				split_line = line.split()
+				if split_line[0].endswith(':') == True:
+					choices.append(split_line[2].strip())					
+		choices.append('[0] Back')	
+		title = '\nPlease Select a Byte Offset'
 
+		while img_conf.get_img_FS_format() == '':
+			index_selection = tms.generate_menu(title, choices)
+
+			if index_selection == len(choices) - 1:
+				FSI_main_menu()
+			else:
+				img_conf.set_byte_offset(int(choices[index_selection]))
+				os.system('fsstat -t -i ' + img_format + ' -o ' + str(img_conf.get_byte_offset()) + ' ' + file_path + ' > Config/tmp.txt')
+				for line in open('Config/tmp.txt'):
+					img_conf.set_img_FS_format(line.strip())
+
+		
 	### Generate Info For Class (Tool Output Information) & Display
 	img_conf.gen_fsstat(fsi_path)
 	img_conf.gen_fls(fsi_path)
@@ -201,18 +220,18 @@ def FSI_display(img_conf):
 		
 	elif choices[index_selection].lower().find('d/') != -1:
 		if choices[index_selection].split()[0] == '*':
-			sel_inode = int(choices[index_selection].split()[2])
+			sel_inode = choices[index_selection].split()[2]
 		else:
-			sel_inode = int(choices[index_selection].split()[1])
+			sel_inode = choices[index_selection].split()[1]
 		img_conf.update_fls(sel_inode)
 		img_conf.add_inode_nav(sel_inode)
 		FSI_display(img_conf)
 
 	elif choices[index_selection].lower().find('r/') != -1 or choices[index_selection].lower().find('-/') != -1 or choices[index_selection].lower().find('b/') != -1 or choices[index_selection].lower().find('c/') != -1:
 		if choices[index_selection].startswith('*'):
-			sel_inode = int(choices[index_selection].split()[2])
+			sel_inode = choices[index_selection].split()[2]
 		else:
-			sel_inode = int(choices[index_selection].split()[1])
+			sel_inode = choices[index_selection].split()[1]
 		img_conf.set_sel_inode(sel_inode)
 		FSI_export(img_conf, index_selection)
 
@@ -244,9 +263,9 @@ def FSI_export(img_conf, index_selection):
 	click.echo('Using istat to View File Contents\n')
 	
 	### Display Inode Details
-	os.system('istat -r -i ' + img_conf.get_img_format() + ' -f ' + img_conf.get_img_FS_format() + ' ' + img_conf.get_file_path() + ' ' + str(img_conf.get_sel_inode()))
+	os.system('istat -r -i ' + img_conf.get_img_format() + ' -f ' + img_conf.get_img_FS_format() + ' -o ' + str(img_conf.get_byte_offset()) + ' ' + img_conf.get_file_path() + ' ' + str(img_conf.get_sel_inode()))
 	click.echo('')
-	os.system('icat -i ' + img_conf.get_img_format() + ' -f ' + img_conf.get_img_FS_format() + ' ' + img_conf.get_file_path() + ' ' + str(img_conf.get_sel_inode()) + ' | hexdump | head')
+	os.system('icat -i ' + img_conf.get_img_format() + ' -f ' + img_conf.get_img_FS_format() + ' -o ' + str(img_conf.get_byte_offset()) + ' ' + img_conf.get_file_path() + ' ' + str(img_conf.get_sel_inode()) + ' | hexdump | head')
 	
 	index_selection = tms.generate_menu(title, choices)		### Selection
 	

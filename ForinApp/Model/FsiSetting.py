@@ -51,11 +51,17 @@ class FsiSetting:
 	def get_img_FS_format(self):				
 		return self.img_FS_format
 
+	def set_img_FS_format(self, img_FS_format):				
+		self.img_FS_format = img_FS_format
+
 	def get_output_path(self):				
 		return self.output_path
 
 	def get_byte_offset(self):				
 		return self.byte_offset
+
+	def set_byte_offset(self, byte_offset):				
+		self.byte_offset = byte_offset
 
 	def get_fsstat_txt(self):				
 		return self.fsstat_txt
@@ -108,7 +114,7 @@ class FsiSetting:
 			line = line.split()
 			if line[1] != '*':
 				tmp['type'] = line[0].strip()
-				tmp['inode'] = int(line[1].strip(':'))
+				tmp['inode'] = line[1].strip(':')
 				file_name = ''
 				for count, txt in enumerate(line):
 					if count > 1:
@@ -117,7 +123,7 @@ class FsiSetting:
 			else:
 				tmp['type'] = line[0].strip()
 				tmp['deleted'] = line[1].strip()
-				tmp['inode'] = int(line[2].strip(':'))
+				tmp['inode'] = line[2].strip(':')
 				for count, txt in enumerate(line):
 					if count > 2:
 						file_name += ' ' + txt
@@ -126,17 +132,20 @@ class FsiSetting:
 
 	### Generates The ffstat information To Append
 	def gen_fsstat(self, path):
-		os.system('fsstat -i ' + self.img_format + ' -f ' + self.img_FS_format + ' ' + self.file_path + ' > ' + self.output_path + self.img_name + '_details.txt')
+		fsstat_txt = []
+		self.set_fsstat(fsstat_txt)
+		os.system('fsstat -i ' + self.img_format + ' -f ' + self.img_FS_format + ' -o ' + str(self.byte_offset) + ' ' + self.file_path + ' > ' + self.output_path + self.img_name + '_details.txt')
 		for line in open(self.output_path + self.img_name + '_details.txt'):
 			if line.startswith('FAT CONTENTS'):
 				break
 			self.fsstat_txt.append(line.strip())
 		else:
-			self.fls_txt.append('\n')
+			self.fsstat_txt.append('\n')
 
 	### Generates The fls information To Append
 	def gen_fls(self, path):
-		os.system('fls -i ' + self.img_format + ' -f ' + self.img_FS_format + ' ' + self.file_path + ' >> ' + self.output_path + self.img_name + '_details.txt')
+		fls_txt = []
+		os.system('fls -i ' + self.img_format + ' -f ' + self.img_FS_format + ' -o ' + str(self.byte_offset) + ' ' + self.file_path + ' >> ' + self.output_path + self.img_name + '_details.txt')
 		os.system('fls -i ' + self.img_format + ' ' + self.file_path + ' > Config/tmp.txt' )
 		for line in open('Config/tmp.txt'):
 			self.fls_txt.append(line)
@@ -148,9 +157,9 @@ class FsiSetting:
 	def update_fls(self, inode):
 		fls_txt = []
 		if inode != 0:
-			os.system('fls -i ' + self.img_format + ' -f ' + self.img_FS_format + ' ' + self.file_path + ' ' + str(inode) + ' > Config/tmp.txt')
+			os.system('fls -i ' + self.img_format + ' -f ' + self.img_FS_format + ' -o ' + str(self.byte_offset) + ' ' + self.file_path + ' ' + str(inode) + ' > Config/tmp.txt')
 		else:
-			os.system('fls -i ' + self.img_format + ' ' + self.file_path + ' > Config/tmp.txt' )
+			os.system('fls -i ' + self.img_format + ' -f ' + self.img_FS_format + ' -o ' + str(self.byte_offset) + ' ' + self.file_path + ' > Config/tmp.txt')
 		for line in open('Config/tmp.txt'):
 			fls_txt.append(line)
 		os.system('rm Config/tmp.txt')
@@ -158,12 +167,12 @@ class FsiSetting:
 
 	### Export istat Output To File & Save 
 	def export_istat(self):
-		os.system('istat -i ' + self.img_format + ' -f ' + self.img_FS_format + ' ' + self.file_path + ' ' + str(self.sel_inode) + ' > ' + self.output_path + str(self.sel_inode) + '_istat.txt')
+		os.system('istat -i ' + self.img_format + ' -f ' + self.img_FS_format + ' -o ' + str(self.byte_offset) + ' ' + self.file_path + ' ' + str(self.sel_inode) + ' > ' + self.output_path + str(self.sel_inode) + '_istat.txt')
 
 	### Export icat Hexdump Output To File & Save 
 	def export_icat_hex(self):
-		os.system('icat -i ' + self.img_format + ' -f ' + self.img_FS_format + ' ' + self.file_path + ' ' + str(self.sel_inode) + ' | hexdump > ' + self.output_path + str(self.sel_inode) + '_icat.txt')
+		os.system('icat -i ' + self.img_format + ' -f ' + self.img_FS_format + ' -o ' + str(self.byte_offset) + ' ' + self.file_path + ' ' + str(self.sel_inode) + ' | hexdump > ' + self.output_path + str(self.sel_inode) + '_icat.txt')
 
 	### Export icat Image Output To File & Save 
 	def export_icat_img(self, file_ext):
-		os.system('icat -i ' + self.img_format + ' -f ' + self.img_FS_format + ' ' + self.file_path + ' ' + str(self.sel_inode) + ' > ' + self.output_path + str(self.sel_inode) + '_icat.' + file_ext.strip())
+		os.system('icat -i ' + self.img_format + ' -f ' + self.img_FS_format + ' -o ' + str(self.byte_offset) + ' ' + self.file_path + ' ' + str(self.sel_inode) + ' > ' + self.output_path + str(self.sel_inode) + '_icat.' + file_ext.strip())

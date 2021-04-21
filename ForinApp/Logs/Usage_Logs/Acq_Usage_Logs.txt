@@ -1,3 +1,15 @@
+--- Action Taken: Acq_Attempt AT: Wed Apr 21 17:45:03 2021 BY: Guest
+Command Used: sudo dc3dd if=/dev/sdb of=/home/kali/hello1.dd 
+
+--- Action Taken: Acq_Attempt AT: Wed Apr 21 16:22:39 2021 BY: Guest
+Command Used: sudo dc3dd if=/dev/sdb3 of=/home/kali/hello1.dd hash=md5 log=/home/kali/Raspberry-Pi4-Forensics/ForinApp/Logs/hello1.log 
+
+--- Action Taken: Acq_Attempt AT: Wed Apr 21 16:21:56 2021 BY: Guest
+Command Used: sudo dc3dd if=/dev/sdb3 of=/home/kali/hello1.dd hash=md5 log=/home/kali/Raspberry-Pi4-Forensics/ForinApp/Logs/hello1.log 
+
+--- Action Taken: Acq_Attempt AT: Wed Apr 21 16:21:43 2021 BY: Guest
+Command Used: sudo dc3dd if=/dev/sdb3 of=/home/kali/hello1.dd hash=md5 log=/home/kali/Raspberry-Pi4-Forensics/ForinApp/Logs/hello1.log 
+
 --- Action Taken: Acq_Attempt AT: Tue Apr 20 22:49:42 2021 BY: Guest
 Command Used: sudo dcfldd if=/dev/sdb3 hash=md5 md5log=hello1_md5.txt hashwindow=10G hashconv=after bs=2048 conv=noerror,sync split=10G splitformat=nnn of=/home/kali/hello1.dd 
 
