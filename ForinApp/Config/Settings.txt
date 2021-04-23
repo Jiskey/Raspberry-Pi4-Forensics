@@ -115,7 +115,7 @@ $PDF_Hashes:True
 
 #Enable Verbose Obj Location Output After PDF Processing
 [True][False]
-$PDF_Verbose_Output:True
+$PDF_Verbose_Output:False
 
 ----- Application Settings -----
 

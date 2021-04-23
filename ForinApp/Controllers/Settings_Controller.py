@@ -1,5 +1,9 @@
 #Python Settings_Controller
-#Desc: Handles operations relating to the settings of the program
+#Application Name: Forin
+#Author: J.Male
+#Desc: 
+#	Handles operations relating to the settings of the program
+#	uses a Settings Class To Handle changes To the Config/Settings.txt file
 
 import click
 import sys

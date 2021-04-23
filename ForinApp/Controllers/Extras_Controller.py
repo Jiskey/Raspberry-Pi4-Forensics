@@ -1,5 +1,9 @@
-#Extras_Controller
-#Desc: Handles Execution Of the Extras section in the application.
+#Python Extras Controller
+#Application Name: Forin
+#Author: J.Male
+#Desc: 
+#	Handles Execution Of the Extras Section In The Application.
+#	An Extra Is Usually An Additonal internal System rather Then a Tool.
 
 import click
 import sys
@@ -11,7 +15,7 @@ from Scripts import SettingsCheckScript as scs
 from Scripts import FdiskScript as fds
 
 """
-main function extras_main, displays selection of extra's
+Main Function, Displays Selection of Extra's To The User
 """
 def extras_main():
 	os.system('clear')
@@ -30,9 +34,9 @@ def extras_main():
 		extras_drives()
 
 """
-extras_logs, searches a directory for files and display its contents.
-requires a path where files will located
-preview is a combination of TMS & cat
+Extras_Logs, Searches a Directory For Files And Display Its Contents.
+Requires A Path Where Files Will Be Located
+Preview Is a combination of simple_term_menu & cat
 """
 def extras_logs(log_path):
 	choices = []
@@ -61,7 +65,7 @@ def extras_logs(log_path):
 	extras_logs(log_path)
 
 """
-performs the 'fdisk' command and displays its full output (verbose)
+Performs the 'fdisk' command and displays its full output (Verbose) Incl. Ram (If Appl.)
 """
 def extras_drives():
 	click.echo('Device Information Found Using Command: fdisk -l')

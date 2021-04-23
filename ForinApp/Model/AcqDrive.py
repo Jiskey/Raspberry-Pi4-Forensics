@@ -7,6 +7,7 @@
 
 import sys
 import os
+
 from Scripts import SettingsCheckScript as scs
 
 """
@@ -177,11 +178,12 @@ class AcqDrive:
 				error = setting.get_code_var()
 
 		check = 0
-		tmp = name
+		tmp = name.strip()
 		for count, file in enumerate(os.listdir(output_loc)):	
-			if file == name + '.dd' or file == name + str(check) +'.dd':
+			if file.startswith(tmp) and file.endswith('.dd'):
 				check = check + 1
-				name = tmp + str(check)
+		else:
+			name = tmp + str(check)
 		
 		if hash_log_loc.endswith('/') == False:
 			hash_log_loc += '/'

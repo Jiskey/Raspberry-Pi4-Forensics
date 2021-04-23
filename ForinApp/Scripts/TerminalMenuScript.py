@@ -1,5 +1,9 @@
 #Python simple_term_menu Script
-#using simple_term_menu to generate multiple differing types of input menus.
+#Application Name: Forin
+#Author: J.Male
+#Desc: 
+#	Using Simple_term_menu to generate multiple differing types of input menus.
+#	Contains File Preview, Multi selection, standard Selection, prompt, string (default) Menus
 
 import click
 import sys
@@ -53,7 +57,7 @@ takes in a title and a filepath
 """
 def generate_file_preview_menu(menu_title, dir_path):
 	def files(path = dir_path):
-		return (file for file in os.listdir(path) if os.path.isfile(os.path.join(path, file)))
+		return (file for file in os.listdir(path) if os.path.isfile(os.path.join(path, file)) and file != 'README.txt')
 
 	menu = TerminalMenu(
 		menu_entries = files(),

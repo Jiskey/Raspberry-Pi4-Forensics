@@ -5,9 +5,6 @@
 #	Handles all of the operations within the application realting to acquisition.
 #	uses Tools Dcfldd/dc3dd to perfom such actions. *as of kali 2021.1 These tool are notincluded by default
 
-#Python ACQ_Controller (Acquisition)
-#Desc: Handles all of the operations within the application realting to acquisition
-
 import click
 import sys
 import os

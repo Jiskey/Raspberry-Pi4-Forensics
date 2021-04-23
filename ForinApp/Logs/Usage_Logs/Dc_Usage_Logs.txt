@@ -1,38 +1,18 @@
+--- Action Taken: Data_Carve_Attempt AT: Thu Apr 22 23:13:27 2021 BY: Guest
+Command Used: sudo scalpel -v -c /home/kali/Raspberry-Pi4-Forensics/ForinApp/Config/scalpel.conf /home/kali/hello1.dd -o qweqe/
+art, gif, gif, jpg, jpg, png, bmp, tif, tif, avi, mov, mov, mov, mov, mov, mpg, mpg, fws, doc, pst, dbx, idx, mbx, wpc, htm, pdf, pdf, mail, 
+
+
+--- Action Taken: Data_Carve_Attempt AT: Thu Apr 22 23:12:52 2021 BY: Guest
+Command Used: sudo scalpel -v -c /home/kali/Raspberry-Pi4-Forensics/ForinApp/Config/scalpel.conf /home/kali/hello1.dd -o qweqweqwe/
+art, gif, jpg, png, bmp, tif, tif, avi, mov, mov, mov, mov, mov, mov, mov, mpg, mpg, fws, doc, doc, pst, ost, dbx, idx, mbx, pdf, pdf, mail, pgd, pgp, pgp, 
+
+
+--- Action Taken: Data_Carve_Attempt AT: Thu Apr 22 18:15:04 2021 BY: Guest
+Command Used: sudo foremost -T -v -c /home/kali/Raspberry-Pi4-Forensics/ForinApp/Config/foremost.conf /home/kali/hello.dd -o Carved_Evidence/
+art, art, gif, gif, jpg, jpg, jpg, png, bmp, tif, avi, mov, mov, mpg, mpg, mpg, fws, doc, pst, ost, dbx, idx, mbx, wpc, htm, pdf, mail, pgd, pgp, pgp, pgp, pgp, txt, 
+
+
 --- Action Taken: Data_Carve_Attempt AT: Tue Apr 20 19:00:48 2021 BY: Guest
 Command Used: sudo foremost -T -v -c /home/kali/Raspberry-Pi4-Forensics/ForinApp/Config/foremost.conf /home/kali/hello.dd -o Carved_Evidence/
 art, art, gif, gif, jpg, jpg, jpg, png, bmp, tif, avi, mov, mov, mpg, mpg, mpg, fws, doc, pst, ost, dbx, idx, mbx, wpc, htm, pdf, mail, pgd, pgp, pgp, pgp, pgp, txt, 
-
-
---- Action Taken: Data_Carve_Attempt AT: Tue Apr 20 18:59:59 2021 BY: Guest
-Command Used: sudo foremost -T -v -c /home/kali/Raspberry-Pi4-Forensics/ForinApp/Config/foremost.conf /home/kali/hello.dd -o Carved_Evidence/
-art, art, gif, gif, jpg, jpg, jpg, png, bmp, tif, avi, mov, mov, mpg, mpg, mpg, fws, doc, pst, ost, dbx, idx, mbx, wpc, htm, pdf, mail, pgd, pgp, pgp, pgp, pgp, txt, 
-
-
---- Action Taken: Data_Carve_Attempt AT: Tue Apr 20 18:59:33 2021 BY: Guest
-Command Used: sudo scalpel -v -c /home/kali/Raspberry-Pi4-Forensics/ForinApp/Config/scalpel.conf /home/kali/hello.dd -o Carved_Evidence/
-art, art, gif, gif, jpg, jpg, png, bmp, tif, tif, avi, mov, mov, mov, mov, mov, mov, mov, mpg, mpg, fws, doc, doc, pst, ost, dbx, idx, mbx, wpc, htm, pdf, pdf, mail, 
-
-
---- Action Taken: Data_Carve_Attempt AT: Tue Apr 20 18:58:51 2021 BY: Guest
-Command Used: sudo foremost -T -v -c /home/kali/Raspberry-Pi4-Forensics/ForinApp/Config/foremost.conf /home/kali/hello.dd -o Carved_Evidence/
-wpc, htm, mail, pgd, pgp, pgp, pgp, pgp, txt, rpm, wav, ra, ra, asf, wmv, wma, wma, mp3, mp3, mp3, mp3, mp3, dat, dat, lnk, chm, cookie, rdp, zip, rar, java, cpp, max, 
-
-
---- Action Taken: Data_Carve_Attempt AT: Thu Apr 15 17:55:22 2021 BY: Guest
-Command Used: sudo foremost -T -v -c /home/kali/Raspberry-Pi4-Forensics/ForinApp/Config/foremost.conf /home/kali/dfrws-2006-challenge.raw -o Carved_Evidence/
-wpc, htm, mail, pgd, pgp, pgp, pgp, pgp, txt, rpm, wav, ra, ra, asf, wmv, wma, wma, mp3, mp3, mp3, mp3, mp3, dat, dat, lnk, chm, cookie, rdp, zip, rar, java, cpp, max, 
-
-
---- Action Taken: Data_Carve_Attempt AT: Thu Apr 15 17:55:04 2021 BY: Guest
-Command Used: sudo foremost -T -v -c /home/kali/Raspberry-Pi4-Forensics/ForinApp/Config/foremost.conf /home/kali/dfrws-2006-challenge.raw -o Carved_Evidence/
-art, gif, gif, jpg, jpg, jpg, png, bmp, tif, avi, 
-
-
---- Action Taken: Data_Carve_Attempt AT: Thu Apr 15 17:53:53 2021 BY: Guest
-Command Used: sudo scalpel -v -c /home/kali/Raspberry-Pi4-Forensics/ForinApp/Config/scalpel.conf /home/kali/dfrws-2006-challenge.raw -o Carved_Evidence/
-htm, pdf, pdf, mail, rpm, wav, ra, ra, dat, dat, 
-
-
---- Action Taken: Data_Carve_Attempt AT: Thu Apr 15 17:53:28 2021 BY: Guest
-Command Used: sudo scalpel -v -c /home/kali/Raspberry-Pi4-Forensics/ForinApp/Config/scalpel.conf /home/kali/dfrws-2006-challenge.raw -o Carved_Evidence/
-art, gif, gif, jpg, jpg, png, bmp, 

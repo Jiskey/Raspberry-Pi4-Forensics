@@ -1,5 +1,9 @@
-#python settings check script
-#used whenever the app requires data about the application settings
+#Python Settings Check Script
+#Application Name: Forin
+#Author: J.Male
+#Desc: 
+#	used whenever the app requires data about the application settings
+#	Handles I/O Of the Config/settings.txt file
 
 import sys
 import os
@@ -16,9 +20,9 @@ def settings_check(setting):
 	txt.close()	
 
 	for line in txt_lines:
-		if line.find(setting) != -1:			#if setting found
+		if line.find(setting) != -1:
 			line = line.rstrip('\n')		
-			name, statement = line.split(':')	#format string
+			name, statement = line.split(':')
 			break
 		else:
 			pass
@@ -64,7 +68,7 @@ def get_settings_list():
 	settings_list = []
 
 	check = 0
-	for count, line in enumerate(txt_lines):	#read line and store
+	for count, line in enumerate(txt_lines):
 		if line.startswith('@@') == True:
 			continue
 		if line.find('-----') != -1:
@@ -78,7 +82,7 @@ def get_settings_list():
 		elif line.find('$') != -1:
 			code = line.strip()
 			check = check + 1
-		if check == 3:				#when filled, append to list
+		if check == 3:
 			check = 0
 			settings_list.append(Setting(section, description, items, code))
 

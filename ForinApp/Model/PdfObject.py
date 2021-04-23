@@ -1,5 +1,13 @@
-#pdf Object Class
+#Python PDFObject Class
+#Application Name: Forin
+#Author: J.Male
+#Desc: 
+#	PDF Object Class Is USed To Store PDF File Parsed Data
 
+"""
+PDF Object Class Scans the objects Created By Pdf-Parser And Stores What is Belived To Be It Contents
+Can Store Its MD5 If Required
+"""
 class PdfObject:
 	obj_id = 0
 	obj_head = []
@@ -14,26 +22,25 @@ class PdfObject:
 		self.obj_data = obj_data
 		self.obj_contents = obj_contents
 
-#Gets && Sets
-	def get_id(self):				#int id
+	def get_id(self):			
 		return self.obj_id
 
-	def get_head(self):				#obj_head list contains file lines
+	def get_head(self):			
 		return self.obj_head
 
-	def get_data(self):			#list contains file lines
+	def get_data(self):			
 		return self.obj_data
 	
-	def get_contents(self):				#list contains file lines
+	def get_contents(self):				
 		return self.obj_contents
 
-	def get_tag(self):				#get the set pdf-parser tag
+	def get_tag(self):				
 		return self.tag
 
-	def set_tag(self, tag):				#get the set pdf-parser tag
+	def set_tag(self, tag):				
 		self.tag = tag
 
-	def get_md5(self):				#md5 hash == '' if Error
+	def get_md5(self):				
 		return self.md5
 
 	def set_md5(self, md5):				

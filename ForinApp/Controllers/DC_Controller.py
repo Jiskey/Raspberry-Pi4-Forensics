@@ -14,7 +14,6 @@ from Model.DcObject import DcObject
 from Scripts import SettingsCheckScript as scs 
 from Scripts import TerminalMenuScript as tms
 from Scripts import DcSettingsScript as dcss
-from Scripts import CommandCreationScript as ccs
 from Scripts import FdiskScript as fds
 from Scripts import UsageLoggingScript as uls
 
@@ -139,11 +138,16 @@ def DC_conform(selected_objs_list, conf_path, dir_name, tool, img_path):
 	check = 0
 	files = ''
 	all_files = ''
-	command = ccs.DC_commmand_gen(conf_path, tool, dir_name, img_path)
 	title = '\nYou Are About To Execute The Above Command Do You With To Proceed?'
 	uls_filepath = scs.settings_check('$Default_UsageLog_Location')
 	old_txt = list(dcss.get_DC_settings_txt(conf_path))
 	new_txt = old_txt
+
+	command = 'sudo {} '.format(tool)
+	if tool == 'foremost':
+		command += '-T -v -c {} {} -o {}/'.format(conf_path, img_path, dir_name)
+	if tool == 'scalpel':
+		command += '-v -c {} {} -o {}/'.format(conf_path, img_path, dir_name)
 
 	### Display Selected File Ext's
 	os.system('clear')
@@ -351,12 +355,16 @@ def DC_selection_image(tool, path=scs.settings_check('$Default_Output_Location')
 	for file in os.listdir(path):
 		if file.lower().endswith('.dd') or file.lower().endswith('.img') or file.lower().endswith('.raw') or file.lower().endswith('.aff'):
 			choices.append(file)
+	choices.append('[1] -- Specify New Evidance Path')
 	choices.append('[0] Back')
 
 	index_selection = tms.generate_menu(title, choices)
 	
 	if index_selection == len(choices) - 1:
 		DC_main_menu()
+	elif index_selection == len(choices) - 2:
+		index_selection = tms.generate_string_menu('Forensic Image File Location:', 1)
+		DC_selection_image(tool, index_selection)
 	else:
 		img_file_name = choices[index_selection]
 		return path + str(img_file_name)
