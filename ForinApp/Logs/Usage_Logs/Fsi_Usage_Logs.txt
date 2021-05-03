@@ -1,3 +1,11 @@
+--- Action Taken: File_System_Inspection AT: Sun Apr 18 16:30:07 2021 BY: Guest
+File Inspected: /home/kali/11-carve-fat.dd
+--- Action Taken: File_System_Inspection AT: Sun Apr 18 16:30:05 2021 BY: Guest
+File Inspected: /home/kali/L2_Graphic.dd
+--- Action Taken: File_System_Inspection AT: Sun Apr 18 16:30:04 2021 BY: Guest
+File Inspected: /home/kali/dfrws-2006-challenge.raw
+--- Action Taken: File_System_Inspection AT: Sun Apr 18 16:29:53 2021 BY: Guest
+File Inspected: /home/kali/L0_Graphic.dd
 --- Action Taken: File_System_Inspection AT: Sat Apr 17 03:15:39 2021 BY: Guest
 File Inspected: /home/kali/11-carve-fat.dd
 --- Action Taken: File_System_Inspection AT: Sat Apr 17 03:15:37 2021 BY: Guest

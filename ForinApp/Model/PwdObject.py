@@ -47,7 +47,6 @@ class PwdObject:
 	def set_output_path(self, output_path):				
 		self.output_path = output_path
 
-
 	def get_pass_hash(self):
 		return self.pass_hash
 

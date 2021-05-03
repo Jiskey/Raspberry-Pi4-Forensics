@@ -16,6 +16,7 @@ from Controllers import FSI_Controller
 from Controllers import PWD_Controller
 from Controllers import Settings_Controller
 from Controllers import Extras_Controller
+from View import Help_Controller
 from Scripts import TerminalMenuScript as tms
 
 """
@@ -46,7 +47,7 @@ def main_menu():
 Acts As The Selection First Menu For The Program
 """
 def sub_menu_1():
-	choices = ["[1] Tools", "[2] Extras", '[3] Settings', "[0] Exit"]
+	choices = ["[1] Tools", "[2] Extras", '[3] Settings', '[4] Help', '[0] Exit']
 	title = '\nWelcome! What would You Like To Do?'
 
 	selection_index = tms.generate_menu(title, choices)
@@ -57,16 +58,17 @@ def sub_menu_1():
 	elif selection_index == 2:
 		Settings_Controller.settings_main()
 	elif selection_index == 3:
+		Help_Controller.help_main_menu()
+	elif selection_index == 4:
 		sys.exit(0)
-	else:
-		sys.exit(0)
+	sys.exit(0)
 
 """
 Acts As a Sub Menu For Tools
 Allows The User To Select A Type Of Forensic Discipline
 """
 def sub_menu_2():
-	choices = ['[1] Acquire Img (Dc3dd / Dcfldd)', 
+	choices = ['[1] Acquire Image (Dc3dd / Dcfldd)', 
 			'[2] File System Inspection (Sleuth Kit)',
 			'[3] Data Carving (Foremost / Scalpel / PhotoRec)',
 			'[4] PDF File Analysis (Pdfid / Pdf-Parser)',
@@ -87,5 +89,4 @@ def sub_menu_2():
 		PWD_Controller.PWD_main_menu()
 	elif selection_index == 5:
 		sub_menu_1()
-	else:
-		sys.exit(0)
+	sys.exit(0)

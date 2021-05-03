@@ -52,5 +52,13 @@ def test_log_change():
 	assert new_contents[len(new_contents) - 1].strip() == 'TestLine3'
 	assert new_contents[0].find('PDF_Parse_Attmept') != -1
 
+	action = 'Password_Crack_Attempt'
+	uls.log_change(filepath_new, action, contents)
+	txt = open(filepath_new, 'r') 
+	new_contents = txt.readlines()
+	txt.close()
+	assert new_contents[len(new_contents) - 1].strip() == 'TestLine3'
+	assert new_contents[0].find('Password_Crack_Attempt') != -1
+
 	os.system('rm ' + filepath_new)
 	assert os.path.isfile(filepath_new) == False
