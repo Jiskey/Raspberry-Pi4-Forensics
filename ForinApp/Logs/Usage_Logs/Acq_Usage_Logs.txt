@@ -1,9 +1,0 @@
---- Action Taken: Acq_Attempt AT: Fri Apr 23 19:08:39 2021 BY: Guest
-Command Used: sudo dc3dd if=/dev/sdb4 of=/home/kappa0.dd hash=md5 log=/home/kali/Raspberry-Pi4-Forensics/ForinApp/Logs/kappa0.log 
-
---- Action Taken: Acq_Attempt AT: Thu Apr 22 23:07:35 2021 BY: Guest
-Command Used: sudo dc3dd if=/dev/sdb4 of=/home/kali/test_part_image.dd 
-
---- Action Taken: Acq_Attempt AT: Wed Apr 21 17:45:03 2021 BY: Guest
-Command Used: sudo dc3dd if=/dev/sdb of=/home/kali/hello1.dd 
-

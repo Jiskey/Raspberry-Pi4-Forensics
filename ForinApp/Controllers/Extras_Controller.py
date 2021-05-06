@@ -3,7 +3,7 @@
 #Author: J.Male
 #Desc: 
 #	Handles Execution Of the Extras Section In The Application.
-#	An Extra Is Usually An Additonal internal System rather Then a Tool.
+#	An Extra Is Usually An Additonal internal System rather Then a Tool (Exceptions).
 
 import click
 import sys
@@ -21,7 +21,7 @@ def extras_main():
 	os.system('clear')
 	click.secho('2. Program Extras\n', fg='blue', bold=True)
 
-	choices = ['[1] View Img/Usability Logs', '[2] Fdisk Drive Search','[3] View Cracked Hashes (Hashcat)' , '[0] Back']
+	choices = ['[1] View Img/Usability Logs', '[2] Fdisk Drive Search','[3] View Cracked Hashes (Hashcat)', '[4] Check Hashes In a Directory (MD5)', '[0] Back']
 	title = 'Please Select An Extra'
 	
 	index_selection = tms.generate_menu(title, choices)
@@ -34,6 +34,8 @@ def extras_main():
 		extras_drives()
 	elif index_selection == 2:
 		extras_cracked_hashes(scs.settings_check('$Default_PWD_Output'))
+	elif index_selection == 3:
+		extras_hash_comp()
 
 """
 Extras_Logs, Searches a Directory For Files And Display Its Contents.
@@ -90,4 +92,19 @@ def extras_cracked_hashes(log_path):
 	index_selection = tms.generate_file_preview_menu(title, log_path)
 
 	extras_main()
+
+"""
+Lets the user specify a directory and display the MD5 hashes of each file
+uses Md5deep the check MD5 hashes
+"""
+def extras_hash_comp():
+	click.echo('Using Md5deep To Perfrom Hashing Of Files')
+	index_selection = tms.generate_string_menu('Path The Check The MD5 hash Of Each File: ', 1)
+	if index_selection == '0':
+		extras_main()
+	else:
+		os.system('sudo md5deep -r {}'.format(index_selection))
+		wait_selection = tms.generate_menu('\nPlease Press Any Button To Continue', [' '])
+		extras_hash_comp()
+	
 	

@@ -9,13 +9,13 @@
 [-- Please Specify New Usage Log Location]
 $Default_UsageLog_Location:/home/kali/Raspberry-Pi4-Forensics/ForinApp/Logs/Usage_Logs/
 
-#Enable SSH On Application StartUp (Not In Use)
-[True][False]
-$SSH_Startup:False
-
 #Boot Drive Override Safety (Include Boot Drive When Perfoming a drive search for connected drives)
 [False][True]
 $Boot_Drive_Override:True
+
+#Operational Name Used To Identify Users In Applcation Usage Logs
+[-- Please Specify New Identifier][Guest]
+$Operation_Name:Jake
 
 ----- Acqusisition Settings -----
 

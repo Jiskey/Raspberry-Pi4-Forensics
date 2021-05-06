@@ -1,6 +1,6 @@
 # FORIN - KALI LINUX DIGITAL FORENSIC INVESTIGATOR
 # By: J. Male
-# Version: 1.1.0 02/05/2021
+# Version: 1.1.2 06/05/2021
 # Kali Version: 2021.1
 # DESC: Forin is a simple CLI app that allows you to perform quick/easy digital anylsis and
 #	investigation using the tools included with Kali Linux.
@@ -9,7 +9,7 @@
 from View import MainMenu_Controller
 
 if __name__ == '__main__':
-	MainMenu_Controller.main_menu()
+	MainMenu_Controller.user_selection()
 
 
 

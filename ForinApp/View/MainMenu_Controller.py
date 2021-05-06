@@ -16,8 +16,27 @@ from Controllers import FSI_Controller
 from Controllers import PWD_Controller
 from Controllers import Settings_Controller
 from Controllers import Extras_Controller
+from Scripts import SettingsCheckScript as scs
 from View import Help_Controller
 from Scripts import TerminalMenuScript as tms
+
+"""
+A Small Function That Allows The User To specfiy A name For usage
+The Name is only ever used is usage logs
+"""
+def user_selection():
+	click.secho('FORIN - KALI LINUX DIGITAL FORENSIC INVESTIGATOR', bold=True, fg='blue')
+	click.echo('Please Select A Operation Name/Nickname/Alias/ID: (Leave Blank For "Guest")')
+	op_name = input('ID: - ')
+	if op_name == '':
+		op_name = 'Guest'
+
+	line_num = scs.settings_index('$Operation_Name')
+	txt_lines = scs.get_settings_txt()
+	txt_lines[line_num] = '$Operation_Name:' + op_name + '\n'
+	scs.settings_update(txt_lines)
+
+	main_menu()
 
 """
 Acts As The Main Menu For The Program And Is Called To Return To The Start
@@ -32,12 +51,13 @@ def main_menu():
 	click.secho('                                                             |___/                  ', bold=True) 
 	click.secho('\n-  FORIN - KALI LINUX DIGITAL FORENSIC INVESTIGATOR', bold=True, fg='blue')
 	click.echo('-  By: J. Male')
-	click.echo('-  Version: 1.1.0 02/05/2021')
+	click.echo('-  Version: 1.1.2 06/05/2021')
 	click.echo('-  Kali Version: 2021.1')
 	click.echo('-  Desc: "FORIN" is a simple CLI app that allows you to perform quick/easy digital anylsis and')
 	click.echo('         investigation using the tools included with Kali Linux')
 	click.echo('\n-  More Information: https://github.com/Jiskey/Raspberry-PI4-Forensics')
 	click.echo('\n######################################################################################################')
+	click.echo('\nWelcome {}!'.format(scs.settings_check('$Operation_Name')))	
 	click.echo('\nIMPORTANT NOTE: BE SURE TO RUN AS SU!')
 	click.echo('IMPORTANT NOTE: Kali v2021.1 Does Not Include Dc3dd, Dcfldd & Foremost By Default')
 
