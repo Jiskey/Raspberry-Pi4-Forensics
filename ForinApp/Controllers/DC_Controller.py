@@ -8,6 +8,7 @@
 import click
 import sys
 import os
+import time
 
 from View import MainMenu_Controller
 from Model.DcObject import DcObject
@@ -29,9 +30,9 @@ def DC_main_menu():
 	### Tool Selection
 	os.system('clear')
 	click.secho('Data Carving: Scalpel Type\n', fg='blue', bold=True)
-	click.echo('There are mutiple tools to perform data_carving. that perform different functions')
-	click.secho('*AS OF KALI V2020.4 For The Pi4. SCALPLE DOES NOT FUNCTION WITHOUT TROUBLESHOOTING\n', fg='red', bold=True)
-	click.echo('If The User Wishes To Troubleshoot Themsleves, Then Scalple Will Proceed To Function Correctly')
+	click.secho('Data Carving Is The Act Of Retriving Files From A Drive, Even If It Heavily Corrupted', bold=True)
+	click.echo('Using Header Informtion, These Programs Can Detect And Attempt To "Carve" Files From A Drive')
+	click.echo('Please Select A Tool To Perfom Data Carving')
 
 	index_selection = tms.generate_menu(title, choices)
 
@@ -98,11 +99,15 @@ def DC_config(conf_path):
 	choices = ['[1] Use Currently Selected Options','[2] Simple Wizard (Type based)','[3] Advanced Wizard (Individual Files)', '[0] Back']	
 
 	os.system('clear')
-	click.secho('Data Carving: Config', fg='blue', bold=True)
-	click.echo('\nThis will edit and select Different File Types in the .conf file')
+	click.secho('Data Carving: Config\n', fg='blue', bold=True)
+	click.secho('In Order To Perform Data Carving, File Headers Must Be Specfied',bold=True)
+	click.echo('To Accomplish This, You Can Select Them By Either:')
+	click.echo('\tFILE TYPE (Graphics Files [jpg, png, ...])')
+	click.echo('\tFILE EXT/HEX (jpg size [Header] [*Footer])\n')
+	click.echo('This Is Accomplished By Editing The Tool Config File!')
 	click.echo('Conf file found under: ' + conf_path)
 	click.echo('If You Are unsure What This Means, Please Refer to The file Above For More Information')
-	click.echo('\nCurrently Saved Options Under Catergories:')
+	click.secho('\nCurrently Saved Options Under Catergories:', bold=True)
 
 	### Currently Saved .Conf File Options
 	for obj in objs_list:
@@ -152,37 +157,37 @@ def DC_conform(selected_objs_list, conf_path, dir_name, tool, img_path):
 	### Display Selected File Ext's
 	os.system('clear')
 	click.secho('Data Carving: Conform\n', fg='blue', bold=True)
-	click.secho('Selected Data Carving Tool: ', bold=True)
-	click.echo(tool)
-	click.secho('Selected Drive/File To Carve: ', bold=True)
-	click.echo(img_path)
-	click.secho('Selected Output Location:', bold=True)
-	click.echo('ForinApp/')
-	click.secho('Selected Output Dir Name:\n', bold=True)
-	click.echo(scs.settings_check('$DC_Output_Location_Name'))
+	click.secho('Selected Settings: ', bold=True)
+	click.echo('Selected Tool: ' + tool)
+	click.echo('Selected Drive/File To Carve: ' + img_path)
+	click.secho('Selected Output Location: $Working_Directory')
+	click.echo('Selected Output Dir Name: ' + str(scs.settings_check('$DC_Output_Location_Name')) + '\n')
 
-	if len(selected_objs_list) <= 1:
-		obj = selected_objs_list
-		print(obj)
-
-	for count, obj in enumerate(selected_objs_list):
-		if files != '':
-			click.echo(files.strip())
-		files = ''
-		check = count
-		for ext in obj.get_exts():
-			if ext[0] == '@' and check == count:
-				check = check + 1
-				click.secho(obj.get_cat().strip(), bold=True)
-			if ext[0] == '@':
-				files += ext[1] + ', '
-				all_files += ext[1] + ', '
-	else:
-		if files != '':
-			click.echo(files.strip())		
+	try:
+		for count, obj in enumerate(selected_objs_list):
+			if files != '':
+				click.echo(files.strip())
+			files = ''
+			check = count
+			for ext in obj.get_exts():
+				if ext[0] == '@' and check == count:
+					check = check + 1
+					click.secho(obj.get_cat().strip(), bold=True)
+				if ext[0] == '@':
+					files += ext[1] + ', '
+					all_files += ext[1] + ', '
+		else:
+			if files != '':
+				click.echo(files.strip())
+	except:
+		print('ERROR: Failed To Correctly Read Selected Settings. Please Try Again!. Returning To Main Menu')
+		time.sleep(2)
+		MainMenu_Controller.main_menu()
+		sys.exit(0)
 
 	click.secho('\n- --- - WARNING - --- - --- - WARNING - --- - --- - WARNING - --- -', fg='red', bold=True)
 	click.secho('Changes will be made to the scalpel.conf file', bold = True)
+	click.echo('You Are About To Perfom Data Carving, Insure Enough Storage Space Is Avalible')
 	click.secho('\nCOMMAND:', bold=True)
 	click.echo(command)
 
@@ -218,7 +223,7 @@ def DC_Wizard(menu_selection, objs_list, conf_path):
 	
 	os.system('clear')
 	click.secho('Data Carving: File Type Selection', fg='blue', bold=True)
-	click.echo('\nIf custom options are added to the .conf file, they will be detected')
+	click.echo('\nNote: You Can use A Custom Conf File (Advanced Usage Only)')
 
 	### Generate Choices (Either Category Or Ext)		
 	for obj in objs_list:
@@ -229,14 +234,14 @@ def DC_Wizard(menu_selection, objs_list, conf_path):
 	file_choices.append('[0] Back')	
 
 	if menu_selection == 1:								
-		title = '\nPlease Select the Type Of Files You Wish to Carve'	
-		title += '\nSelect "Select All" to select everything on exit or select "Back" to leave on exit\n'
+		click.secho('\nPlease Select The Type Of Files You With To Carve', bold=True)
+		title = '\nSelect "Select All" To Select Everything On "Accept <ENTER>" OR Select "Back" To Leave On "Accept <Enter>"\n'
 		index_selection = tms.gernerate_multi_select_menu(title, type_choices, True)	
 		check = 'simp'
 	elif menu_selection == 2:								
-		title = '\nPlease Select the Files You Wish to Carve'
-		title += '\nSelect "Select All" to select everything on exit or select "Back" to leave on exit\n'
-		title += '\n     Ext   Size   Header/Footer'
+		click.secho('\nPlease Select The Files You With To Carve', bold=True)
+		title = '\nSelect "Select All" To Select Everything On "Accept <ENTER>" OR Select "Back" To Leave On "Accept <Enter>"\n'
+		title += '\n        Ext   Size   Header/Footer'
 		index_selection = tms.gernerate_multi_select_menu(title, file_choices, True)
 		check = 'adv'
 	else:
@@ -262,15 +267,23 @@ def DC_selection_dir():
 	choices = []
 
 	os.system('clear')
-	click.secho('Data Carving: Dir/Folder Name', fg='blue', bold=True)
-	click.echo('\nCurrently Saved Name: {} (will format name if dir already exsists)'.format(name))
+	click.secho('Data Carving: Dir/Folder Name\n', fg='blue', bold=True)
+	click.secho('Please Select A Name For Output Folder That Will Be Created', bold=True)
+	click.echo('Currently Saved Name: {} (will format name if dir already exsists)'.format(name))
 
-	for setting in settings_list:
-		if setting.get_code_call() == '$DC_Output_Location_Name':
-			for choice in setting.get_items_list():
-				choices.append(choice)
+	try:
+		for setting in settings_list:
+			if setting.get_code_call() == '$DC_Output_Location_Name':
+				for choice in setting.get_items_list():
+					choices.append(choice)
 
-	choices.append('[1] Use Default: {}'.format(name))
+		choices.append('[1] Use Default: {}'.format(name))
+	except:
+		print('Error Reading Config/Settings.txt File! ERROR: Failed To Load settings List. Returning To Main Menu')
+		time.sleep(3)		
+		MainMenu_Controller.main_menu()
+		sys.exit(0)
+
 	choices.append('[0] Back')
 	
 	index_selection = tms.generate_menu(title, choices)
@@ -291,14 +304,15 @@ Returns a Path of The Selected Drive / Partition
 Requires a str (can be empty) And a Tool Code
 """
 def DC_selection_drive(drive_path, tool):
-	title = 'Please Select a Drive'
+	title = '\nPlease Select a Drive (Or Parititon) That Is Connected To This Device'
 	drives = fds.fdisk(False, False)
 	choices = []
 	check = 1
 
 	os.system('clear')
 	click.secho('Data Carving (Scalpel): Drive Selection\n', fg='blue', bold=True)
-	click.echo('Scalpel Has The Ability To Carve From Drives Connected To The Device')
+	click.secho('Scalpel Has The Ability To Carve From Drives Connected To The Device', bold=True)
+	click.echo('If You Are Dont Know What The Drives Are, Perform A Fdisk Search Under "Extras"')
 
 	### Get Connected Drives
 	for drive in drives:
@@ -343,13 +357,15 @@ DC Image Selection Page, Requires The User To Select A Img File To Carve.
 Requires The Tool That Was Selected And a Path Which Is Passed
 Returns a Full Path With File_Path + Name
 """
-def DC_selection_image(tool, path=scs.settings_check('$Default_Output_Location')):
+def DC_selection_image(tool, path=scs.settings_check('$Default_Application_Evidance_Search_Location')):
 	choices = []
-	title = '\nWhat Would You Like To Carve?\nIf You Dont See Any Files Try Specifying a Custom Path In The Settings'	
+	title = '\nWhat Would You Like To Carve?\nIf You Dont See Any Files Try Specifying a Custom Path'	
 
 	os.system('clear')
-	click.secho('Data Carving: Image Selection', fg='blue', bold=True)
-	click.echo('Currently Selected Evidance Path: {}'.format(path))
+	click.secho('Data Carving: Image Selection\n', fg='blue', bold=True)
+	click.secho('Please Select A Forensic Image File You Wish To Carve.', bold=True)
+	click.echo('If You Do Not Have A Forensic Image Of A Drive, You Can Acquire One With This Program!')
+	click.echo('\nCurrently Selected Evidance Path: {}'.format(path))
 
 	### Discovery Of Image File Is Saved OutputLocation
 	for file in os.listdir(path):
@@ -380,8 +396,8 @@ def DC_photorec_selection():
 
 	os.system('clear')
 	click.secho('Data Carving: PhotoRec\n', fg='blue', bold=True)
-	click.echo('PhotoRec is a powerful data recovery tool similer to the others in this program')
-	click.echo('However, PhotoRec Takes Advanatge of its own Wizard')
+	click.echo('PhotoRec Is A Powerful Data Recovery Tool Similer To The Others In This Program')
+	click.echo('However, PhotoRec Takes Advanatge Of Its Own Wizard')
 	click.secho('\nWARNING: PhotoRec Will Be Run As SU', fg='red')
 
 	index_selection = tms.generate_menu(title, choices)

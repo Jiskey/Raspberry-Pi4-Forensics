@@ -30,14 +30,15 @@ def PWD_main_menu(path = '0'):
 		if evi_path.endswith('/') == False:
 			evi_path = evi_path + '/'
 	else:
-		evi_path = scs.settings_check('$Default_Output_Location')
+		evi_path = scs.settings_check('$Default_Application_Evidance_Search_Location')
 		if evi_path.endswith('/') == False:
 			evi_path = evi_path + '/'
 
 	os.system('clear')
 	click.secho('Password/Hash Cracking (Hashcat)\n', bold=True, fg='blue')
-	click.echo('Hashcat is a powerful hash cracking tool with many options to assist in this demanding task')
-	click.echo('Password Cracking Is A very Demanding Task! Expect System Slowdown')	
+	click.secho('Crack Hashes And Passwords With Use Of Mutliple Different Attack Methods', bold=True)
+	click.echo('Hashcat Is A Powerful Hash Cracking Tool With Many Options To Assist In This Demanding Task')
+	click.echo('Password Cracking Is A very Demanding Task and Requires Powerful GPUs To Perform! Expect System Slowdown')	
 	click.echo('\nCurrent Image Evidance Location: {}\n'.format(evi_path))
 
 	### Select File To Crack
@@ -77,9 +78,11 @@ def PWD_hash_type(pwd_object):
 
 	os.system('clear')
 	click.secho('Password/Hash Cracking (Hashcat)\n', bold=True, fg='blue')
-	click.echo('You Must Know The hash Type before Attmepting To Crack')
+	click.secho('There Are Many Hashes That Can Be Used!', bold=True)
+	click.echo('You Must Know The Hash Type Before Attmepting To Crack It')
 	click.echo('Its Hard To Tell Which Hashes Are What Sometimes. Some do Have Identifers!')
 	click.echo('MD5 Hash Example; baade50c0278b90b546974280789201a;')
+	click.echo('Common Hashes Are Below, Or Veiw The List For All Hashcat Support Hashes.')
 
 	### Select hash type
 	index_selection = tms.generate_menu(title, choices)
@@ -102,12 +105,12 @@ def PWD_attack_type(pwd_object):
 
 	os.system('clear')
 	click.secho('Password/Hash Cracking (Hashcat)\n', bold=True, fg='blue')
-
-	click.echo('1. Dictonary Attack = Standard Dictonary Based Attack')
-	click.echo('2. Rules Based Attack = Standard Dictonary Based Attack With A Set Of Rules')
-	click.echo('3. Combinator Attack = Standard Dictonary Based Attack With Multiple Dicts (Concatination)')
-	click.echo('4. Brute Force + Mask Attack = Brute Force Attack With The Use Of A Generated Mask')
-	click.echo('5. Hybrid = Dictonary + Mask Attack OR Mask + Dictonary Attack')
+	click.secho('Different Attack Types Require Diffrerent Inputs/Files', bold=True)
+	click.echo('1. Dictonary Attack = Standard Dictonary Based Attack (Dict File)')
+	click.echo('2. Rules Based Attack = Standard Dictonary Based Attack With A Set Of Rules (Dict File + Rule File)')
+	click.echo('3. Combinator Attack = Standard Dictonary Based Attack With Multiple Dicts (Concatination) (Dict File x2)')
+	click.echo('4. Brute Force + Mask Attack = Brute Force Attack With The Use Of A Generated Mask (Created Mask)')
+	click.echo('5. Hybrid = Dictonary + Mask Attack OR Mask + Dictonary Attack (Created Mask + Dict File)')
 
 	### Select Attack Type To Use
 	index_selection = tms.generate_menu(title, choices)
@@ -182,7 +185,7 @@ def PWD_conform(pwd_object):
 
 	os.system('clear')
 	click.secho('Password/Hash Cracking (Hashcat)\n', bold=True, fg='blue')
-	
+	click.secho('Target Information:', bold=True)
 	click.echo('To Crack: {}'.format(pwd_object.get_filepath() + pwd_object.get_filename()))
 	click.echo('Output Path: {}'.format(pwd_object.get_output_path()))
 
@@ -302,6 +305,7 @@ def PWD_sel_dict(pwd_object, path = '0'):
 
 	os.system('clear')
 	click.secho('Password/Hash Cracking (Hashcat)\n', bold=True, fg='blue')
+	click.secho('Please Specify The File(s) You Wish To Use.', bold=True)
 	click.echo('Currently Selected Path: ' + path + '\n')
 
 	### If Attack Requires A Dictonary
@@ -338,7 +342,7 @@ def PWD_sel_dict(pwd_object, path = '0'):
 			else:
 				PWD_sel_dict(pwd_object, index_selection)
 		elif len(index_selection) > 2:
-			index_selection = tms.generate_menu('Please Select Only 2 Dictonary Files', '')
+			index_selection = tms.generate_menu('Please Select Only 2 Dictonary Files <ENTER>', '')
 			PWD_sel_dict(pwd_object)
 		else:
 			for sel_dict in index_selection:
@@ -387,6 +391,7 @@ def PWD_config_wizard(pwd_object):
 
 		os.system('clear')
 		click.secho('Password/Hash Cracking (Hashcat)\n', bold=True, fg='blue')
+		click.secho('Please Select The Setting Option You Wish To Set', bold=True)
 
 		### Print If Setting = x
 		if setting.get_code_call() == '$Default_Workload_Profile':
@@ -445,9 +450,12 @@ updates pwd_object mask and custom charset list with user created options
 def PWD_gen_mask(pwd_object):
 	os.system('clear')
 	click.secho('Password/Hash Cracking (Hashcat)\n', bold=True, fg='blue')
-	click.echo('To Brute Force "Effectively", A Mask Is Required')
+	click.secho('A Brute Force Attack Uses A Mask (Set Of Characters) To Check Every Combintion Within The Given Range', bold=True)
+	click.echo('You Must Generate This Mask In Order To Brute Force. (?l?l?l?l Range = aaaa - zzzz)')
+	click.echo('Each Charset "?l" Conatins a Set of Characters "?l = alphabet lowercase"')
+	click.echo('Example: To Crack "Password1!", A mask Of "?u?l?l?l?l?l?l?l?d?s" Could Be Used!')
 	click.echo('Please Use The Selections To Generate A Mask A character At A Time')
-	click.echo('You Can Also Generate Custom Charsets!')
+	click.echo('You Can Also Generate Custom Charsets To Add To The Mask!')
 	click.echo('\nDefault Charsets:')
 	click.echo('?l = abcdefghijklmnopqrstuvwxyz')
 	click.echo('?u = ABCDEFGHIJKLMNOPQRSTUVWXYZ')

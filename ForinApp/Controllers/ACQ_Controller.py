@@ -8,6 +8,7 @@
 import click
 import sys
 import os
+import time
 
 from Model.AcqDrive import AcqDrive	
 from View import MainMenu_Controller
@@ -30,20 +31,25 @@ def ACQ_selection():
 
 	os.system('clear')
 	click.secho('Acquisition: Drive Selection', fg='blue', bold=True)
-	click.echo('\nDEVICE SEARCH: "fdisk -l"')
-	click.echo('Note: If Boot Override is Set To: False. The Suspect Boot Drive Will Not Show (Can Be changed In Settings)')
-	click.echo('Boot Drive Override: {}\n'.format(scs.settings_check('$Boot_Drive_Override')))
+	click.secho('\nAcquisition Allows You Collect A Forensic Image File (filename.dd) From Connect Drive.', bold=True)
+	click.echo('Connected Device Search: "fdisk -l".')
+	click.echo('Note: If Boot Override is Set To: False. "Boot" Drives Will Not Be Selectable.')
+	click.echo('Boot Drive Override: {}'.format(scs.settings_check('$Boot_Drive_Override')))
+	click.echo('Below Are The Found Drives Connected To This Device.\n')
 
 	drives_list = fds.fdisk(False)
+	try:
+		### Connected Drive Choices
+		for count, drive in enumerate(drives_list):
+			if drive.get_boot() == True and scs.settings_check('$Boot_Drive_Override') == 'True':
+				choices.append('[{}] {}'.format(check, drive.get_path()))
+				check = check + 1
+			elif drive.get_boot() == False:	
+				choices.append('[{}] {}'.format(check, drive.get_path()))
+				check = check + 1
+	except:
+		click.echo('Error Reading Drives!')
 
-	### Connected Drive Choices
-	for count, drive in enumerate(drives_list):
-		if drive.get_boot() == True and scs.settings_check('$Boot_Drive_Override') == 'True':
-			choices.append('[{}] {}'.format(check, drive.get_path()))
-			check = check + 1
-		elif drive.get_boot() == False:	
-			choices.append('[{}] {}'.format(check, drive.get_path()))
-			check = check + 1
 	choices.append('[0] Main Menu')
 	title = ('Please Select The Drive You Would like To Acquire')
 
@@ -51,7 +57,7 @@ def ACQ_selection():
 
 	if index_selection == len(choices) - 1:
 		MainMenu_Controller.main_menu()
-
+	
 	### Acquired Drive Partition Choices
 	for drive in drives_list:
 		choice_path = choices[index_selection].split()
@@ -82,27 +88,40 @@ ACQ_wizard Returns a Altered Settings_List
 Requires The Drive To Acquire and The Partition Code
 """
 def ACQ_config(acq_drive, p_code):
-	settings_list = scs.get_settings_list()
-	new_settings_list = []
-	check = 0
-	choices = ['[1] Use Default Configuration', '[2] Use Custom Configuration (Wizard)', 
-		'[3] Quick Acquire (No hashing or Logging)', '[0] Back']
-	title = '\nPlease Choose A Configuration'
+	try:
+		settings_list = scs.get_settings_list()
+		new_settings_list = []
+		check = 0
+		choices = ['[1] Use Default Configuration', '[2] Use Custom Configuration (Wizard)', 
+			'[3] Quick Acquire (No hashing or Logging)', '[0] Back']
+		title = '\nPlease Choose A Configuration'
+	except:
+		title = '\nError Loading Settings File! Please Get A Replacement OR check Config/Settings.txt'
+		choices = ['[0] Back']
 
 	os.system('clear')
-	click.secho('Acquisition: Configuration', fg='blue', bold=True)
-	click.echo('\nCurrent Saved/Default Settings:\n')
+	click.secho('Acquisition: Configuration\n', fg='blue', bold=True)
+	click.echo('You Can Either Select The Currently Saved Settings Or Quick Config.\nOR Use the Wizard To Specify Some Custom Settings.')
+	click.echo('\nRecommended/Simple Acqusition: 3. Quick Aquire')
+	click.secho('\nCurrent Saved/Default Settings:', bold=True)
 
 	###Get Current Settings From Settings List
-	for setting in settings_list:
-		if setting.get_section() == '----- Acqusisition Settings -----':
-			new_settings_list.append(setting)			
-			call, var = setting.get_code().split(':')
-			if check < 7:						
-				check = check + 1
-				click.echo('{} -- {}'.format(call[1:], var))
-			elif settings_list[0].get_code_var() == 'dcfldd':
-				click.echo('{} -- {}'.format(call[1:], var))
+	try:
+		for setting in settings_list:
+			if setting.get_section() == '----- Acqusisition Settings -----':
+				new_settings_list.append(setting)			
+				call, var = setting.get_code().split(':')
+				if check < 7:						
+					check = check + 1
+					click.echo('{} -- {}'.format(call[1:], var))
+				elif settings_list[0].get_code_var() == 'dcfldd':
+					click.echo('{} -- {}'.format(call[1:], var))
+	except:
+		click.echo('Error Loading Settings File! Returning To Main Menu. Please Get A Replacement OR check Config/Settings.txt')
+		time.sleep(3)
+		MainMenu_Controller.main_menu()
+		sys.exit(0)
+		
 
 	index_selection = tms.generate_menu(title, choices)
 
@@ -131,6 +150,8 @@ def ACQ_conform(settings_list, acq_drive, p_code):
 	### Display Selected Drive Information
 	os.system('clear')
 	click.secho('Acquisition: Execution\n', fg='blue', bold=True)
+	click.secho('Below Is The Details Of The Drive To Acquire & The Settings Selected!', bold=True)
+	click.echo('Note: A Image File MAY Be Larger Then The Actuall Drive Size! Ensure Enough Storage Space Is Avalible!\n')
 	click.secho('Selected Device:', bold=True)
 	click.echo('Drive To Acquire -- {}'.format(acq_drive.get_path()))					#display Drive Details
 	click.echo('Drive ID -- {}'.format(acq_drive.get_identifier()))
@@ -177,9 +198,9 @@ def ACQ_conform(settings_list, acq_drive, p_code):
 			click.echo('{} -- {}'.format(call[1:], var))
 
 	### Prompt User, Print Command, Freeze 2 Second
+	click.secho('\n- --- - WARNING - --- - --- - WARNING - --- - --- - WARNING - --- -', fg='red', bold=True)
 	click.echo('\nNOTE: Please Check To Ensure That All Settings Are Correct And The Generated Command Is Correct')
 	click.echo('If You Are Unsure Of The Configuration Or Unsure What A Setting Does, Please Proceed With Caution')
-	click.secho('\n- --- - WARNING - --- - --- - WARNING - --- - --- - WARNING - --- -', fg='red', bold=True)
 	click.secho('\nCOMMAND:', bold=True)
 	click.echo(command)
 	title = '\nYou Are About To Execute The Above Command Do You With To Proceed?'
@@ -195,6 +216,7 @@ def ACQ_conform(settings_list, acq_drive, p_code):
 		logfile += 'Acq_Usage_Logs.txt'
 		uls.log_change(logfile, 'Acq_Attempt', command + '\n')			
 		os.system(command)							### EXECUTE
+		wait_selection = tms.generate_menu('Operation Complete. Please Press Enter To Continue: ENTER', [' '])
 
 	MainMenu_Controller.main_menu()
 	 
@@ -214,6 +236,8 @@ def ACQ_wizard(settings_list, acq_drive, p_code):
 	for count, setting in enumerate(settings_list):			
 		os.system('clear')
 		click.secho('Acquisition: Automatic Wizard\n', fg='blue', bold=True)
+		click.secho('Please Select An Option You Would Like For Each Setting!', bold=True)
+		click.secho('Options With "--" Require A Custom String Output\n')
 
 		### Collect Current Setting
 		choices = []

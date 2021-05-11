@@ -21,7 +21,7 @@ Requires The filepath, the name of the change (action) and contents to write to 
 """
 def log_change(filepath, action, contents):
 	localtime = time.asctime(time.localtime(time.time()))
-	output = "--- Action Taken: {} AT: {} BY: Guest\n".format(action, localtime)
+	output = "--- Action Taken: {} AT: {} BY: {}\n".format(action, localtime, scs.settings_check('$Operation_Name'))
 	exsisting_logs = []
 
 	try:

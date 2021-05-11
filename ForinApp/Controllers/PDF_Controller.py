@@ -27,7 +27,7 @@ def PDF_main_menu(path = '0'):
 		if evi_path.endswith('/') == False:
 			evi_path = evi_path + '/'
 	else:
-		evi_path = scs.settings_check('$Default_Output_Location')
+		evi_path = scs.settings_check('$Default_Application_Evidance_Search_Location')
 		if evi_path.endswith('/') == False:
 			evi_path = evi_path + '/'
 
@@ -37,11 +37,14 @@ def PDF_main_menu(path = '0'):
 	### Select PDF File
 	os.system('clear')
 	click.secho('PDF File Analysis\n', fg='blue', bold=True)
-	click.echo('Pdfid and pdf-parser will scan a pdf file and Forin will display its output')
-	click.echo('This Will Create A Disarmed PDF Copy, a .txt file containing the PDF objects & a txt of object locations')
+	click.secho('PDFID & PDF-PARSER Can Inspect The Contents Of An .PDF File', bold=True)
+	click.echo('A PDF File Contains "Objects" In "Streams" To Handle Its Contents And Can View These For Information')
+	click.echo('A PDF File Can Contain Script Payloads, So Inspecting The File Without Having To Open It Is A Must.')
+	click.echo('This Will Create A Disarmed PDF Copy, A .txt File Containing The PDF Objects & A .txt Of Object Locations')
 	click.echo('these files can be found in the same dir as the PDF evidance.\n')
 	click.echo('Note: In Order For Forin To Display Information, Txt Files Will be created FOR EACH OBJ in the pdf')
 	click.echo('      This Can Have An Effect On Process Time With Larger PDF Files.\n')
+	click.secho('Currently Selected Settings:', bold=True)
 	click.echo('Enable Object MD5 Hashes: {}'.format(hashes))
 	click.echo('Enable Copy & Disarm of PDF Document: {}'.format(disarm))
 	if disarm == 'False':
@@ -73,7 +76,6 @@ def PDF_main_menu(path = '0'):
 
 	click.secho('- --- - WARNING - --- - --- - WARNING - --- - --- - WARNING - --- -\n', fg='red', bold=True)
 	click.secho('The Following Commands Will Be Executed:', bold=True)
-
 	new_sel_file = sel_file.split('.')
 
 	### Generate PDF-Parser / PDFID Commmands
@@ -91,18 +93,19 @@ def PDF_main_menu(path = '0'):
 	pdfparser_locs_comm = 'sudo pdf-parser -a -O ' + evi_path + sel_file
 	pdfparser_locs_comm += ' > ' + evi_path + new_sel_file[0] + '_parser_locs.txt'
 
-	click.echo(pdfid_comm + '\n')
-	click.echo(pdfparser_objs_comm + '\n')
-	click.echo(pdfparser_locs_comm + '\n')
+	click.echo(pdfid_comm)
+	click.echo(pdfparser_objs_comm)
+	click.echo(pdfparser_locs_comm)
 
 	if hashes == 'True':
 		pdfparser_hash_comm = 'sudo pdf-parser -H ' + evi_path + sel_file
 		pdfparser_hash_comm += ' > ' + evi_path + new_sel_file[0] + '_parser_md5.txt'
-		click.echo(pdfparser_hash_comm + '\n')
+		click.echo(pdfparser_hash_comm)
 	else:
 		pdfparser_hash_comm = ''
 
-	title = 'You Are About To Execute The following Commands!'
+	click.echo('\nNote: Objects Are Created Imediatly After Execution! Check PDF_Evidance Folder!')
+	title = '\nYou Are About To Execute The following Commands!'
 	index_selection = tms.generate_promt_menu(title, 2)
 
 	if index_selection == 0:
@@ -124,7 +127,11 @@ def PDF_selection(objs_list, paths):
 
 	os.system('clear')
 	click.secho('PDF Obj Search Selection\n', fg='blue', bold=True)
-	click.secho('Object Locations:', bold=True)
+	click.secho('These Are The Stream Objects Found Within The .PDF Document.', bold=True)
+	click.echo('You Can Veiw The Contents Of These Streams To See Different Information')
+	click.echo('Example: /page 1: 16    /[Stream] [Count]: [Object][...]' )
+	click.secho('\nObject Locations:', bold=True)
+	click.secho
 
 	### Display Type of Print Output
 	try:
@@ -144,7 +151,7 @@ def PDF_selection(objs_list, paths):
 			click.echo(line.strip())
 
 	title = '\nHow Would You Like To Search the Objs?'
-	choices = ['[1] View By Stream','[2] View All','[0] Back']
+	choices = ['[1] View PDF Objects Filtered By Stream','[2] View All PDF Objects','[0] Back']
 	index_selection = tms.generate_menu(title, choices)
 
 	### Select Object Search Filter
@@ -181,8 +188,8 @@ requires a list of objs, tool output file paths and a tag
 """
 def PDF_display(objs_list, paths, tag):
 	os.system('clear')
-	click.secho('PDF Obj Previewer\n', fg='blue', bold=True)
-	click.secho('Press Enter To Use To View its Contnet In Full')
+	click.secho('PDF Obj Preview\n', fg='blue', bold=True)
+	click.secho('Press Enter To Use To View its Contnet In Full', bold=True)
 
 	### Orginise PDF Objects List
 	org_obj_list = []

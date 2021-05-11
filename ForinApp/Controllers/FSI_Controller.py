@@ -28,12 +28,15 @@ def FSI_main_menu(path = '0'):
 	if path and path != '0':
 		evi_path = ''
 	else:
-		evi_path = scs.settings_check('$Default_Output_Location')
+		evi_path = scs.settings_check('$Default_Application_Evidance_Search_Location')
 
 	os.system('clear')
 	click.secho('File System Inspection (Sleuth Kit)\n', bold=True, fg='blue')
-	click.echo('File System Inspection Of A Forensic Img File Using TSK [MMLS, FLS, IMG_STAT, ICAT, ISTAT, FSSTAT]\n')
-	click.echo('Image File Can Be Of The Following Formats:')
+	click.secho('File System Inspection Of A Forensic Img File Using TSK [MMLS, FLS, IMG_STAT, ICAT, ISTAT, FSSTAT]', bold=True)
+	click.echo('FSI Allows You To Inspect The Files On A Drive IF Sleuth Kit and Determine Its Exsistance (Not Corrupt)')
+	click.echo('If Successful, You Will Be Able To Navigate The File System and View Files And Folders.')
+	click.echo('You Will Also Be Able To Export The File Information, Hexdata, or File Itself!\n')
+	
 	os.system('mmls -i list')
 	click.echo('\nCurrent Image Evidance Location: {}'.format(evi_path))
 	
@@ -103,6 +106,11 @@ def FSI_selection(file_path):
 
 	os.system('clear')
 	click.secho('File System Inspection (Sleuth Kit)\n', bold=True, fg='blue')
+	click.secho('If Determination Is Successful, You Will Be Able To Select A Byte Offset', bold=True)
+	click.echo('A Byte Offset Is The Selected START Byte to Read Until The END Byte (Showing Data Within That Range).')	
+	click.echo('Otherwise, You Will Recive An Error!\n')
+	
+	click.secho('Checking Image File For File System...', bold=True, fg='red')
 
 	### Create Img_Conf Class
 	os.system('img_stat -t ' + file_path + ' > Config/tmp.txt')
@@ -132,6 +140,7 @@ def FSI_selection(file_path):
 
 			if index_selection == len(choices) - 1:
 				FSI_main_menu()
+				break
 			else:
 				img_conf.set_byte_offset(int(choices[index_selection]))
 				os.system('fsstat -t -i ' + img_format + ' -o ' + str(img_conf.get_byte_offset()) + ' ' + file_path + ' > Config/tmp.txt')
@@ -140,6 +149,9 @@ def FSI_selection(file_path):
 
 		
 	### Generate Info For Class (Tool Output Information) & Display
+	os.system('clear')
+	click.secho('File System Inspection (Sleuth Kit)\n', bold=True, fg='blue')
+	
 	img_conf.gen_fsstat(fsi_path)
 	img_conf.gen_fls(fsi_path)
 	img_conf.update_fls(0)
@@ -147,7 +159,7 @@ def FSI_selection(file_path):
 	for line in img_conf.get_fsstat_txt():
 		click.echo(line)
 		
-	choices = ['[1] View Files', '[0] Back']
+	choices = ['[1] View Files/Folders Within File System', '[0] Back']
 	title = 'What Would You Like To do?'
 	
 	index_selection = tms.generate_menu(title, choices)		### Selection
@@ -174,7 +186,10 @@ def FSI_display(img_conf):
 
 	os.system('clear')
 	click.secho('File System Inspection (Sleuth Kit)\n', bold=True, fg='blue')
-
+	click.secho('The File System Should Conatin Folders And Files To Inspect')
+	click.echo('You Can Navigate The File System To Inspect Its Contents')
+	click.echo('.. = Back')
+	click.echo('.  = Path Start\n')
 	click.echo('Using fls to View Files & Directories')
 	click.echo('-:Unkown, r:RegulerFile, d:Dir, v:TSK Virtual File (Ignore)\n')
 
@@ -192,6 +207,16 @@ def FSI_display(img_conf):
 
 	### Navigation
 	if index_selection == len(choices) - 1:
+		try:
+			for nav in img_conf.get_inode_nav_list():
+				img_conf.del_inode_nav(0)
+			else:
+				try:
+					img_conf.del_inode_nav(0)
+				except:
+					pass
+		except:
+			pass
 		FSI_selection(img_conf.get_file_path())
 	elif index_selection == 1:
 		if len(nav_list) < 2:
@@ -200,15 +225,25 @@ def FSI_display(img_conf):
 			img_conf.update_fls(0)
 			FSI_display(img_conf)
 		else:
-			try:
-				last_inode = nav_list[len(nav_list) -2]
-				img_conf.del_inode_nav(len(img_conf.get_inode_nav_list()) -1)
-				img_conf.update_fls(last_inode)
-				FSI_display(img_conf)
-			except:
-				FSI_selection(img_conf.get_file_path())
+			#try:
+			last_inode = nav_list[len(nav_list) -2]
+			img_conf.del_inode_nav(len(img_conf.get_inode_nav_list()) -1)
+			img_conf.update_fls(last_inode)
+			FSI_display(img_conf)
+			#except:
+			FSI_selection(img_conf.get_file_path())
 	elif index_selection == 0:
 		img_conf.update_fls(0)
+		try:
+			for nav in img_conf.get_inode_nav_list():
+				img_conf.del_inode_nav(0)
+			else:
+				try:
+					img_conf.del_inode_nav(0)
+				except:
+					pass
+		except:
+			pass
 		FSI_display(img_conf)
 
 	### Detect fls Selection
@@ -239,29 +274,23 @@ User Options Incl. Exporting Files Based on istat (Details), icat (Hex), & The A
 Requires a Img_Conf Class & A index_Selection (fls line)
 """
 def FSI_export(img_conf, index_selection):
-	img_check = False
 	sel_fls = img_conf.get_fls(index_selection - 2)
 	file_name = ''
 	title = '\nWhat Would You Like To Export'
-	choices = ['[1] Export Details (istat)', '[2] Export icat Hexdump (icat)', '[3] Export Copy (icat *Mainly jpg/png files)', '[0] back']
+	choices = ['[1] Export File Details (Above)', '[2] Export Full Icat Hexdump', '[3] Attmept Export Of Copy', '[0] back']
+	file_ext = sel_fls['name'].split('.', -1)
+	file_name = sel_fls['name'].split('.', -1)
 
-	### Check File Selected
-	try:
-		file_name, file_ext = sel_fls['name'].split('.', -1)
-		if file_ext == 'jpg' or 'png' or 'tif' or 'tiff' or 'raw':
-			img_check = True
-		else:
-			file_name = sel_fls['name']
-	except:
-		file_name = sel_fls['name']
 
 	os.system('clear')
 	click.secho('File System Inspection (Sleuth Kit)\n', bold=True, fg='blue')
-	click.echo('Using istat to View File Contents\n')
+	click.secho('Below Is Some Information About The File Like Date and the File Header Hex.', bold=True)
+	click.echo('You Can Export The Information If Needed (Verbose Details & Full Hexdump) \nOR Attempt To Export The File Itself (CAUTION)')
 	
 	### Display Inode Details
+	click.secho('\nIstat File Contents (File Information)', bold=True)
 	os.system('istat -r -i ' + img_conf.get_img_format() + ' -f ' + img_conf.get_img_FS_format() + ' -o ' + str(img_conf.get_byte_offset()) + ' ' + img_conf.get_file_path() + ' ' + str(img_conf.get_sel_inode()))
-	click.echo('')
+	click.secho('\nIcat Hexdump Header (First 10 Lines)', bold=True)
 	os.system('icat -i ' + img_conf.get_img_format() + ' -f ' + img_conf.get_img_FS_format() + ' -o ' + str(img_conf.get_byte_offset()) + ' ' + img_conf.get_file_path() + ' ' + str(img_conf.get_sel_inode()) + ' | hexdump | head')
 	
 	index_selection = tms.generate_menu(title, choices)		### Selection
@@ -274,11 +303,8 @@ def FSI_export(img_conf, index_selection):
 		click.echo('\nExporting...')
 		img_conf.export_icat_hex()
 	elif index_selection == 2:
-		if img_check == True:
-			img_conf.export_icat_img(file_ext)
-			click.echo('\nExporting...')
-		else:
-			click.echo('Error: File Not Accepted')
+		click.echo('\nExporting...')
+		img_conf.export_icat_img(file_ext)
 	elif index_selection == 3:
 		FSI_display(img_conf)
 

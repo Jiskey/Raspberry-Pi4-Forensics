@@ -78,6 +78,9 @@ class FsiSetting:
 	def get_inode_nav_list(self):				
 		return self.inode_nav_list
 
+	def set_inode_nav_list(self, inode_nav_list):				
+		self.inode_nav_list = inode_nav_list
+
 	def add_inode_nav(self, inode):	
 		self.inode_nav_list.append(inode)
 

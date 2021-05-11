@@ -1,1 +1,1 @@
-Default Logs Folder
+Default Logs Folder For ACQ Logs
