@@ -199,41 +199,41 @@ class AcqDrive:
 			part = self.get_path()					
 		else:
 			part = self.get_partition_path(p_code)
-		drive = 'if={} '.format(part)
-		output = 'of={}'.format(output_loc)
+		drive = 'if="{}" '.format(part)
+		output = 'of="{}'.format(output_loc)
 		if output.endswith('/'):
-			output += name + '.dd '
+			output += name + '.dd" '
 		else: 
-			output += '/' + name + '.dd '
+			output += '/' + name + '.dd" '
 		if otf_hashing == 'True':
-			hashing = 'hash={} '.format(hash_mode)
+			hashing = ' hash={} '.format(hash_mode)
 		else:
 			hashing = ''
 		if enable_logs == 'True' and otf_hashing == 'True':			
-			log = 'log={}{}.log '.format(hash_log_loc, name)	
+			log = 'log="{}{}.log" '.format(hash_log_loc, name)	
 		else:
 			log = ''
 
 		### Generatate Dc3dd Command
-		output = '"' + output.strip() + '"'
+		output = output.strip()
 		command = start + drive + output + hashing + log
 
 		if tool == 'dcfldd':
 			if multi_hash == 'True' and hash_mode_2 != hash_mode:		
-				hashing = hash_mode + ',' + hash_mode_2 + ' '
+				hashing = 'hash=' + hash_mode + ',' + hash_mode_2 + ' '
 				if enable_logs == 'True':
-					log = '{}log={}{}_{}.txt '.format(hash_log_loc, hash_mode, name, hash_mode)
-					log += '{}log={}{}_{}.txt '.format(hash_log_loc, hash_mode_2, name, hash_mode_2)
+					log = '{}log="{}{}_{}.txt" '.format(hash_mode, hash_log_loc, name, hash_mode)
+					log += '{}log="{}{}_{}.txt" '.format(hash_mode_2, hash_log_loc, name, hash_mode_2)
 				else:
 					log = ''
 			elif multi_hash == 'True' and hash_mode_2 == hash_mode:		
 				if enable_logs == 'True':
-					log = '{}log={}_{}.txt '.format(hash_mode, name, hash_mode)
+					log = '{}log="{}_{}.txt" '.format(hash_mode, name, hash_mode)
 				else:
 					log = ''
 			elif multi_hash == 'False':					
 				if enable_logs == 'True':
-					log = '{}log={}_{}.txt '.format(hash_mode, name, hash_mode)
+					log = '{}log="{}_{}.txt" '.format(hash_mode, name, hash_mode)
 				else:
 					log = ''
 
@@ -254,7 +254,6 @@ class AcqDrive:
 			block_size = 'bs={} '.format(byte_split)	
 
 			### Generate Dcfldd Command
-			output = '"' + output.strip() + '"'
 			command = start + drive + hashing + log + hash_window + converstion + block_size + error_handling + splitting + splitting_format + output
 		
 		return command
