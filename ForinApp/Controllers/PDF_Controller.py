@@ -55,9 +55,12 @@ def PDF_main_menu(path = '0'):
 
 	title = 'Please Select A File From The List Below.\nIf There Is No Files, Try specifying a New Dir.'
 	choices = []
-	for file in os.listdir(evi_path):
-		if file.lower().endswith('.pdf') and file.find('.disarmed') == -1:		
-			choices.append(file)
+	try:
+		for file in os.listdir(evi_path):
+			if file.lower().endswith('.pdf') and file.find('.disarmed') == -1:		
+				choices.append(file)
+	except:
+		click.secho('Error Loading Directory! Check Settings File OR specify A New Dir!\n', fg='red')	
 	choices.append('-- Specify .PDF Evidance Directory')
 	choices.append('[0] Back')
 
@@ -66,7 +69,7 @@ def PDF_main_menu(path = '0'):
 	if index_selection == len(choices) - 1:
 		MainMenu_Controller.main_menu()
 	elif index_selection == len(choices) - 2:
-		index_selection = tms.generate_string_menu('PDF Evidance File Location:', 1)		
+		index_selection = tms.generate_dir_menu()		
 		if index_selection == '0':
 			PDF_main_menu()
 		else:
@@ -85,21 +88,21 @@ def PDF_main_menu(path = '0'):
 	txt = open(evi_path + new_sel_file[0] + '_pdfid.txt', 'w')
 	txt.write('')
 	txt.close()
-	pdfid_comm += evi_path + sel_file + ' -o ' + evi_path + new_sel_file[0] + '_pdfid.txt'
+	pdfid_comm += '"' + evi_path + sel_file + '" -o "' + evi_path + new_sel_file[0] + '_pdfid.txt"'
 
-	pdfparser_objs_comm = 'sudo pdf-parser -c -O ' + evi_path + sel_file
-	pdfparser_objs_comm += ' > ' + evi_path + new_sel_file[0] + '_parser_objs.txt'
+	pdfparser_objs_comm = 'sudo pdf-parser -c -O "' + evi_path + sel_file
+	pdfparser_objs_comm += '" > "' + evi_path + new_sel_file[0] + '_parser_objs.txt"'
 	
-	pdfparser_locs_comm = 'sudo pdf-parser -a -O ' + evi_path + sel_file
-	pdfparser_locs_comm += ' > ' + evi_path + new_sel_file[0] + '_parser_locs.txt'
+	pdfparser_locs_comm = 'sudo pdf-parser -a -O "' + evi_path + sel_file
+	pdfparser_locs_comm += '" > "' + evi_path + new_sel_file[0] + '_parser_locs.txt"'
 
 	click.echo(pdfid_comm)
 	click.echo(pdfparser_objs_comm)
 	click.echo(pdfparser_locs_comm)
 
 	if hashes == 'True':
-		pdfparser_hash_comm = 'sudo pdf-parser -H ' + evi_path + sel_file
-		pdfparser_hash_comm += ' > ' + evi_path + new_sel_file[0] + '_parser_md5.txt'
+		pdfparser_hash_comm = 'sudo pdf-parser -H "' + evi_path + sel_file
+		pdfparser_hash_comm += '" > "' + evi_path + new_sel_file[0] + '_parser_md5.txt"'
 		click.echo(pdfparser_hash_comm)
 	else:
 		pdfparser_hash_comm = ''
@@ -230,7 +233,7 @@ def PDF_display(objs_list, paths, tag):
 					else:
 						check = check + 1
 
-		os.system('more -d -f ' + paths[3] + 'obj_{}.txt'.format(code))
+		os.system('more -d -f "' + paths[3] + 'obj_{}.txt"'.format(code))
 		x = input ('\n\nPlease Press [Enter] To Return')
 		PDF_display(objs_list, paths, tag)
 			

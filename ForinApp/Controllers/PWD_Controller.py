@@ -43,9 +43,13 @@ def PWD_main_menu(path = '0'):
 
 	### Select File To Crack
 	title = 'Please Select A File That Contains The Hash Lines To Crack:'
-	for file in os.listdir(evi_path):
-		if os.path.isfile(evi_path + str(file)) == True and str(file).startswith('.') == False:
-			choices.append(file)
+	try:
+		for file in os.listdir(evi_path):
+			if os.path.isfile(evi_path + str(file)) == True and str(file).startswith('.') == False:
+				choices.append(file)
+	except:
+		click.secho('Error Loading Directory! Check Settings File OR specify A New Dir!\n', fg='red')
+
 	choices.append('[1] -- Specify Hash File Evidance Directory')
 	choices.append('[0] Back')
 	index_selection = tms.generate_menu(title, choices)
@@ -53,7 +57,7 @@ def PWD_main_menu(path = '0'):
 	if index_selection == len(choices) - 1:
 		MainMenu_Controller.main_menu()
 	elif index_selection == len(choices) - 2:
-		index_selection = tms.generate_string_menu('Hash File Evidance Directory:', 1)
+		index_selection = tms.generate_dir_menu()
 		if index_selection == '0':
 			PWD_main_menu()
 		else:
@@ -116,8 +120,10 @@ def PWD_attack_type(pwd_object):
 	index_selection = tms.generate_menu(title, choices)
 
 	if index_selection == 5:
+		pwd_object.set_sel_rule('')
 		PWD_main_menu(pwd_object.get_filepath())
 	elif index_selection == 4:
+		pwd_object.set_sel_rule('')
 		choices = ['[1] Mask:Dict','[2] Dict:Mask']
 		title = '\nPlease Select A Format'
 		index_selection = tms.generate_menu(title, choices)
@@ -129,9 +135,11 @@ def PWD_attack_type(pwd_object):
 		PWD_gen_mask(pwd_object)
 	elif index_selection == 3:
 		pwd_object.set_attack(3)
+		pwd_object.set_sel_rule('')
 		PWD_gen_mask(pwd_object)
 	elif index_selection == 2:
 		pwd_object.set_attack(1)
+		pwd_object.set_sel_rule('')
 		PWD_sel_dict(pwd_object)
 	elif index_selection == 1:
 		pwd_object.set_attack(2)
@@ -320,7 +328,7 @@ def PWD_sel_dict(pwd_object, path = '0'):
 		if index_selection == len(choices) - 1:
 			PWD_attack_type(pwd_object)
 		elif index_selection == len(choices) - 2:
-			index_selection = tms.generate_string_menu('Hash File Evidance Directory:', 1)
+			index_selection = tms.generate_dir_menu()
 			if index_selection == '0':
 				PWD_sel_dict(pwd_object)
 			else:
@@ -336,13 +344,13 @@ def PWD_sel_dict(pwd_object, path = '0'):
 		if index_selection[len(index_selection) - 1] == 'Back':
 			PWD_attack_type(pwd_object)
 		elif index_selection[len(index_selection) - 1] == '-- Specify New File Directory':
-			index_selection = tms.generate_string_menu('Hash File Evidance Directory:', 1)
+			index_selection = tms.generate_dir_menu()
 			if index_selection == '0':
 				PWD_sel_dict(pwd_object)
 			else:
 				PWD_sel_dict(pwd_object, index_selection)
-		elif len(index_selection) > 2:
-			index_selection = tms.generate_menu('Please Select Only 2 Dictonary Files <ENTER>', '')
+		elif len(index_selection) > 2 or len(index_selection) < 2:
+			index_selection = tms.generate_menu('Please Select 2 Dictonary Files! <ENTER>', '')
 			PWD_sel_dict(pwd_object)
 		else:
 			for sel_dict in index_selection:
@@ -358,7 +366,7 @@ def PWD_sel_dict(pwd_object, path = '0'):
 		if index_selection == len(choices) - 1:
 			PWD_attack_type(pwd_object)
 		elif index_selection == len(choices) - 2:
-			index_selection = tms.generate_string_menu('Hash File Evidance Directory:', 1)
+			index_selection = tms.generate_dir_menu()
 			if index_selection == '0':
 				PWD_sel_dict(pwd_object)
 			else:
@@ -423,7 +431,7 @@ def PWD_config_wizard(pwd_object):
 			continue
 		### Specify New Dir
 		elif choices[index_selection].startswith('-- ') == True:
-			index_selection = tms.generate_string_menu('Hashcat Output Filepath', 1)
+			index_selection = tms.generate_dir_menu()
 			if index_selection == '0':
 				PWD_config_wizard(pwd_object)
 				break

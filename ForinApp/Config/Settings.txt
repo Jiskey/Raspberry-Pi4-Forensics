@@ -5,9 +5,13 @@
 
 ----- General Settings -----
 
-#Default Application Evidance Search Location (The Folder That The App Searches for Evidance Files By Default)
+#Default Application Evidence Search Location (The Folder That The App Searches for Evidance Files By Default )
 [-- Please Specify New Default Application Evidance Search Directory]
-$Default_Application_Evidance_Search_Location:Evidance/
+$Default_Application_Evidance_Search_Location:Evidence/
+
+#Default Application Evidence Search Location (The Folder That The App Searches for Evidance Files By Default (FULL PATH))
+[-- Please Specify New Default Application Evidance Search Directory]
+$Default_Application_Directory_Search_Location:/home/
 
 #Default Usage Log File Location
 [-- Please Specify New Usage Log Directory]
@@ -19,7 +23,7 @@ $Boot_Drive_Override:True
 
 #Operational Name Used To Identify Users In Applcation Usage Logs
 [-- Please Specify New Identifier][Guest]
-$Operation_Name:aslkdfhlaik;sjhbda
+$Operation_Name:Guest
 
 ----- Acqusisition Settings -----
 
@@ -33,7 +37,7 @@ $Default_Image_Name:Default_ImgName
 
 #Default Output Location for Images
 [-- Specify New Acq Output_Directory]
-$Default_Output_Location:Evidance/ACQ_Evidance/
+$Default_Output_Location:Evidence/ACQ_Evidence/
 
 #Enable On The Fly Hashing During Acqusition 
 [True][False]
@@ -87,7 +91,7 @@ $Error_handling:True
 
 #Default Output Location for programs that perform FSI
 [-- Specify_New_FSI_Directory]
-$Default_FSI_Output:Evidance/FSI_Evidance/
+$Default_FSI_Output:Evidence/FSI_Evidence/
 
 ----- Data Carving Settings -----
 
@@ -101,13 +105,13 @@ $Foremost_ConfFile_Location:Config/foremost.conf
 
 #Default Data Carving Output Dir/Folder Name
 [-- Specify New Carving Output Dir/Folder Name]
-$DC_Output_Location_Name:Carved_Evidance
+$DC_Output_Location_Name:Carved_Evidence
 
 ----- PDF Analysis Settings -----
 
-#Location of PDF Evidance Files (pdfid & pdf-parser output)
-[-- Specify .PDF Evidance Directory]
-$PDF_Evidance_Location:Evidance/PDF_Evidance/
+#Location of PDF Evidence Files (pdfid & pdf-parser output)
+[-- Specify .PDF Evidence Directory]
+$PDF_Evidance_Location:Evidence/PDF_Evidence/
 
 #Enable pdfid Disarm (-d) To Create a Safe pdf Copy
 [True][False]
@@ -123,9 +127,9 @@ $PDF_Verbose_Output:True
 
 ----- Password Cracking Settings Settings -----
 
-#Location of Password Evidance Files ((Hashcat Output) If Potfile Not Used*)
+#Location of Password Evidence Files ((Hashcat Output) If Potfile Not Used*)
 [-- Specify New Password Directory]
-$Default_PWD_Output:Evidance/PWD_Evidance/
+$Default_PWD_Output:Evidence/PWD_Evidence/
 
 #Workload Profile For Hashcat Operation
 [Low][Default][High][Nightmare]

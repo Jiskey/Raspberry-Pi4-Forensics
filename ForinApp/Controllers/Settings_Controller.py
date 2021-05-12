@@ -111,7 +111,7 @@ def settings_edit_menu(setting):
 	new_code = call + ':' + choices[index_selection]
 	if choices[index_selection].find('--') != -1:
 		if choices[index_selection].find('Directory') != -1:
-			string_selection = tms.generate_string_menu('Image Name', 1)
+			string_selection = tms.generate_dir_menu()
 		else:
 			string_selection = tms.generate_string_menu('Image Name', 0)	
 		if string_selection == '0':

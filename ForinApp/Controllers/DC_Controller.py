@@ -150,9 +150,9 @@ def DC_conform(selected_objs_list, conf_path, dir_name, tool, img_path):
 
 	command = 'sudo {} '.format(tool)
 	if tool == 'foremost':
-		command += '-T -v -c {} {} -o {}/'.format(conf_path, img_path, dir_name)
+		command += '-T -v -c {} "{}" -o {}/'.format(conf_path, img_path, dir_name)
 	if tool == 'scalpel':
-		command += '-v -c {} {} -o {}/'.format(conf_path, img_path, dir_name)
+		command += '-v -c {} "{}" -o {}/'.format(conf_path, img_path, dir_name)
 
 	### Display Selected File Ext's
 	os.system('clear')
@@ -368,22 +368,38 @@ def DC_selection_image(tool, path=scs.settings_check('$Default_Application_Evida
 	click.echo('\nCurrently Selected Evidance Path: {}'.format(path))
 
 	### Discovery Of Image File Is Saved OutputLocation
-	for file in os.listdir(path):
-		if file.lower().endswith('.dd') or file.lower().endswith('.img') or file.lower().endswith('.raw') or file.lower().endswith('.aff'):
-			choices.append(file)
+	try:
+		for file in os.listdir(path):
+			if file.lower().endswith('.dd') or file.lower().endswith('.img') or file.lower().endswith('.raw') or file.lower().endswith('.aff'):
+				choices.append(file)
+	except:
+		click.secho('\nError Loading Directory! Check Settings File OR specify A New Dir!', fg='red')
 	choices.append('[1] -- Specify New Evidance Path')
 	choices.append('[0] Back')
 
-	index_selection = tms.generate_menu(title, choices)
-	
-	if index_selection == len(choices) - 1:
-		DC_main_menu()
-	elif index_selection == len(choices) - 2:
-		index_selection = tms.generate_string_menu('Forensic Image File Location:', 1)
-		DC_selection_image(tool, index_selection)
-	else:
-		img_file_name = choices[index_selection]
-		return path + str(img_file_name)
+	### Select File or New File Path
+	new_path = path
+	x = True
+	while x == True:
+		index_selection = tms.generate_menu(title, choices)
+		
+		if index_selection == len(choices) - 1:
+			DC_main_menu()
+		elif index_selection == len(choices) - 2:
+			new_path = tms.generate_dir_menu()
+			if new_path == '0':
+				pass
+			else:
+				choices = []
+				for file in os.listdir(new_path):
+					if file.lower().endswith('.dd') or file.lower().endswith('.img') or file.lower().endswith('.raw') or file.lower().endswith('.aff'):
+						choices.append(file)
+				choices.append('[1] -- Specify New Evidance Path')
+				choices.append('[0] Back')
+		else:
+			img_file_name = choices[index_selection]
+			return new_path + str(img_file_name)
+			break
 
 	MainMenu_Controller.main_menu()
 

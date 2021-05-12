@@ -272,10 +272,9 @@ def ACQ_wizard(settings_list, acq_drive, p_code):
 		if choices[index_selection].startswith('--') == True:			
 			title = choices[index_selection]
 			if choices[index_selection] == '-- Specify New Acq File_Name':
-				code = 0
+				var = tms.generate_string_menu(title, 0)
 			else:
-				code = 1
-			var = tms.generate_string_menu(title, code)
+				var = tms.generate_dir_menu()
 
 			if var == '0':
 				var = setting.get_code_call()

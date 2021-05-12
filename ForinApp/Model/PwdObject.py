@@ -131,6 +131,7 @@ class PwdObject:
 	def set_potfile(self, potfile):
 		self.potfile = potfile
 
+	### Command that generates the hashes compbatible with Hashcat
 	def gen_hash_list(self):
 		check = False
 		tmp_string = ''
@@ -152,6 +153,7 @@ class PwdObject:
 			except:
 				continue
 
+	### Generate Hashcat command
 	def gen_command(self):
 		command = 'sudo hashcat '
 		if self.potfile == 'False':
@@ -164,17 +166,17 @@ class PwdObject:
 		command = command + '-m {} '.format(self.pass_hash)
 		command = command + '-a {} '.format(self.attack)
 		if self.sel_rule != '':
-			command = command + '-r {} '.format(self.sel_rule)
-		command = command + '-o {}{}'.format(self.output_path, self.filename.split('.')[0] + '_evidance.txt')
-		command = command + ' {} '.format(self.filepath + self.filename)
+			command = command + '-r "{}" '.format(self.sel_rule)
+		command = command + '-o "{}{}"'.format(self.output_path, self.filename.split('.')[0] + '_evidance.txt')
+		command = command + ' "{}"'.format(self.filepath + self.filename)
 
 		if self.attack == 0 or self.attack == 1:
 			for wordlist in self.dict_list:
-				command = command + wordlist + ' '
+				command = command + ' "' + wordlist + '" '
 		elif self.attack == 3 or self.attack == 6 or self.attack == 7:
 			if self.attack == 6:
 				for wordlist in self.dict_list:
-					command = command + wordlist + ' '
+					command = command + ' "' + wordlist + '" '
 
 			for count, charset in enumerate(self.custom_charset_list):
 				command = command + '-' + str(count + 1) + ' ' + charset + ' '
@@ -182,7 +184,7 @@ class PwdObject:
 
 			if self.attack == 7:
 				for wordlist in self.dict_list:
-					command = command + wordlist + ' '
+					command = command + ' "' + wordlist + '" '
 
 		return command
 

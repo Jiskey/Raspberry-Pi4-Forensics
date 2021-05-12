@@ -20,7 +20,7 @@ requires a path where the pdf is located (evidance), the name of the selected fi
 returns a list of PdfObject's and a path for each file location 
 """
 def get_pdf_objects_list(evi_path, sel_file, hash_check):
-	path = evi_path + sel_file[:-4]				
+	path = '' + evi_path + sel_file[:-4]				
 	objs_path = path + '_parser_objs.txt'
 	locs_path = path + '_parser_locs.txt'
 	hash_path = path + '_parser_md5.txt'
@@ -52,8 +52,8 @@ def get_pdf_objects_list(evi_path, sel_file, hash_check):
 	dir_path = path + '_parser_objs'
 	if dir_path.endswith('/') == False:
 		dir_path += '/'
-	os.system('sudo mkdir ' + dir_path)
-	os.system('sudo rm ' + dir_path + '*')
+	os.system('sudo mkdir "' + dir_path + '"')
+	os.system('sudo rm "' + dir_path + '*"')
 
 	### Create PDF Object Files
 	for count, line in enumerate(txt_objs_lines):
@@ -147,7 +147,7 @@ def get_pdf_objects_list(evi_path, sel_file, hash_check):
 
 	### Create Files For Storage & Preview
 	for obj in pdf_objects_list:
-		txt = open(dir_path + '/obj_{}.txt'.format(obj.get_id()), 'w')
+		txt = open(dir_path + 'obj_{}.txt'.format(obj.get_id()), 'w')
 		for line in obj.get_head():
 			txt.write(line)
 		for line in obj.get_data():

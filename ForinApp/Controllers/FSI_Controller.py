@@ -26,7 +26,7 @@ def FSI_main_menu(path = '0'):
 	title = ''	
 
 	if path and path != '0':
-		evi_path = ''
+		evi_path = path
 	else:
 		evi_path = scs.settings_check('$Default_Application_Evidance_Search_Location')
 
@@ -53,11 +53,13 @@ def FSI_main_menu(path = '0'):
 
 	if evi_path.endswith('/') != True:
 		evi_path += '/'
-	for file in os.listdir(evi_path):
-		for ext in ext_list:
-			if file.endswith(ext) == True:
-				choices.append(file)
-				continue
+	try:
+		for file in os.listdir(evi_path):
+			for ext in ext_list:
+				if file.endswith(ext) == True:
+					choices.append(file)
+	except:
+		click.secho('\nError Loading Directory! Check Settings File OR specify A New Dir!', fg='red')
 	choices.append('[1] -- Select New Evidance Location')
 	choices.append('[0] Main Menu')
 	title = '\nPlease Select A File To Insepct'
@@ -67,7 +69,8 @@ def FSI_main_menu(path = '0'):
 	if index_selection == len(choices) - 1:
 		MainMenu_Controller.main_menu()
 	elif index_selection == len(choices) - 2:
-		new_path = tms.generate_string_menu('Evidance File Path', 1)
+		#new_path = tms.generate_string_menu('Evidance File Path', 1)
+		new_path = tms.generate_dir_menu()
 		FSI_main_menu(new_path)
 	else:
 		uls_filepath = scs.settings_check('$Default_UsageLog_Location')
@@ -113,10 +116,10 @@ def FSI_selection(file_path):
 	click.secho('Checking Image File For File System...', bold=True, fg='red')
 
 	### Create Img_Conf Class
-	os.system('img_stat -t ' + file_path + ' > Config/tmp.txt')
+	os.system('img_stat -t "' + file_path + '" > Config/tmp.txt')
 	for line in open('Config/tmp.txt'):
 		img_format = line.strip()
-	os.system('fsstat -t -i ' + img_format + ' ' + file_path + ' > Config/tmp.txt')
+	os.system('fsstat -t -i ' + img_format + ' "' + file_path + '" > Config/tmp.txt')
 	for line in open('Config/tmp.txt'):
 		img_FS_format = line.strip()
 
@@ -125,7 +128,7 @@ def FSI_selection(file_path):
 	### Detect Physical Image / Ignore Logical
 	if img_conf.get_img_FS_format() == '':
 		click.echo('Checking Active Partitons...\n')
-		os.system('mmls -i ' + img_format + ' ' + file_path + ' > Config/tmp.txt')
+		os.system('mmls -i ' + img_format + ' "' + file_path + '" > Config/tmp.txt')
 		for line in open('Config/tmp.txt'):
 			print(line.strip())
 			if line.startswith('\n') == False:
@@ -143,7 +146,7 @@ def FSI_selection(file_path):
 				break
 			else:
 				img_conf.set_byte_offset(int(choices[index_selection]))
-				os.system('fsstat -t -i ' + img_format + ' -o ' + str(img_conf.get_byte_offset()) + ' ' + file_path + ' > Config/tmp.txt')
+				os.system('fsstat -t -i ' + img_format + ' -o ' + str(img_conf.get_byte_offset()) + ' "' + file_path + '" > Config/tmp.txt')
 				for line in open('Config/tmp.txt'):
 					img_conf.set_img_FS_format(line.strip())
 
@@ -278,8 +281,8 @@ def FSI_export(img_conf, index_selection):
 	file_name = ''
 	title = '\nWhat Would You Like To Export'
 	choices = ['[1] Export File Details (Above)', '[2] Export Full Icat Hexdump', '[3] Attmept Export Of Copy', '[0] back']
-	file_ext = sel_fls['name'].split('.', -1)
-	file_name = sel_fls['name'].split('.', -1)
+	file_ext = str(sel_fls['name'].split('.', -1)[-0])
+	file_name = str(sel_fls['name'].split('.', -1)[0])
 
 
 	os.system('clear')
@@ -289,9 +292,9 @@ def FSI_export(img_conf, index_selection):
 	
 	### Display Inode Details
 	click.secho('\nIstat File Contents (File Information)', bold=True)
-	os.system('istat -r -i ' + img_conf.get_img_format() + ' -f ' + img_conf.get_img_FS_format() + ' -o ' + str(img_conf.get_byte_offset()) + ' ' + img_conf.get_file_path() + ' ' + str(img_conf.get_sel_inode()))
+	os.system('istat -r -i ' + img_conf.get_img_format() + ' -f ' + img_conf.get_img_FS_format() + ' -o ' + str(img_conf.get_byte_offset()) + ' "' + img_conf.get_file_path() + '" ' + str(img_conf.get_sel_inode()))
 	click.secho('\nIcat Hexdump Header (First 10 Lines)', bold=True)
-	os.system('icat -i ' + img_conf.get_img_format() + ' -f ' + img_conf.get_img_FS_format() + ' -o ' + str(img_conf.get_byte_offset()) + ' ' + img_conf.get_file_path() + ' ' + str(img_conf.get_sel_inode()) + ' | hexdump | head')
+	os.system('icat -i ' + img_conf.get_img_format() + ' -f ' + img_conf.get_img_FS_format() + ' -o ' + str(img_conf.get_byte_offset()) + ' "' + img_conf.get_file_path() + '" ' + str(img_conf.get_sel_inode()) + ' | hexdump | head')
 	
 	index_selection = tms.generate_menu(title, choices)		### Selection
 	
@@ -308,6 +311,6 @@ def FSI_export(img_conf, index_selection):
 	elif index_selection == 3:
 		FSI_display(img_conf)
 
-	time.sleep(1)
+	time.sleep(2)
 	FSI_export(img_conf, index_selection)
 	

@@ -12,6 +12,7 @@ import time
 
 from simple_term_menu import TerminalMenu
 from Scripts import SettingsCheckScript as scs
+from glob import glob
 
 """
 genernate_menu creates a selection menu
@@ -29,8 +30,8 @@ def generate_menu(menu_title, menu_items):
 			exit_on_shortcut = False,
 		)
 
-		selection_index = menu.show()
-		return selection_index
+		index_selection = menu.show()
+		return index_selection
 	except:
 		click.echo('Found Settings File Corruption In Core Operation [Terminal Menu (Cannot Determine Terminal Menu Format / Options)]. TERMINATING!')
 		click.echo('ERROR: ' + menu_title)
@@ -50,12 +51,12 @@ def generate_obj_preview_menu(menu_title, menu_items, objs_list, dir_path):
 			menu_highlight_style = ('bg_' + scs.settings_check('$Highlight_Colour'), 'fg_' + scs.settings_check('$Text_Colour')),
 			cycle_cursor = True,
 			exit_on_shortcut = False,
-			preview_command = 'cat ' + dir_path + '{}.txt',
+			preview_command = 'cat "' + dir_path + '{}.txt"',
 			preview_size = 0.8,
 		)
 
-		selection_index = menu.show()
-		return selection_index
+		index_selection = menu.show()
+		return index_selection
 	except:
 		click.echo('Found Settings File Corruption In Core Operation [Terminal Menu (Cannot Determine Terminal Menu Format / Options)]. TERMINATING!')
 		click.echo('ERROR: ' + menu_title)		
@@ -78,12 +79,12 @@ def generate_file_preview_menu(menu_title, dir_path):
 			menu_highlight_style = ('bg_' + scs.settings_check('$Highlight_Colour'), 'fg_' + scs.settings_check('$Text_Colour')),
 			cycle_cursor = True,
 			exit_on_shortcut = False,
-			preview_command = 'cat ' + dir_path + '{}',
+			preview_command = 'cat "' + dir_path + '{}"',
 			preview_size = 0.6,
 		)
 
-		selection_index = menu.show()
-		return selection_index
+		index_selection = menu.show()
+		return index_selection
 	except:
 		click.echo('Found Settings File Corruption In Core Operation [Terminal Menu (Cannot Determine Terminal Menu Format / Options)]. TERMINATING!')
 		click.echo('ERROR: ' + menu_title)		
@@ -139,8 +140,8 @@ def generate_promt_menu(title, freeze):
 		)
 
 		time.sleep(freeze)
-		selection_index = menu.show()
-		return selection_index
+		index_selection = menu.show()
+		return index_selection
 	except:
 		click.echo('Found Settings File Corruption In Core Operation [Terminal Menu (Cannot Determine Terminal Menu Format / Options)]. TERMINATING!')
 		click.echo('ERROR MENU DESCRIPTION: ' + menu_title)		
@@ -176,4 +177,77 @@ def gernerate_multi_select_menu(title, choices, type_check):
 		click.echo('Found Settings File Corruption In Core Operation [Terminal Menu (Cannot Determine Terminal Menu Settings in Config/Settings.txt)]. TERMINATING!')
 		click.echo('ERROR: ' + menu_title)		
 		sys.exit(0)
+
+"""
+generate dir menu is the menu used to search directories on a system.
+can take a path but defaults to the settings specified (/home/ if error is settings file)
+returns a new selected path
+"""
+def generate_dir_menu(path = '0'):
+	try:
+		if path == '0':
+			path = scs.settings_check('$Default_Application_Directory_Search_Location:')
+			if path.endswith('/') == False:
+				path = path + '/'
+			if path.startswith('/') == False:
+				path = '/' + path
+		title = ''
+	except:
+		title = 'ERROR: Specified Dir is Does Not Exsist! Using "/home/" by Default! '
+		path = '/home/'
+#try:
+	choices = []
+	choices.append('.')
+	choices.append('..')
+	for dir in glob(path + '*/'):
+		choices.append(dir)
+	choices.append('[1] Accept')
+	choices.append('[0] Back')
+
+	x = True
+	while x == True:
+		menu = TerminalMenu(
+			menu_entries = choices,
+			title = title + '\nPress Accept To Conform The Path. Current Path: '+ path,
+			menu_cursor = scs.settings_check('$Cursor_Style'),
+			menu_cursor_style = ('fg_' + scs.settings_check('$Cursor_Colour'), "bold"),
+			menu_highlight_style = ('bg_' + scs.settings_check('$Highlight_Colour'), 'fg_' + scs.settings_check('$Text_Colour')),
+			cycle_cursor = True,
+			exit_on_shortcut = False,
+		)
+
+		index_selection = menu.show()
+		tmp = ''
+		if index_selection == len(choices) - 1:
+			tmp = '0'
+			break
+		elif index_selection == len(choices) - 2:
+			tmp = path
+			break
+		elif index_selection == 0:
+			tmp = generate_dir_menu('/')
+			break
+		elif index_selection == 1:
+			tmp = path.split('/')
+			if len(tmp) == 1:
+				tmp = generate_dir_menu('/')
+				break
+			elif len(tmp) > 1:
+				tmp.pop(-1)
+				tmp.pop(-1)
+				path = '/'
+				for dirs in tmp:
+					if dirs != '':
+						path += dirs + '/'
+				tmp = generate_dir_menu(path)
+				break	
+		else:
+			tmp = generate_dir_menu(choices[index_selection])
+			break
+	return tmp
+#except:
+	click.echo('Found Settings File Corruption In Core Operation [Terminal Menu (Cannot Determine Terminal Menu Format / Options)]. TERMINATING!')
+	click.echo('ERROR: Generate Dir Menu!')
+	sys.exit(0)
+
 

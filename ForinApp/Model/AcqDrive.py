@@ -177,13 +177,16 @@ class AcqDrive:
 			elif setting.get_code_call() == '$Error_handling':
 				error = setting.get_code_var()
 
-		check = 0
-		tmp = name.strip()
-		for count, file in enumerate(os.listdir(output_loc)):	
-			if file.startswith(tmp) and file.endswith('.dd'):
-				check = check + 1
-		else:
-			name = tmp + str(check)
+		try:
+			check = 0
+			tmp = name.strip()
+			for count, file in enumerate(os.listdir(output_loc)):	
+				if file.startswith(tmp) and file.endswith('.dd'):
+					check = check + 1
+			else:
+				name = tmp + str(check)
+		except:
+			pass
 		
 		if hash_log_loc.endswith('/') == False:
 			hash_log_loc += '/'
@@ -212,6 +215,7 @@ class AcqDrive:
 			log = ''
 
 		### Generatate Dc3dd Command
+		output = '"' + output.strip() + '"'
 		command = start + drive + output + hashing + log
 
 		if tool == 'dcfldd':
@@ -250,6 +254,7 @@ class AcqDrive:
 			block_size = 'bs={} '.format(byte_split)	
 
 			### Generate Dcfldd Command
+			output = '"' + output.strip() + '"'
 			command = start + drive + hashing + log + hash_window + converstion + block_size + error_handling + splitting + splitting_format + output
 		
 		return command

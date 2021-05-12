@@ -99,11 +99,11 @@ uses Md5deep the check MD5 hashes
 """
 def extras_hash_comp():
 	click.echo('Using Md5deep To Perfrom Hashing Of Files')
-	index_selection = tms.generate_string_menu('Path The Check The MD5 hash Of Each File: ', 1)
+	index_selection = tms.generate_dir_menu()
 	if index_selection == '0':
 		extras_main()
 	else:
-		os.system('sudo md5deep -r {}'.format(index_selection))
+		os.system('sudo md5deep -r "{}"'.format(index_selection))
 		wait_selection = tms.generate_menu('\nPlease Press Any Button To Continue', [' '])
 		extras_hash_comp()
 	

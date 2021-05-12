@@ -137,7 +137,7 @@ class FsiSetting:
 	def gen_fsstat(self, path):
 		fsstat_txt = []
 		self.set_fsstat(fsstat_txt)
-		os.system('fsstat -i ' + self.img_format + ' -f ' + self.img_FS_format + ' -o ' + str(self.byte_offset) + ' ' + self.file_path + ' > ' + self.output_path + self.img_name + '_details.txt')
+		os.system('fsstat -i ' + self.img_format + ' -f ' + self.img_FS_format + ' -o ' + str(self.byte_offset) + ' "' + self.file_path + '" > "' + self.output_path + self.img_name + '_details.txt"')
 		for line in open(self.output_path + self.img_name + '_details.txt'):
 			if line.startswith('FAT CONTENTS'):
 				break
@@ -148,7 +148,7 @@ class FsiSetting:
 	### Generates The fls information To Append
 	def gen_fls(self, path):
 		fls_txt = []
-		os.system('fls -i ' + self.img_format + ' -f ' + self.img_FS_format + ' -o ' + str(self.byte_offset) + ' ' + self.file_path + ' >> ' + self.output_path + self.img_name + '_details.txt')
+		os.system('fls -i ' + self.img_format + ' -f ' + self.img_FS_format + ' -o ' + str(self.byte_offset) + ' "' + self.file_path + '" >> "' + self.output_path + self.img_name + '_details.txt"')
 		os.system('fls -i ' + self.img_format + ' ' + self.file_path + ' > Config/tmp.txt' )
 		for line in open('Config/tmp.txt'):
 			self.fls_txt.append(line)
@@ -160,9 +160,9 @@ class FsiSetting:
 	def update_fls(self, inode):
 		fls_txt = []
 		if inode != 0:
-			os.system('fls -i ' + self.img_format + ' -f ' + self.img_FS_format + ' -o ' + str(self.byte_offset) + ' ' + self.file_path + ' ' + str(inode) + ' > Config/tmp.txt')
+			os.system('fls -i ' + self.img_format + ' -f ' + self.img_FS_format + ' -o ' + str(self.byte_offset) + ' "' + self.file_path + '" ' + str(inode) + ' > Config/tmp.txt')
 		else:
-			os.system('fls -i ' + self.img_format + ' -f ' + self.img_FS_format + ' -o ' + str(self.byte_offset) + ' ' + self.file_path + ' > Config/tmp.txt')
+			os.system('fls -i ' + self.img_format + ' -f ' + self.img_FS_format + ' -o ' + str(self.byte_offset) + ' "' + self.file_path + '" > Config/tmp.txt')
 		for line in open('Config/tmp.txt'):
 			fls_txt.append(line)
 		os.system('rm Config/tmp.txt')
@@ -170,12 +170,12 @@ class FsiSetting:
 
 	### Export istat Output To File & Save 
 	def export_istat(self):
-		os.system('istat -i ' + self.img_format + ' -f ' + self.img_FS_format + ' -o ' + str(self.byte_offset) + ' ' + self.file_path + ' ' + str(self.sel_inode) + ' > ' + self.output_path + str(self.sel_inode) + '_istat.txt')
+		os.system('istat -i ' + self.img_format + ' -f ' + self.img_FS_format + ' -o ' + str(self.byte_offset) + ' "' + self.file_path + '" ' + str(self.sel_inode) + ' > "' + self.output_path + str(self.sel_inode) + '_istat.txt"')
 
 	### Export icat Hexdump Output To File & Save 
 	def export_icat_hex(self):
-		os.system('icat -i ' + self.img_format + ' -f ' + self.img_FS_format + ' -o ' + str(self.byte_offset) + ' ' + self.file_path + ' ' + str(self.sel_inode) + ' | hexdump > ' + self.output_path + str(self.sel_inode) + '_icat.txt')
+		os.system('icat -i ' + self.img_format + ' -f ' + self.img_FS_format + ' -o ' + str(self.byte_offset) + ' "' + self.file_path + '" ' + str(self.sel_inode) + ' | hexdump > "' + self.output_path + str(self.sel_inode) + '_icat.txt"')
 
 	### Export icat Image Output To File & Save 
 	def export_icat_img(self, file_ext):
-		os.system('icat -i ' + self.img_format + ' -f ' + self.img_FS_format + ' -o ' + str(self.byte_offset) + ' ' + self.file_path + ' ' + str(self.sel_inode) + ' > ' + self.output_path + str(self.sel_inode) + '_icat.' + file_ext.strip())
+		os.system('icat -i ' + self.img_format + ' -f ' + self.img_FS_format + ' -o ' + str(self.byte_offset) + ' "' + self.file_path + '" ' + str(self.sel_inode) + ' > "' + self.output_path + str(self.sel_inode) + '_icat.' + file_ext.strip() + '"')
