@@ -11,7 +11,7 @@ $Default_Application_Evidance_Search_Location:Evidence/
 
 #Default Application Evidence Search Location (The Folder That The App Searches for Evidance Files By Default (FULL PATH))
 [-- Please Specify New Default Application Evidance Search Directory]
-$Default_Application_Directory_Search_Location:/home/kali/Raspberry-Pi4-Forensics-Final/ForinApp/Evidence/
+$Default_Application_Directory_Search_Location:/home/
 
 #Default Usage Log File Location
 [-- Please Specify New Usage Log Directory]
