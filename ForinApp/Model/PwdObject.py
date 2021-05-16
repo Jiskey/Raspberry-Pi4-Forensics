@@ -180,7 +180,7 @@ class PwdObject:
 
 			for count, charset in enumerate(self.custom_charset_list):
 				command = command + '-' + str(count + 1) + ' ' + charset + ' '
-			command = command + self.pass_mask + ' '
+			command = command + ' ' + self.pass_mask + ' '
 
 			if self.attack == 7:
 				for wordlist in self.dict_list:
