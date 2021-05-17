@@ -281,7 +281,7 @@ def FSI_export(img_conf, index_selection):
 	file_name = ''
 	title = '\nWhat Would You Like To Export'
 	choices = ['[1] Export File Details (Above)', '[2] Export Full Icat Hexdump', '[3] Attmept Export Of Copy', '[0] back']
-	file_ext = str(sel_fls['name'].split('.', -1)[-0])
+	file_ext = str(sel_fls['name'].split('.', -1)[-1])
 	file_name = str(sel_fls['name'].split('.', -1)[0])
 
 
