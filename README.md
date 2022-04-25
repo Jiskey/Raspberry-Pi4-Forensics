@@ -1,4 +1,4 @@
-# Raspberry Pi4 Forenics
+# Raspberry Pi4 Forensics
 
 Project Owner | Project Supervisor
 ------------ | -------------
